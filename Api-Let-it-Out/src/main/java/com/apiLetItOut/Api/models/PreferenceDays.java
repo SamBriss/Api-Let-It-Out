@@ -1,0 +1,68 @@
+package com.apiLetItOut.Api.models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+import java.time.LocalTime;
+
+@Entity
+@Table (name = "PreferenceDays")
+public class PreferenceDays {
+    public int getPreferenceDayId() {
+        return preferenceDayId;
+    }
+
+    public void setPreferenceDayId(int preferenceDayId) {
+        this.preferenceDayId = preferenceDayId;
+    }
+
+    public LocalTime getStartHour() {
+        return StartHour;
+    }
+
+    public void setStartHour(LocalTime startHour) {
+        StartHour = startHour;
+    }
+
+    public LocalTime getEndHour() {
+        return EndHour;
+    }
+
+    public void setEndHour(LocalTime endHour) {
+        EndHour = endHour;
+    }
+
+    public CalendarConfigurationUsers getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(CalendarConfigurationUsers configuration) {
+        this.configuration = configuration;
+    }
+
+    public WeekDays getWeekDay() {
+        return weekDay;
+    }
+
+    public void setWeekDay(WeekDays weekDay) {
+        this.weekDay = weekDay;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int preferenceDayId;
+    private LocalTime StartHour;
+    private LocalTime EndHour;
+
+    @ManyToOne
+    private CalendarConfigurationUsers configuration;
+
+    @ManyToOne
+    private WeekDays weekDay;
+
+    // Getters and setters
+}

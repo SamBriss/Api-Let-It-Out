@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiLetItOutApplication<Api-Let-it-Out>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.apiLetItOut.Api.ApiLetItOutApplication",
+            "projectName": "Api-Let-it-Out",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
