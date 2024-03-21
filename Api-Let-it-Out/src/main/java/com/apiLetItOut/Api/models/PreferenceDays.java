@@ -52,11 +52,20 @@ public class PreferenceDays {
         this.weekDay = weekDay;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int preferenceDayId;
     private LocalTime StartHour;
     private LocalTime EndHour;
+    private String label;
 
     @ManyToOne
     private CalendarConfigurationUsers configuration;

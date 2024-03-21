@@ -12,29 +12,119 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiLetItOut.Api.models.MultipleDaysCalendarSettings;
 import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;
+import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
+import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("api")
 public class CalendarConfigurationUsersApiController {
     @Autowired
     UserService userService;
+    
+    @Autowired
+    PreferenceDaysService preferenceDaysService;
 
     @Autowired
     CalendarConfigurationUsersService calendarConfigurationUsersService;
 
-    
-    @PostMapping("/config/addCalendarConfiguration")
-    public ResponseEntity<String> RegisterNewDiaryEntries(@RequestParam("username") String username,
-                                                    @RequestParam("startWorkDay") String startWorkDayStr,
-                                                    @RequestParam("endWorkDay") String endWorkDayStr )throws ParseException {
+    @Autowired
+    MultipleDaysCalendarSettingsService multipleDaysCalendarSettings;
 
-        System.out.println("llega aquii");
-                                                        
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("registro entrada de diario");
-            
+    @PostMapping("/config/addConfigurationFinal")
+    public ResponseEntity<String> newCalendarConfiguration(@RequestParam("username") String username, 
+                                            @RequestParam("startWorkDay") String startWorkDayStr, 
+                                            @RequestParam ("endWorkDay") String endWorkDayStr) {
+        
+      System.out.println("llego aquuuuuiiiiii");                                         
+        
+      int userId = 0;
+      userId = this.userService.SearchUserTAGMethod(username);
+      if(userId!=0)
+      {
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        java.util.Date startWorkDay;
+        java.util.Date endWorkDay;
+        try {
+            startWorkDay = formatoHora.parse(startWorkDayStr);
+            endWorkDay = formatoHora.parse(endWorkDayStr);
+
+            int result =  calendarConfigurationUsersService.RegisterNewCalendarConfigurationMethod(userId, startWorkDay, endWorkDay);
+            if(result>0)
+            {
+                int configurationId = this.calendarConfigurationUsersService.SearchConfigurationIdByUserIdMethod(userId);
+                return ResponseEntity.status(HttpStatus.OK).body(""+configurationId);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+      }
+        return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
     }
+    
+//D:\Valeria\Documents\.ceti\LetItOut\AppMovil\App_Git\Api Let it Out\Api-Let-it-Out
+    @PostMapping("/preferenceDays/addPreferenceDays")
+    public ResponseEntity<String> addPreferenceDays(@RequestParam("configurationId") String configurationIdStr,
+                                            @RequestParam("weekDayId") String weekDayIdStr,
+                                            @RequestParam("startHour") String StartHourStr,
+                                            @RequestParam("endHour") String EndHourStr,
+                                            @RequestParam("label") String label) {
+
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        try {
+            Date EndHour = formatoHora.parse(EndHourStr);
+            Date StartHour = formatoHora.parse(StartHourStr);
+            int weekDayId = Integer.parseInt(weekDayIdStr);
+            int configurationId = Integer.parseInt(configurationIdStr);
+
+            int result = preferenceDaysService.insertPreferenceDays(configurationId, weekDayId, StartHour, EndHour, label);
+            System.out.println("result:  "+result);
+
+            if(result==0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(""+result);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
+    
+    @PostMapping("/multPrefDays/addMultipleLabourWeekDays")
+    public ResponseEntity<String> addMultipleLabourWeekDays(@RequestParam("configurationId") String configurationIdString,
+                                            @RequestParam("weekDayId") String weekDayIdStr) {
+        int configurationId, weekDayId;
+        try{
+            weekDayId = Integer.parseInt(weekDayIdStr);
+            configurationId = Integer.parseInt(configurationIdString);
+            
+            int result = multipleDaysCalendarSettings.insertMultipleLabourWeekDaysMethod(configurationId, weekDayId);
+            if(result>0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(""+result);
+            }
+          
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
+    
 
 }

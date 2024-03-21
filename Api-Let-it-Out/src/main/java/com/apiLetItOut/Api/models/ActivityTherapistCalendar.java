@@ -4,8 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -20,11 +21,11 @@ public class ActivityTherapistCalendar {
         this.activityId = activityId;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -60,23 +61,34 @@ public class ActivityTherapistCalendar {
         this.motive = motive;
     }
 
-    public boolean isAppointment() {
+    public int isAppointment() {
         return appointment;
     }
 
-    public void setAppointment(boolean appointment) {
+    public void setAppointment(int appointment) {
         this.appointment = appointment;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int activityId;
-    private LocalDate date;
+    private Date date;
     private LocalTime startHour;
     private LocalTime endHour;
     private LocalTime duration;
     private String motive;
-    private boolean appointment;
+    private int appointment;
+    
+    @ManyToOne
+    private UsersTherapists userTherapistId;
+
+    public UsersTherapists getUserTherapistId() {
+        return userTherapistId;
+    }
+
+    public void setUserTherapistId(UsersTherapists userTherapistId) {
+        this.userTherapistId = userTherapistId;
+    }
 
     // Getters and setters
 }
