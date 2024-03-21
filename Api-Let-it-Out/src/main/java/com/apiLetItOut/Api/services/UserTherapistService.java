@@ -19,4 +19,27 @@ public class UserTherapistService {
     public Integer FindUserTherapistsMethod(int userId) {
         return userTherapistRepository.FindUserTherapists(userId);
     }
+
+    public Integer FindTherapistCodeMethod(int vinculationCode) {
+        return userTherapistRepository.SearchTherapistCode(vinculationCode);
+    }
+
+    public Integer FoundTherapistIdMethod(int userId)
+    {
+        return userTherapistRepository.FoundIdUserTherapist(userId);
+    }
+
+    public Integer updateTherapistCodeMethod(int userTherapistId, int vinculationCode)
+    {
+        return userTherapistRepository.updateTherapistCode(userTherapistId, vinculationCode);
+    }
+
+    public Integer FindTherapistIdByCodeMethod(int vinculationCode) {
+        return userTherapistRepository.SearchTherapistIdByCode(vinculationCode);
+    }
+
+    public Integer SearchTherapistExistanceCodeMethod(int userTherapistId)
+    {
+        return userTherapistRepository.SearchTherapistExistanceCode(userTherapistId);
+    }
 }

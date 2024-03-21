@@ -50,4 +50,7 @@ public interface UserRepository extends CrudRepository<Users, Integer>{
     @Transactional
     @Query("UPDATE Users u SET u.token = :tokenValue WHERE u.username = :username OR u.email = :email")
     Integer updateToken(@Param("tokenValue") String tokenValue, @Param("username") String username, @Param("email") String email);
+
+    @Query(value= "Select username FROM Users WHERE userId=:userId", nativeQuery = true)
+    String SearchUsernameById (@Param("userId") int userId);
 }

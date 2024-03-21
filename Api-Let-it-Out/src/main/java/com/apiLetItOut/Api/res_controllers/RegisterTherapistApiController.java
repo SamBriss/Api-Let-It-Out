@@ -92,4 +92,107 @@ public class RegisterTherapistApiController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error general");
         
     }
+
+    @PostMapping("/userTherapist/CodeDiponibility")
+    public ResponseEntity<String> SearchTherapistCode(@RequestParam("vinculationCode") String vinculationCodestr){
+
+        int vinculationCode;
+
+        try {
+            vinculationCode = Integer.parseInt(vinculationCodestr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        int CountCode = userTherapistService.FindTherapistCodeMethod(vinculationCode);
+        if(CountCode == 0){
+            return ResponseEntity.status(HttpStatus.OK).body("Disponible");
+        }
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No disponible");
+        }
+    }
+
+    @PostMapping("/userTherapist/updateTherapist")
+    public ResponseEntity<String> updateTherapistVinculationCode(@RequestParam("username") String username,
+                                                                @RequestParam("vinculationCode") String vinculationCodestr){
+
+        int vinculationCode;
+
+        try {
+            vinculationCode = Integer.parseInt(vinculationCodestr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTherapistId = userTherapistService.FoundTherapistIdMethod(userId);
+
+        if(userTherapistId > 0){
+            int updateTherapistCode = userTherapistService.updateTherapistCodeMethod(userTherapistId, vinculationCode);
+
+            if(updateTherapistCode > 0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("update");
+            }
+            else 
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No update");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No encontrado");
+        } 
+    }
+
+    @PostMapping("/userTherapist/VerifyExistence")
+    public ResponseEntity<String> VerifyExistenceCode(@RequestParam("vinculationCode") String vinculationCodestr){
+
+        int vinculationCode;
+
+        try {
+            vinculationCode = Integer.parseInt(vinculationCodestr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        int CountCode = userTherapistService.FindTherapistCodeMethod(vinculationCode);
+        if(CountCode > 0){
+            return ResponseEntity.status(HttpStatus.OK).body("existe");
+        }
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No existe");
+        }
+    }
+
+    @PostMapping("/userTherapist/alreadyCode")
+    public ResponseEntity<String> VerifyTherapistExistenceCode(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTherapistId = userTherapistService.FoundTherapistIdMethod(userId);
+
+        if(userTherapistId > 0){
+            int existanceCode = userTherapistService.SearchTherapistExistanceCodeMethod(userTherapistId);
+            if (existanceCode > 0)
+            {
+                String codigo = String.valueOf(existanceCode);
+                return ResponseEntity.status(HttpStatus.OK).body(codigo);
+            }
+            else if (existanceCode == 0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("No tiene");
+            }
+        }
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No existe");
+        }
+        return null;
+    }
 }

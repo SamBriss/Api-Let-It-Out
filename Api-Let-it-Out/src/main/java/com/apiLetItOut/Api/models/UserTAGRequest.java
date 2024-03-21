@@ -16,7 +16,10 @@ public class UserTAGRequest {
     private int status;
 
     @ManyToOne
-    private UsersTAG userTAG; // Assuming Users is the entity for the Users table
+    private UsersTAG userTAG;
+
+    @ManyToOne
+    private UsersTherapists usersTherapists;    
 
     public int getUserTAGRequestId() {
         return userTAGRequestId;

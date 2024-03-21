@@ -22,7 +22,6 @@ public class UserService {
     {
         return userRepository.LogInUserByEmail(email, password);
     }
-
     public int SearchUserTAGMethod(String username)
     {
         return userRepository.SearchUsersByUsername(username);
@@ -38,9 +37,12 @@ public class UserService {
     public java.util.List<Object[]> findInfoForTokenMethod(String username, String email) {
         return userRepository.findInfoForToken(username, email);
     }
-
     public Integer updateTokenMethod(String tokenValue, String username, String email)
     {
         return userRepository.updateToken(tokenValue, username, email);
+    }
+    public String SearchUsernameByIdMethod(int userId)
+    {
+        return userRepository.SearchUsernameById(userId);
     }
 }

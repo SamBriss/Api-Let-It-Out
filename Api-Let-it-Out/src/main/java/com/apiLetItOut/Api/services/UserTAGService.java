@@ -25,4 +25,9 @@ public class UserTAGService {
     {
         return userTAGRepository.FoundIdUserTag(userId);
     }
+
+    public Integer FoundIdByTAGMethod(int userTAGId)
+    {
+        return userTAGRepository.FoundUserIdByUserTAG(userTAGId);
+    }
 }

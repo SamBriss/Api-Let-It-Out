@@ -18,5 +18,4 @@ public interface PreferencestaguserRepository extends CrudRepository <Preference
                         @Param("score") int score,
                         @Param("userTAGId") int userTAGId,
                         @Param("categoryId") int categoryId);
-
 }
