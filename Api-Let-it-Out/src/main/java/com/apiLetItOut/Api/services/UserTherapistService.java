@@ -42,4 +42,9 @@ public class UserTherapistService {
     {
         return userTherapistRepository.SearchTherapistExistanceCode(userTherapistId);
     }
+
+    public Integer SearchIdByTherapistMethod(int userTherapistId)
+    {
+        return userTherapistRepository.FoundUserIdByUserTherapist(userTherapistId);
+    }
 }

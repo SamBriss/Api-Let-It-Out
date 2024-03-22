@@ -41,4 +41,7 @@ public interface UserTherapistRepository extends CrudRepository <UsersTherapists
 
     @Query(value = "Select vinculationCode FROM UsersTherapists WHERE userTherapistId=:userTherapistId", nativeQuery = true)
     int SearchTherapistExistanceCode (@Param("userTherapistId") int userTherapistId);
+
+    @Query(value= "Select userId FROM userstherapists WHERE userTherapistId=:userTherapistId", nativeQuery = true)
+    Integer FoundUserIdByUserTherapist (@Param("userTherapistId") int userTherapistId);
 }

@@ -178,5 +178,5 @@ public class UserTAGRequestController {
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
         }
-    }
+    }    
 }

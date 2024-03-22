@@ -31,5 +31,5 @@ public interface UserTAGRequestRepository extends CrudRepository<UserTAGRequest,
     @Modifying
     @Query(value= "DELETE FROM usertagrequest WHERE userTAGId=:userTAGId AND userTherapistId=:userTherapistId", nativeQuery = true)
     Integer DeleteRequest(@Param("userTAGId") int userTAGId,
-                            @Param("userTherapistId") int userTherapistId);
+                            @Param("userTherapistId") int userTherapistId);                 
 }
