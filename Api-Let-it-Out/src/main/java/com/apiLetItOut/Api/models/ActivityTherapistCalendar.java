@@ -6,13 +6,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import java.util.Date;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table (name = "ActivityTherapistCalendar")
+@Table (name = "activity_therapist_calendar")
 public class ActivityTherapistCalendar {
+    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int activityId;
+    private Date date;
+    private LocalTime startHour;
+    private LocalTime endHour;
+    private String motive;
+    private int appointment;
+
+    @ManyToOne
+    private UsersTherapists userTherapistId;
+
     public int getActivityId() {
         return activityId;
     }
@@ -45,14 +59,6 @@ public class ActivityTherapistCalendar {
         this.endHour = endHour;
     }
 
-    public LocalTime getDuration() {
-        return duration;
-    }
-
-    public void setDuration(LocalTime duration) {
-        this.duration = duration;
-    }
-
     public String getMotive() {
         return motive;
     }
@@ -61,26 +67,13 @@ public class ActivityTherapistCalendar {
         this.motive = motive;
     }
 
-    public int isAppointment() {
+    public int getAppointment() {
         return appointment;
     }
 
     public void setAppointment(int appointment) {
         this.appointment = appointment;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int activityId;
-    private Date date;
-    private LocalTime startHour;
-    private LocalTime endHour;
-    private LocalTime duration;
-    private String motive;
-    private int appointment;
-    
-    @ManyToOne
-    private UsersTherapists userTherapistId;
 
     public UsersTherapists getUserTherapistId() {
         return userTherapistId;

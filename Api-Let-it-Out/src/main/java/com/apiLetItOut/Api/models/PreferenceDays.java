@@ -12,6 +12,20 @@ import java.time.LocalTime;
 @Entity
 @Table (name = "PreferenceDays")
 public class PreferenceDays {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int preferenceDayId;
+    private LocalTime StartHour;
+    private LocalTime EndHour;
+    private String label;
+
+    @ManyToOne
+    private CalendarConfigurationUsers configuration;
+
+    @ManyToOne
+    private WeekDays weekDay;
+
     public int getPreferenceDayId() {
         return preferenceDayId;
     }
@@ -36,6 +50,14 @@ public class PreferenceDays {
         EndHour = endHour;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public CalendarConfigurationUsers getConfiguration() {
         return configuration;
     }
@@ -51,27 +73,6 @@ public class PreferenceDays {
     public void setWeekDay(WeekDays weekDay) {
         this.weekDay = weekDay;
     }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int preferenceDayId;
-    private LocalTime StartHour;
-    private LocalTime EndHour;
-    private String label;
-
-    @ManyToOne
-    private CalendarConfigurationUsers configuration;
-
-    @ManyToOne
-    private WeekDays weekDay;
 
     // Getters and setters
 }
