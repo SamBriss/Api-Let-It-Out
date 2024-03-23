@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.models.ActivityTherapistCalendar;
 import com.apiLetItOut.Api.services.ActivityTherapistCalendarService;
+import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTherapistService;
 
@@ -31,6 +32,9 @@ public class ActivityTherapistCalendarApiController {
 
     @Autowired 
     ActivityTherapistCalendarService activityTherapistCalendarService;
+
+    @Autowired
+    AppointmentCalendarService appointmentCalendarService;
 
     @PostMapping("/therapistCalendar/addTherapistActivityCalendar")
     public ResponseEntity<String> newCalendarConfiguration(@RequestParam("username") String username, 
@@ -88,7 +92,7 @@ System.out.println("count of registers:   "+count);
 
                     // tabla de appointments
                     
-                    java.util.List<Object[]> resultListAppointmentCalendar = activityTherapistCalendarService.findRegistersOfTherapistActivitiesMethod(userTherapistId, date);
+                    java.util.List<Object[]> resultListAppointmentCalendar = appointmentCalendarService.findRegistersOfTherapistAppointmentsMethod(userTherapistId, date);
                     
                     if(resultListAppointmentCalendar.size() > 0)
                     {
