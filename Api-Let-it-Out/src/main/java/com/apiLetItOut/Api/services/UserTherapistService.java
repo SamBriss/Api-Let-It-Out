@@ -47,4 +47,24 @@ public class UserTherapistService {
     {
         return userTherapistRepository.FoundUserIdByUserTherapist(userTherapistId);
     }
+
+    public Integer SearchIdTherapistByUserIdMethod(int userId)
+    {
+        return userTherapistRepository.SearchIdTherapistByUserId(userId);
+    }
+
+    public String SearchLicenceTherapistMethod(int userTherapistId)
+    {
+        return userTherapistRepository.SearchLicenceTherapist(userTherapistId);
+    }
+
+    public Integer SearchDirectionIdTherapistMethod(int userTherapistId)
+    {
+        return userTherapistRepository.SearchDirectionIdTherapist(userTherapistId);
+    }
+
+    public Integer UpdateLicenceTherapistMethod(int userTherapistId, String licence)
+    {
+        return userTherapistRepository.UpdateLicenceTherapist(userTherapistId, licence);
+    }
 }

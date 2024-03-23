@@ -13,4 +13,29 @@ public class DirectionsService {
     {
         return directionsRepository.RegisterNewDirection(street, numExt, numInt, colony);
     }
+
+    public String SearchStreetMethod(int directionId)
+    {
+        return directionsRepository.SearchStreet(directionId);
+    }
+
+    public String SearchColonyMethod(int directionId)
+    {
+        return directionsRepository.SearchColony(directionId);
+    }
+
+    public Integer SearchNumExtMethod(int directionId)
+    {
+        return directionsRepository.SearchNumExt(directionId);
+    }
+
+    public Integer SearchNumIntMethod(int directionId)
+    {
+        return directionsRepository.SearchNumInt(directionId);
+    }
+
+    public Integer UpdateDirectionMethod(String street, String colony, int numExt, int numInt, int directionId)
+    {
+        return directionsRepository.UpdateDirection(street, numExt, numInt, colony, directionId);
+    }
 }

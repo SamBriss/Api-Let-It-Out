@@ -44,4 +44,19 @@ public interface UserTherapistRepository extends CrudRepository <UsersTherapists
 
     @Query(value= "Select userId FROM userstherapists WHERE userTherapistId=:userTherapistId", nativeQuery = true)
     Integer FoundUserIdByUserTherapist (@Param("userTherapistId") int userTherapistId);
+
+    @Query(value = "Select userTherapistId from UsersTherapists where userId =:userId", nativeQuery = true)
+    Integer SearchIdTherapistByUserId(@Param("userId") int userId);
+
+    @Query(value = "Select licence From UsersTherapists where userTherapistId=:userTherapistId", nativeQuery = true)
+    String SearchLicenceTherapist(@Param("userTherapistId") int userTherapistId);
+
+    @Query(value = "Select directionId From UsersTherapists where userTherapistId=:userTherapistId", nativeQuery = true)
+    Integer SearchDirectionIdTherapist(@Param("userTherapistId") int userTherapistId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Update usersTherapists set licence = :licence where userTherapistId =:userTherapistId", nativeQuery = true)
+    Integer UpdateLicenceTherapist(@Param("userTherapistId") int userTherapistId,
+    @Param("licence") String licence);
 }

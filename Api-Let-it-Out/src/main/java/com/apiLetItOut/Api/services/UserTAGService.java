@@ -30,4 +30,19 @@ public class UserTAGService {
     {
         return userTAGRepository.FoundUserIdByUserTAG(userTAGId);
     }
+
+    public Integer SearchLevelTAGMethod(int userTAGId)
+    {
+        return userTAGRepository.SearchLevelTAG(userTAGId);
+    }
+
+    public Boolean SearchMedsExistenceTAG(int userTAGId)
+    {
+        return userTAGRepository.SearchMedsExistenceTAG(userTAGId);
+    }
+
+    public Integer UpdateUserTAGLevelMedsExistenceMethod(int levelTAGId, boolean medsExistence, int userTAGId)
+    {
+        return userTAGRepository.UpdateUserTAGLevelMedsExistence(levelTAGId, levelTAGId, userTAGId);
+    }
 }

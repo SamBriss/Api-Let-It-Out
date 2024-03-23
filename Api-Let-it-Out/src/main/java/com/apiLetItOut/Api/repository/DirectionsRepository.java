@@ -19,4 +19,25 @@ public interface DirectionsRepository extends CrudRepository <Directions, Intege
                                 @Param("numExt") int numExt, 
                                 @Param("numInt") int numInt,
                                 @Param("colony") String colony);
+
+    @Query(value = "Select street from directions where directionId = :directionId", nativeQuery = true)
+    String SearchStreet(@Param("directionId") Integer directionId);
+
+    @Query(value = "Select colony from directions where directionId = :directionId", nativeQuery = true)
+    String SearchColony(@Param("directionId") Integer directionId);
+    
+    @Query(value = "select numExt from directions where directionId = :directionId", nativeQuery = true)
+    Integer SearchNumExt(@Param("directionId") Integer directionId);
+
+    @Query(value = "select numInt from directions where directionId = :directionId", nativeQuery = true)
+    Integer SearchNumInt(@Param("directionId") Integer directionId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Update directions set street=:street, colony=:colony, numExt=:numExt, numInt=:numInt where directionId=:directionId", nativeQuery = true)
+    Integer UpdateDirection(@Param("street") String street,
+    @Param("numExt") int numExt, 
+    @Param("numInt") int numInt,
+    @Param("colony") String colony,
+    @Param("directionId") int directionId);
 }
