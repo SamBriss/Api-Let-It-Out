@@ -21,7 +21,7 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
     java.util.List<Object[]> findRegistersOfTherapistAppointments(@Param("userTherapistId") int userTherapistId, @Param("date") Date date);
 
                     
-    @Query(value= "Select COUNT(*) FROM activity_therapist_calendar", nativeQuery = true)
+    @Query(value= "Select COUNT(*) FROM appointmentcalendar", nativeQuery = true)
     int SearchCountAppointmentsTherapistCalendar();
     
     @Transactional
@@ -37,4 +37,11 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
                         @Param("therapistAcceptance") int therapistAcceptance,
                         @Param("TAGacceptance") int TAGacceptance
                         );
+
+                        
+    // en esta no me capta startHour, dice que no existe sepa pq
+    @Query(value= "Select u.startHour, u.endHour FROM appointmentcalendar u WHERE u.userTAGId=:userTAGId AND u.date=:date AND u.therapistAcceptance!=2 AND u.TAGacceptance=1", nativeQuery = true)
+    java.util.List<Object[]> findRegistersOfUserTagAppointments(@Param("userTAGId") int userTAGId, @Param("date") Date date);
+
+              
 }

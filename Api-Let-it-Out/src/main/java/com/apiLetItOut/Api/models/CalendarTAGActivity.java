@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table (name = "CalendarTAGActivity")
+@Table (name = "calendar_tag_activity")
 public class CalendarTAGActivity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,14 +65,6 @@ public class CalendarTAGActivity {
         this.endHour = endHour;
     }
 
-    public LocalTime getDuration() {
-        return duration;
-    }
-
-    public void setDuration(LocalTime duration) {
-        this.duration = duration;
-    }
-
     public LocalDate getDateRegister() {
         return dateRegister;
     }
@@ -105,14 +97,22 @@ public class CalendarTAGActivity {
         this.userTAG = userTAG;
     }
 
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
     private String label;
     private String location;
     private LocalDate date;
     private LocalTime startHour;
     private LocalTime endHour;
-    private LocalTime duration;
     private LocalDate dateRegister;
     private String comments;
+    private String direction;
     private boolean reminders;
 
     @ManyToOne

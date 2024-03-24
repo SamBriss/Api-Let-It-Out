@@ -16,6 +16,10 @@ public class AppointmentCalendarService {
         return appointmentCalendarRepository.findRegistersOfTherapistAppointments(userTherapistId, date);
     }
 
+    public java.util.List<Object[]> findRegistersOfUserTagAppointmentsMethod(int userTAGId, Date date) {
+        return appointmentCalendarRepository.findRegistersOfUserTagAppointments(userTAGId, date);
+    }
+
     public Integer SearchCountAppointmentsTherapistCalendarMethod()
     {
         return appointmentCalendarRepository.SearchCountAppointmentsTherapistCalendar();
