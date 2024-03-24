@@ -6,16 +6,12 @@ import org.springframework.http.ResponseEntity;
 // este es el que me ha funcionado
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Date;
-import java.util.Random;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiLetItOut.Api.models.ActivityTherapistCalendar;
 import com.apiLetItOut.Api.services.ActivityTherapistCalendarService;
 import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.UserService;
@@ -112,8 +108,6 @@ System.out.println("count of registers:   "+count);
                 // agregar la actividad a la tabla de activitytherapistcalendar
 
                 int result = activityTherapistCalendarService.addNewActivityTherapistCalendarMethod(date, startHour, endHour, motive, appointment, userTherapistId);
-                // Aquí guardas la nueva actividad en la base de datos
-                // activityTherapistCalendarService.saveNewActivity(userTherapistId, date, startHour, endHour, motive, appointment);
                 
                 return ResponseEntity.status(HttpStatus.OK).body(""+result);
             }

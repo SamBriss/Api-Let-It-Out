@@ -17,8 +17,24 @@ import jakarta.transaction.Transactional;
 public interface AppointmentCalendarRepository extends CrudRepository<AppointmentCalendar, Integer> {
     
     // en esta no me capta startHour, dice que no existe sepa pq
-    @Query(value= "Select u.startHour, u.endHour FROM appointmentcalendar u WHERE u.userTherapistId=:userTherapistId AND u.date=:date", nativeQuery = true)
+    @Query(value= "Select u.startHour, u.endHour FROM appointmentcalendar u WHERE u.userTherapistId=:userTherapistId AND u.date=:date AND u.therapistAcceptance=1 AND u.TAGacceptance!=2", nativeQuery = true)
     java.util.List<Object[]> findRegistersOfTherapistAppointments(@Param("userTherapistId") int userTherapistId, @Param("date") Date date);
 
                     
+    @Query(value= "Select COUNT(*) FROM activity_therapist_calendar", nativeQuery = true)
+    int SearchCountAppointmentsTherapistCalendar();
+    
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO appointmentcalendar " + 
+            "(userTAGId, userTherapistId, date, startHour, endHour, therapistAcceptance, TAGacceptance) " +
+            "VALUES (:userTAGId, :userTherapistId, :date, :startHour, :endHour, :therapistAcceptance, :TAGacceptance)", nativeQuery = true)
+    Integer addNewAppointmentFromTherapistCalendar(@Param("userTAGId") int userTAGId,
+                        @Param("userTherapistId") int userTherapistId,
+                        @Param("date") Date date,
+                        @Param("startHour") Date startHour,
+                        @Param("endHour") Date endHour,
+                        @Param("therapistAcceptance") int therapistAcceptance,
+                        @Param("TAGacceptance") int TAGacceptance
+                        );
 }

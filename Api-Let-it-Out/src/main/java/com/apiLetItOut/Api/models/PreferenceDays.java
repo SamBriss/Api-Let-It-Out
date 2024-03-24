@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import java.time.LocalTime;
 
 @Entity
-@Table (name = "PreferenceDays")
+@Table (name = "preference_days")
 public class PreferenceDays {
     
     @Id

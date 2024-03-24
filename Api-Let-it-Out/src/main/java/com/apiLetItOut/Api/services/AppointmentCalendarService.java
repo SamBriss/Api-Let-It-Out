@@ -16,4 +16,14 @@ public class AppointmentCalendarService {
         return appointmentCalendarRepository.findRegistersOfTherapistAppointments(userTherapistId, date);
     }
 
+    public Integer SearchCountAppointmentsTherapistCalendarMethod()
+    {
+        return appointmentCalendarRepository.SearchCountAppointmentsTherapistCalendar();
+    }
+    
+    public Integer addNewAppointmentFromTherapistCalendarMethod(int userTAGId, int userTherapistId, Date date, Date startHour, Date endHour, int therapistAcceptance, int TAGacceptance)
+    {
+        return appointmentCalendarRepository.addNewAppointmentFromTherapistCalendar(userTAGId, userTherapistId, date, startHour, endHour, therapistAcceptance, TAGacceptance);
+    }
+    
 }

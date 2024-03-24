@@ -18,7 +18,7 @@ public interface PreferenceDaysRepository extends CrudRepository<PreferenceDays,
     @Transactional
     @Modifying
     @Query(
-        value = "INSERT INTO PreferenceDays (configurationId, weekDayId, StartHour, EndHour, label)VALUES (:configurationId, :weekDayId, :StartHour, :EndHour, :label)", 
+        value = "INSERT INTO preference_days (configurationId, weekDayId, StartHour, EndHour, label)VALUES (:configurationId, :weekDayId, :StartHour, :EndHour, :label)", 
         nativeQuery = true
         )
     Integer RegisterNewPreferenceDays(@Param("configurationId") int configurationId,
@@ -26,5 +26,9 @@ public interface PreferenceDaysRepository extends CrudRepository<PreferenceDays,
                         @Param("StartHour") Date StartHour,
                         @Param("EndHour") Date EndHour,
                         @Param("label") String label);
+   
+                        
+    @Query(value= "Select u.startHour, u.endHour, u.date FROM preference_days u WHERE u.configurationId=:configurationId", nativeQuery = true)
+    java.util.List<Object[]> findRegistersOfTherapistExclusionTimes(@Param("configurationId") int configurationId);
 
 }

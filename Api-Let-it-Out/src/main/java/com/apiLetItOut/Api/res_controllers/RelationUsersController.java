@@ -222,4 +222,44 @@ public class RelationUsersController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
         }
     }
+
+    
+    @PostMapping("/addAppointment/relationsTherapist")
+    public ResponseEntity postMethodNameRelationTherapistForCalendar(@RequestParam("username") String username) {
+        try {
+            int userId = userService.SearchUserTAGMethod(username);
+            int userTherapistId = userTherapistService.FoundTherapistIdMethod(userId);
+    
+            if (userTherapistId > 0) 
+            {
+                List<Integer> TagIds = relationUsersService.SearchTAGByTherapistMethos(userTherapistId);
+
+                if (!TagIds.isEmpty()) {
+                    List<String> tagUsernames = new ArrayList<>();
+                    for (Integer tagId : TagIds) {
+                        int userIdT = userTAGService.FoundIdByTAGMethod(tagId);
+                        String name = userService.SearchNameMethod(userIdT);
+                        String lastNameP = userService.SearchUserLPMethod(userIdT);
+                        String usernameT = userService.SearchUsernameByIdMethod(userIdT);
+
+                        if (usernameT != null) {
+                            String send = name + lastNameP +" "+ "("+usernameT+")";
+                            tagUsernames.add(send);
+                        }
+                    }
+                    return ResponseEntity.ok().body(tagUsernames);
+                } else {
+                    // Handle case when therapist relationships are not found
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NoRelation");
+                }
+            } 
+            else 
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
+            }
+        } catch (NullPointerException e) {
+            // Handle NullPointerException
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("NoRelation");
+        }
+    }
 }

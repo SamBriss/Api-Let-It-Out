@@ -17,4 +17,9 @@ public class PreferenceDaysService {
     {
         return this.preferenceDaysRepository.RegisterNewPreferenceDays(configurationId, weekDayId, StartHour, EndHour, label);
     }
+    
+    public java.util.List<Object[]> findRegistersOfTherapistExclusionTimesMethod(int configurationId) {
+        return preferenceDaysRepository.findRegistersOfTherapistExclusionTimes(configurationId);
+    }
+
 }
