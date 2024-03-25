@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.apiLetItOut.Api.models.ActivityTherapistCalendar;
-import com.apiLetItOut.Api.models.Users;
 
 import jakarta.transaction.Transactional;
 

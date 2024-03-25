@@ -1,8 +1,5 @@
 package com.apiLetItOut.Api.repository;
 
-import java.util.Date;
-
-import org.hibernate.mapping.List;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

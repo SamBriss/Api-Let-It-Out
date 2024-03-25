@@ -6,14 +6,11 @@ import org.springframework.http.ResponseEntity;
 // este es el que me ha funcionado
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiLetItOut.Api.models.CalendarConfigurationUsers;
 import com.apiLetItOut.Api.services.ActivityTherapistCalendarService;
 import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;

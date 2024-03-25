@@ -15,5 +15,8 @@ public class EmotionsService {
     {
         return emotionsRepository.SearchEmotion(emotion);
     }
-    
+    public String SearchEmotionNameMethod( int emotionsId)
+    {
+        return emotionsRepository.SearchEmotionName(emotionsId);
+    }
 }

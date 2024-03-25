@@ -91,7 +91,6 @@ public class UserTAGRequestController {
                 List<String> usernames = new ArrayList<>();
                 for (int userTAGId : userTAGIds) {
                     int userIdByTAG = userTAGService.FoundIdByTAGMethod(userTAGId);
-    
                     if (userIdByTAG > 0) {
                         String usernameTAG = userService.SearchUsernameByIdMethod(userIdByTAG);
                         if (usernameTAG != null) {

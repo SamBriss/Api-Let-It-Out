@@ -10,4 +10,7 @@ public interface EmotionsRepository extends CrudRepository <FeedbackEmotions, In
 
     @Query(value= "Select emotionsId FROM feedbackemotions WHERE name=:emotion", nativeQuery = true)
     Integer SearchEmotion(@Param("emotion") String emotion);
+
+    @Query(value= "Select name FROM feedbackemotions WHERE emotionsId=:emotionsId", nativeQuery = true)
+    String SearchEmotionName(@Param("emotionsId") int emotionsId);
 }

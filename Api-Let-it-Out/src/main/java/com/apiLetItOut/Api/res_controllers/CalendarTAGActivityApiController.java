@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiLetItOut.Api.services.ActivityTherapistCalendarService;
 import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.CalendarTAGActivityService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
-import com.apiLetItOut.Api.services.UserTherapistService;
 
 @RestController
 @RequestMapping("api")
