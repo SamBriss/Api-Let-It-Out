@@ -14,11 +14,17 @@ import jakarta.transaction.Transactional;
 public interface DirectionsRepository extends CrudRepository <Directions, Integer>{
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO Directions (street, numExt, numInt, colony) VALUES (:street, :numExt, :numInt, :colony) LIMIT 1", nativeQuery=true)
+    @Query(value = "INSERT INTO Directions (street, numExt, numInt, colony) VALUES (:street, :numExt, :numInt, :colony)", nativeQuery=true)
     Integer RegisterNewDirection(@Param("street") String street,
                                 @Param("numExt") int numExt, 
                                 @Param("numInt") int numInt,
                                 @Param("colony") String colony);
+
+    @Query (value= "Select directionId from directions where street=:street AND colony=:colony AND numExt=:numExt AND numInt=:numInt LIMIT 1", nativeQuery=true)
+    Integer SearchDirectionId(@Param("street") String street,
+    @Param("numExt") int numExt, 
+    @Param("numInt") int numInt,
+    @Param("colony") String colony);
 
     @Query(value = "Select street from directions where directionId = :directionId", nativeQuery = true)
     String SearchStreet(@Param("directionId") Integer directionId);
