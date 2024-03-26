@@ -71,23 +71,27 @@ public class RegisterTherapistApiController {
             int userId = userService.SearchUser(username, email);
             // Registro de la dirección
             
-            int directionId = directionService.RegisterNewDirectionsMethod(street, numExt, numInt, colony);
-
-            // Registro del terapeuta con la dirección y obtención del ID de usuario
-            int userTherapistId = userTherapistService.RegisterNewUserTherapistMethod(userId, licence, contract, vinculationCode, directionId);
-
-            if (userId > 0 && directionId>0 && userTherapistId>0) {
-                return ResponseEntity.status(HttpStatus.CREATED).body("success");
-            } else  if (userId<0){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar usuario general");
-            } else if(directionId<0)
+            int countOfRegistrationDirection = directionService.RegisterNewDirectionsMethod(street, numExt, numInt, colony);
+            if(countOfRegistrationDirection>0)
             {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar direccion");
+                 // Registro del terapeuta con la dirección y obtención del ID de usuario
+                int directionId = directionService.SearchDirectionIdMethod(street, numExt, numInt, colony);
+                int userTherapistId = userTherapistService.RegisterNewUserTherapistMethod(userId, licence, contract, vinculationCode, directionId);
+
+                if (userId > 0 && directionId>0 && userTherapistId>0) {
+                    return ResponseEntity.status(HttpStatus.CREATED).body("success");
+                } else  if (userId<0){
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar usuario general");
+                } else if(directionId<0)
+                {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar direccion");
+                }
+                else if(userTherapistId<0)
+                {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar usuario terapeuta");
+                }
             }
-            else if(userTherapistId<0)
-            {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar usuario terapeuta");
-            }
+           
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error general");
         

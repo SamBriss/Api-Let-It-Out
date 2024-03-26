@@ -14,6 +14,11 @@ public class DirectionsService {
         return directionsRepository.RegisterNewDirection(street, numExt, numInt, colony);
     }
 
+    public int SearchDirectionIdMethod(String street, int numExt, int numInt, String colony)
+    {
+        return directionsRepository.SearchDirectionId(street, numExt, numInt, colony);
+    }
+
     public String SearchStreetMethod(int directionId)
     {
         return directionsRepository.SearchStreet(directionId);
