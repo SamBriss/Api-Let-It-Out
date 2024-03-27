@@ -47,8 +47,9 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value= "Update UsersTAG SET levelTAGId = :levelTAGId, medsExistence = :medsExistence where userTAGId = :userTAGId", nativeQuery = true)
+    @Query(value= "Update UsersTAG SET levelTAGId = :levelTAGId, medsExistence = :medsExistence, umbral = :umbral where userTAGId = :userTAGId", nativeQuery = true)
     Integer UpdateUserTAGLevelMedsExistence(@Param("levelTAGId") int levelTAGId,
                                             @Param("medsExistence") int medsExistence,
+                                            @Param("umbral") int umbral,
                                             @Param("userTAGId") int userTAGId);
 }

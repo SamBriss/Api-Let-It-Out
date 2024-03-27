@@ -15,4 +15,8 @@ public class PsychiatricDomainService {
     {
         return psychiatricDomainRepository.RegisterNewDomains(userTAGId, domainId, score, executionDate);
     }
+    public Integer UpdateDomainsMethod(int userTAGId, int domainId, int score, Date executionDate)
+    {
+        return psychiatricDomainRepository.updateDomains(userTAGId, domainId, score, executionDate);
+    }
 }
