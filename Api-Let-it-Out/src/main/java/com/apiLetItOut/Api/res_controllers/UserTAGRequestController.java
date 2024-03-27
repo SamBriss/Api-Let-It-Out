@@ -82,7 +82,6 @@ public class UserTAGRequestController {
         int userId = userService.SearchUserTAGMethod(username);
         int userTherapistId = userTherapistService.FoundTherapistIdMethod(userId);
         
-
         if(userTherapistId > 0)
         {
             List<Integer> userTAGIds =  userTAGRequestService.FoundUserTAGIdByTherapistMethod(userTherapistId);
