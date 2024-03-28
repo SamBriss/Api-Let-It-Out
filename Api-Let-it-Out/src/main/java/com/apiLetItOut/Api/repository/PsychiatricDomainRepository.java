@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,10 +28,14 @@ public interface PsychiatricDomainRepository extends CrudRepository <Psychiatric
         @Query(value = "UPDATE psychiatricDomainsQuestionaire " + 
                         "SET score = :score, executionDate = :executionDate, " + "domainId = :domainId" +
                         "WHERE userTAGId = :userTAGId ", nativeQuery = true)
-        int updateDomains(@Param("userTAGId") int userTAGId,
+        int UpdateDomains(@Param("userTAGId") int userTAGId,
                                 @Param("domainId") int domainId,
                                 @Param("score") int score,
                                 @Param("executionDate") Date executionDate);
-                        
 
+        @Query (value = "Select domainId from psychiatricDomainsQuestionaire where userTAGId = :userTAGId ORDER BY score DESC", nativeQuery = true)
+        List<Integer> SearchDomainsOfUserTAG(@Param("userTAGId") int userTAGId);
+
+        @Query (value = "Select scores from psychiatricDomainsQuestionaire where userTAGId = :userTAGId ORDER BY score DESC", nativeQuery = true)
+        List<Integer> SearchScoresOfDomainId(@Param("userTAGId") int userTAGId);
 }

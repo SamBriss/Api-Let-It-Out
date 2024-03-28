@@ -3,7 +3,6 @@ package com.apiLetItOut.Api.res_controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.RelationUsersService;
-import com.apiLetItOut.Api.services.ResponsableAdultService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
@@ -26,9 +25,6 @@ public class UpdateTAGProfile {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    ResponsableAdultService responsableAdultService;
 
     @Autowired
     RelationUsersService relationUserService;
@@ -242,7 +238,7 @@ public class UpdateTAGProfile {
         String tel = userService.SearchUserTelMethod(userId);
         String gender = userService.SearchUserGenderMethod(userId);
         String password = userService.SearchUserPasswordMethod(userId);
-        
+        int existenceRelation = relationUserService.ExistenceOfUserTAGWithTherapistMethod(userTAGId);
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
         Boolean medsExistence = userTAGService.SearchMedsExistenceTAG(userTAGId);
         String levelTAGStr="Leve";
@@ -284,6 +280,7 @@ public class UpdateTAGProfile {
         responseData.put("password", password);
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("medsExistence", medsExistence);
+        responseData.put("relationCount", existenceRelation);
         
         // Retornar los datos como respuesta
         return ResponseEntity.ok(responseData);

@@ -1,15 +1,26 @@
 // Clase UsersTherapists
 package com.apiLetItOut.Api.models;
 
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "UsersTherapists")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsersTherapists {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,48 +29,12 @@ public class UsersTherapists {
     private boolean contract;
     private int vinculationCode;
 
-    @ManyToOne
-    private Users user;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "userId")
+    private Users userId;
 
-    public int getUserTherapistId() {
-        return userTherapistId;
-    }
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="directionId")
+    private Directions directionId;
 
-    public void setUserTherapistId(int userTherapistId) {
-        this.userTherapistId = userTherapistId;
-    }
-
-    public String getLicence() {
-        return licence;
-    }
-
-    public void setLicence(String licence) {
-        this.licence = licence;
-    }
-
-    public boolean isContract() {
-        return contract;
-    }
-
-    public void setContract(boolean contract) {
-        this.contract = contract;
-    }
-
-    public int getVinculationCode() {
-        return vinculationCode;
-    }
-
-    public void setVinculationCode(int vinculationCode) {
-        this.vinculationCode = vinculationCode;
-    }
-
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
-    }
-
-    // Getters and setters
 }
