@@ -3,6 +3,7 @@ package com.apiLetItOut.Api.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.List;
 
 import com.apiLetItOut.Api.repository.ActivitiesFromTherapistRepository;
 
@@ -25,4 +26,21 @@ public class ActivitiesFromTherapistService {
     {
         return activitiesFromTherapistRepository.findAllActivitiesToDoFromCalendarTAGByDate(userTAGId, date);
     }
+    public Integer CountRequestQuantityActivitiesMethod( int userTAGId)
+    {
+        return activitiesFromTherapistRepository.CountRequestQuantityActivities(userTAGId);
+    }
+    public List<Integer> SelectActivityIdMethod( int userTAGId)
+    {
+        return activitiesFromTherapistRepository.SelectActiivityId(userTAGId);
+    }
+    public List<Integer> SelectTherapistIdMethod( int userTAGId)
+    {
+        return activitiesFromTherapistRepository.SelectTherapistId(userTAGId);
+    }
+    public Integer UpdateCommentsTherapistMethod(int activityTId, String comments)
+    {
+        return activitiesFromTherapistRepository.UpdateCommentsTherapist(activityTId, comments);
+    }
+
 }

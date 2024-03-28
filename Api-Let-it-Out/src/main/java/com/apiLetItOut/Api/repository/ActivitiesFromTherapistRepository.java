@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Date;
+import java.util.List;
 
 import com.apiLetItOut.Api.models.ActivitiesFromTherapist;
 
@@ -34,5 +35,19 @@ public interface ActivitiesFromTherapistRepository extends CrudRepository <Activ
     @Query(value= "Select u.label, u.description, u.dateAsign, u.dateMax, i.name, i.lastnameP, i.username FROM activitiesfromtherapist u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND u.dateMax=:date AND u.completed=0", nativeQuery = true)
     java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAGByDate(@Param("userTAGId") int userTAGId, @Param("date") Date date);
         
+    @Query(value= "Select COUNT(*) FROM activitiesfromtherapist WHERE userTAGId=:userTAGId", nativeQuery = true)
+    Integer CountRequestQuantityActivities(@Param("userTAGId") int userTAGId);
 
+    @Query(value= "Select activityTId FROM activitiesfromtherapist WHERE userTAGId=:userTAGId", nativeQuery = true)
+    List<Integer> SelectActiivityId(@Param("userTAGId") int userTAGId);
+
+    @Query(value= "Select userTherapistId FROM activitiesfromtherapist WHERE userTAGId=:userTAGId", nativeQuery = true)
+    List<Integer> SelectTherapistId (@Param("userTAGId") int userTAGId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Update activitiesfromtherapist set comments = :comments where activityTId =:activityTId", nativeQuery = true)
+    Integer UpdateCommentsTherapist(@Param("activityTId") int activityTId,
+    @Param("comments") String comments);
 }
+
