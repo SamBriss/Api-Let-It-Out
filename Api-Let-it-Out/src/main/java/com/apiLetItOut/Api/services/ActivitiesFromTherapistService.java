@@ -15,4 +15,14 @@ public class ActivitiesFromTherapistService {
     {
         return activitiesFromTherapistRepository.RegisterNewActivityFromTherapist(userTAGId, userTherapistId, label, description, dateAsign, dateMax, completed);
     }
+    
+    public java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAGMethod(int userTAGId)
+    {
+        return activitiesFromTherapistRepository.findAllActivitiesToDoFromCalendarTAG(userTAGId);
+    }
+    
+    public java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAGByDateMethod(int userTAGId, Date date)
+    {
+        return activitiesFromTherapistRepository.findAllActivitiesToDoFromCalendarTAGByDate(userTAGId, date);
+    }
 }

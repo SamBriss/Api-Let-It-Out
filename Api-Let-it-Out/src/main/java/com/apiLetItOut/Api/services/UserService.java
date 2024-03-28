@@ -22,7 +22,7 @@ public class UserService {
     {
         return userRepository.LogInUserByEmail(email, password);
     }
-    public int SearchUserTAGMethod(String username)
+    public Integer SearchUserTAGMethod(String username)
     {
         return userRepository.SearchUsersByUsername(username);
     }

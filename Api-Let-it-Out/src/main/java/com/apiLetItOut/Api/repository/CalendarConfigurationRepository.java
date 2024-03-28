@@ -23,4 +23,6 @@ public interface CalendarConfigurationRepository  extends CrudRepository <Calend
                         
     @Query(value= "Select configurationId FROM CalendarConfigurationUsers WHERE userId=:userId", nativeQuery = true)
     Integer SearchConfigurationIdByUserId (@Param("userId") int userId);
+
+    
 }

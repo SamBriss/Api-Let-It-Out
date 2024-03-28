@@ -18,7 +18,14 @@ public interface CalendarTAGActivityRepository extends CrudRepository<CalendarTA
     
     // en esta no me capta startHour, dice que no existe sepa pq
     @Query(value= "Select u.startHour, u.endHour FROM calendar_tag_activity u WHERE u.userTAGId=:userTAGId AND u.date=:date", nativeQuery = true)
-    java.util.List<Object[]> findRegistersOfUserTagActivities(@Param("userTAGId") int userTherapistId, @Param("date") Date date);
+    java.util.List<Object[]> findRegistersOfUserTagActivities(@Param("userTAGId") int userTAGId, @Param("date") Date date);
+
+    @Query(value= "Select u.activityId, u.label, u.location, u.direction, u.date, u.startHour, u.endHour, u.dateRegister, u.comments, u.reminders FROM calendar_tag_activity u WHERE u.userTAGId=:userTAGId", nativeQuery = true)
+    java.util.List<Object[]> findAllActivitiesFromCalendarTAG(@Param("userTAGId") int userTAGId);
+
+
+    @Query(value= "Select u.activityId, u.label, u.location, u.direction, u.date, u.startHour, u.endHour, u.dateRegister, u.comments, u.reminders FROM calendar_tag_activity u WHERE u.userTAGId=:userTAGId AND u.date=:date", nativeQuery = true)
+    java.util.List<Object[]> findAllActivitiesFromCalendarTAGByDate(@Param("userTAGId") int userTAGId, @Param("date") Date date);
 
     @Transactional
     @Modifying

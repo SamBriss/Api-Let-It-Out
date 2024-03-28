@@ -4,6 +4,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apiLetItOut.Api.models.AppointmentCalendar;
 import com.apiLetItOut.Api.repository.AppointmentCalendarRepository;
 
 @Service
@@ -18,7 +19,15 @@ public class AppointmentCalendarService {
     public java.util.List<Object[]> findRegistersOfUserTagAppointmentsMethod(int userTAGId, Date date) {
         return appointmentCalendarRepository.findRegistersOfUserTagAppointments(userTAGId, date);
     }
-
+  
+    public java.util.List<Object[]> findAllAppointmentsFromCalendarTAGMethod(int userTAGId)
+    {
+        return appointmentCalendarRepository.findAllAppointmentsFromCalendarTAG(userTAGId);
+    }
+    public java.util.List<Object[]> findAppointmentsFromCalendarTAGByDateMethod(int userTAGId, Date date)
+    {
+        return appointmentCalendarRepository.findAppointmentsFromCalendarTAGByDate(userTAGId, date);
+    }
     public Integer SearchCountAppointmentsTherapistCalendarMethod()
     {
         return appointmentCalendarRepository.SearchCountAppointmentsTherapistCalendar();

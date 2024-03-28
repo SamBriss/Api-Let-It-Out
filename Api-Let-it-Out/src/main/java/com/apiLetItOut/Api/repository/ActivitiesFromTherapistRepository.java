@@ -25,4 +25,14 @@ public interface ActivitiesFromTherapistRepository extends CrudRepository <Activ
                         @Param("dateAsign") Date dateAsign,
                         @Param("dateMax") Date dateMax,
                         @Param("completed") int completed);
+
+                                            
+    @Query(value= "Select u.label, u.description, u.dateAsign, u.dateMax, t.name, t.lastnameP, t.username FROM activitiesfromtherapist u INNER JOIN userstherapists i ON u.userTherapistId=i.userTherapistId INNER JOIN users t ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND u.completed=0", nativeQuery = true)
+    java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAG(@Param("userTAGId") int userTAGId);
+
+       
+    @Query(value= "Select u.label, u.description, u.dateAsign, u.dateMax, i.name, i.lastnameP, i.username FROM activitiesfromtherapist u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND u.dateMax=:date AND u.completed=0", nativeQuery = true)
+    java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAGByDate(@Param("userTAGId") int userTAGId, @Param("date") Date date);
+        
+
 }

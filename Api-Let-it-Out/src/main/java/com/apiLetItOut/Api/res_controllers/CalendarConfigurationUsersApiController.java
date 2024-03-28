@@ -16,6 +16,8 @@ import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;
 import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
 import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -122,6 +124,26 @@ public class CalendarConfigurationUsersApiController {
         
         return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
     }
+
+    @PostMapping("/configCalendar/findExistenceOfConfigurationId")
+    public ResponseEntity<String> postMethodName(@RequestParam("username") String username) {
+        Integer userId = 0;
+        userId = this.userService.SearchUserTAGMethod(username);
+        if(userId!=null)
+        {
+            Integer configurationId = this.calendarConfigurationUsersService.SearchConfigurationIdByUserIdMethod(userId);
+            if(configurationId!=null)
+            {
+            return ResponseEntity.status(HttpStatus.OK).body("1");
+            }
+            else
+            {
+                return ResponseEntity.ok("0");
+            }
+        }
+        return ResponseEntity.ok("UserIdNotFound");
+    }
+    
     
 
 }
