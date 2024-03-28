@@ -2,7 +2,7 @@ package com.apiLetItOut.Api.res_controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiLetItOut.Api.services.ResponsableAdultService;
+import com.apiLetItOut.Api.services.RelationUsersService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
@@ -27,7 +27,7 @@ public class UpdateTAGProfile {
     UserService userService;
 
     @Autowired
-    ResponsableAdultService responsableAdultService;
+    RelationUsersService relationUserService;
 
     @PostMapping("/userProfile/getDataGeneralUsername")
     public ResponseEntity<Map<String, Object>> getUserProfileGeneralByUsername(@RequestParam("username") String username) {
@@ -80,7 +80,8 @@ public class UpdateTAGProfile {
         String tel = userService.SearchUserTelMethod(userId);
         String gender = userService.SearchUserGenderMethod(userId);
         String password = userService.SearchUserPasswordMethod(userId);
-        
+        int existenceRelation = relationUserService.ExistenceOfUserTAGWithTherapistMethod(userTAGId);
+        System.out.println(existenceRelation);
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
         Boolean medsExistence = userTAGService.SearchMedsExistenceTAG(userTAGId);
         String levelTAGStr="Leve";
@@ -100,15 +101,15 @@ public class UpdateTAGProfile {
             }
         }
         
-        if(gender=="F" || gender=="f")
+        if(gender.equals("F") || gender.equals("f"))
         {
             gender="Femenino";
         }
-        else if(gender=="M" || gender=="m")
+        else if(gender.equals("M") || gender.equals("m"))
         {
             gender="Masculino";
         }
-        else if(gender=="P" || gender=="p")
+        else if(gender.equals("P") || gender.equals("p"))
         {
             gender = "Prefiero no especificar";
         }
@@ -122,6 +123,7 @@ public class UpdateTAGProfile {
         responseData.put("password", password);
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("medsExistence", medsExistence);
+        responseData.put("relationCount", existenceRelation);
         
         // Retornar los datos como respuesta
         return ResponseEntity.ok(responseData);
@@ -138,14 +140,15 @@ public class UpdateTAGProfile {
                                                     @RequestParam("username") String username,
                                                     @RequestParam("levelTAG") String levelTAGStr,
                                                     @RequestParam("medsExistence") String medsExistenceStr) {
-        int age, levelTAGId=1;
+        System.out.println(medsExistenceStr);
+        int age, levelTAGId=1, medsExistence;
         try{
             age = Integer.parseInt(ageStr);
+            medsExistence = Integer.parseInt(medsExistenceStr);
         }catch(NumberFormatException e)
         {
             return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
         }
-        boolean medsExistence = Boolean.parseBoolean(medsExistenceStr);
         if(levelTAGStr.equals("Leve"))
         {
             levelTAGId=1;
@@ -162,13 +165,14 @@ public class UpdateTAGProfile {
         char genderChar = gender.charAt(0);
         gender = String.valueOf(genderChar);
         String telCompleto = "+521" + tel;
+        int umbral = 210 - age;
         int userId = userService.SearchUserTAGMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
         int countOfUpdatedUsers = userService.UpdateUsersMethod(userId, name, lastNameP,lastNameM, age, gender, telCompleto, password);
         
         if(countOfUpdatedUsers>0)
         {
-            int countOfUpdatedTAG = userTAGService.UpdateUserTAGLevelMedsExistenceMethod(levelTAGId, medsExistence, userTAGId);
+            int countOfUpdatedTAG = userTAGService.UpdateUserTAGLevelMedsExistenceMethod(levelTAGId, medsExistence, userTAGId, umbral);
             if(countOfUpdatedTAG>0)
             {
                 return ResponseEntity.status(HttpStatus.CREATED).body("success");
@@ -234,7 +238,7 @@ public class UpdateTAGProfile {
         String tel = userService.SearchUserTelMethod(userId);
         String gender = userService.SearchUserGenderMethod(userId);
         String password = userService.SearchUserPasswordMethod(userId);
-        
+        int existenceRelation = relationUserService.ExistenceOfUserTAGWithTherapistMethod(userTAGId);
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
         Boolean medsExistence = userTAGService.SearchMedsExistenceTAG(userTAGId);
         String levelTAGStr="Leve";
@@ -254,15 +258,15 @@ public class UpdateTAGProfile {
             }
         }
         
-        if(gender=="F" || gender=="f")
+        if(gender.equals("F") || gender.equals("f"))
         {
             gender="Femenino";
         }
-        else if(gender=="M" || gender=="m")
+        else if(gender.equals("M") || gender.equals("m"))
         {
             gender="Masculino";
         }
-        else if(gender=="P" || gender=="p")
+        else if(gender.equals("P") || gender.equals("p"))
         {
             gender = "Prefiero no especificar";
         }
@@ -276,6 +280,7 @@ public class UpdateTAGProfile {
         responseData.put("password", password);
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("medsExistence", medsExistence);
+        responseData.put("relationCount", existenceRelation);
         
         // Retornar los datos como respuesta
         return ResponseEntity.ok(responseData);
@@ -292,14 +297,14 @@ public class UpdateTAGProfile {
                                                     @RequestParam("email") String email,
                                                     @RequestParam("levelTAG") String levelTAGStr,
                                                     @RequestParam("medsExistence") String medsExistenceStr) {
-        int age, levelTAGId=1;
+        int age, levelTAGId=1, medsExistence;
         try{
             age = Integer.parseInt(ageStr);
+            medsExistence = Integer.parseInt(medsExistenceStr);
         }catch(NumberFormatException e)
         {
             return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
         }
-        boolean medsExistence = Boolean.parseBoolean(medsExistenceStr);
         if(levelTAGStr.equals("Leve"))
         {
             levelTAGId=1;
@@ -315,13 +320,14 @@ public class UpdateTAGProfile {
         }
         char genderChar = gender.charAt(0);
         gender = String.valueOf(genderChar);
+        int umbral = 210-age;
         int userId = userService.SearchUsersByEmailMethod(email);
         int userTAGId = userTAGService.FoundTAGMethod(userId);
         int countOfUpdatedUsers = userService.UpdateUsersMethod(userId, name, lastNameP,lastNameM, age, gender, tel, password);
         
         if(countOfUpdatedUsers>0)
         {
-            int countOfUpdatedTAG = userTAGService.UpdateUserTAGLevelMedsExistenceMethod(levelTAGId, medsExistence, userTAGId);
+            int countOfUpdatedTAG = userTAGService.UpdateUserTAGLevelMedsExistenceMethod(levelTAGId, medsExistence, userTAGId, umbral);
             if(countOfUpdatedTAG>0)
             {
                 return ResponseEntity.status(HttpStatus.CREATED).body("success");
@@ -334,4 +340,7 @@ public class UpdateTAGProfile {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar usuario");
         }
     }
+
+
+    
 }

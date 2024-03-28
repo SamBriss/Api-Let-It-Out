@@ -1,11 +1,9 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apiLetItOut.Api.models.ActivityTherapistCalendar;
 import com.apiLetItOut.Api.repository.ActivityTherapistCalendarRepository;
 
 @Service

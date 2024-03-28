@@ -41,8 +41,8 @@ public class UserTAGService {
         return userTAGRepository.SearchMedsExistenceTAG(userTAGId);
     }
 
-    public Integer UpdateUserTAGLevelMedsExistenceMethod(int levelTAGId, boolean medsExistence, int userTAGId)
+    public Integer UpdateUserTAGLevelMedsExistenceMethod(int levelTAGId, int medsExistence, int userTAGId, int umbral)
     {
-        return userTAGRepository.UpdateUserTAGLevelMedsExistence(levelTAGId, levelTAGId, userTAGId);
+        return userTAGRepository.UpdateUserTAGLevelMedsExistence(levelTAGId, medsExistence, umbral, userTAGId);
     }
 }

@@ -67,4 +67,45 @@ public class PsychiatricDomainController {
         }
 
     }
+
+    @PostMapping("/userTAG/UpdatePsydomains")
+    public ResponseEntity<String> UpdateDomains(@RequestParam("username") String username,
+            @RequestParam("domainId") String domainIdstr,
+            @RequestParam("score") String scorestr,
+            @RequestParam("executionDate") String executionDatestr) throws ParseException {
+
+        int domainId;
+        int score;
+
+        try {
+            score = Integer.parseInt(scorestr);
+            domainId = Integer.parseInt(domainIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Formato de fecha
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        // Convertir el String a Date
+        Date executionDate = formatoFecha.parse(executionDatestr);
+
+
+        int userId = userService.SearchUserTAGMethod(username);
+        userId = userService.SearchUsersByEmailMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        if (userTAGId > 0) {
+            int psychiatricDomainQuestionaireId = psychiatricDomainService.UpdateDomainsMethod(userTAGId, domainId,
+                    score, executionDate);
+            if (psychiatricDomainQuestionaireId > 0) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("success");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar dominios");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+
+    }
 }

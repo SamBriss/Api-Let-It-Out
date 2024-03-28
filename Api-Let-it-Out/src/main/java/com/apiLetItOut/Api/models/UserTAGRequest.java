@@ -6,7 +6,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "UsersTAGRequest")
 public class UserTAGRequest {
@@ -20,20 +28,4 @@ public class UserTAGRequest {
 
     @ManyToOne
     private UsersTherapists usersTherapists;    
-
-    public int getUserTAGRequestId() {
-        return userTAGRequestId;
-    }
-
-    public void setUserTAGRequestId(int userTAGRequestId) {
-        this.userTAGRequestId = userTAGRequestId;
-    }
-
-    public int getStatus(){
-        return status;
-    }
-
-    public void setStatus(int status){
-        this.status = status;
-    }
 }

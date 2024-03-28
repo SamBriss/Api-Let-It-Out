@@ -31,4 +31,8 @@ public class RelationUsersService {
     {
         return relationUsersRepository.DeleteVinculation(userTAGId, userTherapistId);
     }
+    public int ExistenceOfUserTAGWithTherapistMethod(int userTAGId)
+    {
+        return relationUsersRepository.ExistenceOfUserTAGWithTherapist(userTAGId);
+    }
 }

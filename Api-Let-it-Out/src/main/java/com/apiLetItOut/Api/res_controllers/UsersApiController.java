@@ -35,12 +35,6 @@ public class UsersApiController {
         }
     }
 
-    public String postMethodName(@RequestBody String entity) {
-        // TODO: process POST request
-
-        return entity;
-    }
-
     @PostMapping("/user/createToken")
     public ResponseEntity createToken(@RequestParam("username") String username,
             @RequestParam("email") String email) {
@@ -101,6 +95,18 @@ public class UsersApiController {
             return ResponseEntity.status(HttpStatus.OK).body("0");
         } else {
             return ResponseEntity.status(HttpStatus.OK).body("1");
+        }
+    }
+
+    @PostMapping("/userProfile/logOut")
+    public ResponseEntity<String> logOutProfile(@RequestParam ("username") String username, @RequestParam("email") String email)
+    {
+        int countRows = userService.updateTokenMethod("0", username, email);
+        if(countRows>0)
+        {
+            return ResponseEntity.status(HttpStatus.CREATED).body("success");
+        } else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el token");
         }
     }
 }

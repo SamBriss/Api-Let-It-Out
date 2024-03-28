@@ -36,4 +36,7 @@ public interface RelationUsersRepository extends CrudRepository<RelationUsers, I
         @Query(value= "DELETE FROM relationusers WHERE userTAGId=:userTAGId AND userTherapistId=:userTherapistId", nativeQuery = true)
         Integer DeleteVinculation(@Param("userTAGId") int userTAGId,
                                 @Param("userTherapistId") int userTherapistId); 
+        
+        @Query (value="Select COUNT(*) from relationusers where userTAGId = :userTAGId", nativeQuery = true)
+        Integer ExistenceOfUserTAGWithTherapist(@Param("userTAGId") int userTAGId);
 }
