@@ -3,9 +3,11 @@ package com.apiLetItOut.Api.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.apiLetItOut.Api.models.FeedbackEmotions;
 
+@Repository
 public interface EmotionsRepository extends CrudRepository <FeedbackEmotions, Integer>{ 
 
     @Query(value= "Select emotionsId FROM feedbackemotions WHERE name=:emotion", nativeQuery = true)
