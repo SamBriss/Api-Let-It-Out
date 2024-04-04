@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -48,5 +49,22 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
     @Query(value= "Select u.startHour, u.endHour FROM appointmentcalendar u WHERE u.userTAGId=:userTAGId AND u.date=:date AND u.therapistAcceptance!=2 AND u.TAGacceptance=1", nativeQuery = true)
     java.util.List<Object[]> findRegistersOfUserTagAppointments(@Param("userTAGId") int userTAGId, @Param("date") Date date);
 
-              
+    @Query(value = "Select a.appointmentId, a.date, a.startHour, a.endHour, a.userTherapistId FROM appointmentcalendar a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TAGacceptance=1 AND a.date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 14 DAY)", nativeQuery = true)
+    java.util.List<Object[]> findNext14DaysAppointments(@Param("username") String username);
+
+    @Query(value = "Select a.startHour, a.endHour, a.date from appointmentcalendar a INNER JOIN userstherapists t ON a.userTherapistId=t.userTherapistId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TherapistAcceptance=1 AND a.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY a.startHour ASC", nativeQuery = true)
+    List<Object[]> findDateAndHoursOfAppointmentsTherapist(@Param("username") String username);
+
+    @Query(value = "Select a.startHour, a.endHour, a.date from appointmentcalendar a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TAGacceptance=1 AND a.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY a.startHour ASC", nativeQuery = true)
+    List<Object[]> findDateAndHoursOfAppointmentsTAG(@Param("username") String username);
+    
+    @Transactional
+    @Modifying
+    @Query(value = "Update appointmentcalendar set startHour =:startHour, endHour = :endHour, date = :date, therapistAcceptance = :therapistAcceptance, TAGacceptance =:TAGacceptance where appointmentId=:appointmentId", nativeQuery = true)
+    Integer UpdateAppointment(@Param("appointmentId") int appointmentId, 
+                        @Param("startHour") Date startHour,
+                        @Param("endHour") Date endHour,
+                        @Param("date") Date date,
+                        @Param("therapistAcceptance") int therapistAcceptance,
+                        @Param("TAGacceptance") int TAGacceptance);
 }

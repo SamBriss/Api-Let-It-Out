@@ -67,4 +67,9 @@ public class UserTherapistService {
     {
         return userTherapistRepository.UpdateLicenceTherapist(userTherapistId, licence);
     }
+
+    public Object[] FindNameLastNamePUsernameTherapistByTherapistIdMethod(int appointmentId)
+    {
+        return userTherapistRepository.FindNameLastNamePUsernameTherapistByTherapistId(appointmentId);
+    }
 }

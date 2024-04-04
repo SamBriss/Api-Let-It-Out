@@ -1,7 +1,11 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.apiLetItOut.Api.models.AppointmentCalendar;
@@ -37,5 +41,24 @@ public class AppointmentCalendarService {
     {
         return appointmentCalendarRepository.addNewAppointmentFromTherapistCalendar(userTAGId, userTherapistId, date, startHour, endHour, therapistAcceptance, TAGacceptance);
     }
+
+    public java.util.List<Object[]> findNext14DaysAppointmentsMethod(String username)
+    {
+        return appointmentCalendarRepository.findNext14DaysAppointments(username);
+    }
     
+    public java.util.List<Object[]> findDateAndHoursOfAppointmentsTherapistMethod(String username)
+    {
+        return appointmentCalendarRepository.findDateAndHoursOfAppointmentsTherapist(username);
+    }
+
+    public java.util.List<Object[]> findDateAndHoursOfAppointmentsTAGMethod(String username)
+    {
+        return appointmentCalendarRepository.findDateAndHoursOfAppointmentsTAG(username);
+    }
+
+    public Integer UpdateAppointmentMethod(int appointmentId, Date startHour, Date endHour, Date date, int therapistAcceptance, int TAGacceptance)
+    {
+        return appointmentCalendarRepository.UpdateAppointment(appointmentId, startHour, endHour, date, therapistAcceptance, TAGacceptance);
+    }
 }

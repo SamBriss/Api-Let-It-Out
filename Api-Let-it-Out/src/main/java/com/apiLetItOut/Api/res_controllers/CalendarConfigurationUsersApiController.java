@@ -3,6 +3,7 @@ package com.apiLetItOut.Api.res_controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,9 @@ import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;
 import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
 import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
+
+import jakarta.el.ELException;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -144,6 +148,56 @@ public class CalendarConfigurationUsersApiController {
         return ResponseEntity.ok("UserIdNotFound");
     }
     
+    @PostMapping("configCalendar/startHourJourney")
+    public ResponseEntity postMethodNameJourneyStart(@RequestParam("appointmentId") String appointmentIdString) {
+        
+        try
+        {
+            int appointmentId = Integer.parseInt(appointmentIdString);
+            if(appointmentId>0)
+            {
+                Object startHourJourney = calendarConfigurationUsersService.SearchStartHourJourneyMethod(appointmentId);
+                return ResponseEntity.ok().body(startHourJourney);
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return ResponseEntity.ok().body("n");
+    }
     
+    @PostMapping("configCalendar/endHourJourney")
+    public ResponseEntity postMethodNameJourneyEnd(@RequestParam("appointmentId") String appointmentIdString) {
+        
+        try
+        {
+            int appointmentId = Integer.parseInt(appointmentIdString);
+            if(appointmentId>0)
+            {
+                Object startHourJourney = calendarConfigurationUsersService.SearchEndHourJourneyMethod(appointmentId);
+                return ResponseEntity.ok().body(startHourJourney);
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return ResponseEntity.ok().body("n");
+    }
+    
+
+    @PostMapping("configCalendar/getPreferenceAppointmentsTAG")
+    public ResponseEntity postmethodGetPreferencesAppointments(@RequestParam("usernameTAG") String usernameTAG)
+    {
+        List<Object[]> preferenceAppointments = preferenceDaysService.findPreferenceAppointmentsTAGMethod(usernameTAG);
+        if(preferenceAppointments.isEmpty())
+        {
+            return ResponseEntity.ok().body("none");
+        }
+        return ResponseEntity.ok().body(preferenceAppointments); 
+    }
 
 }

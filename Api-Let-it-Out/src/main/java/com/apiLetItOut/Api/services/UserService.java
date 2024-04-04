@@ -106,4 +106,9 @@ public class UserService {
     {
         return userRepository.SearchUsernameByEmail(email);
     }
+
+    public Integer FindUserIdByUserTherapistIdMethod(int userTherapistId)
+    {
+        return userRepository.FindUserIdByUserTherapistId(userTherapistId);
+    }
 }
