@@ -21,13 +21,13 @@ public class CalendarConfigurationUsersService {
     {
         return calendarConfigurationRepository.SearchConfigurationIdByUserId(userId);
     }
-    public Object SearchStartHourJourneyMethod(int appointmentId)
+    public Object SearchStartHourJourneyMethod(String usernameTherapist)
     {
-        return calendarConfigurationRepository.SearchStartHourJourney(appointmentId);
+        return calendarConfigurationRepository.SearchStartHourJourney(usernameTherapist);
     }
     
-    public Object SearchEndHourJourneyMethod(int appointmentId)
+    public Object SearchEndHourJourneyMethod(String usernameTherapist)
     {
-        return calendarConfigurationRepository.SearchEndHourJourney(appointmentId);
+        return calendarConfigurationRepository.SearchEndHourJourney(usernameTherapist);
     }
 }

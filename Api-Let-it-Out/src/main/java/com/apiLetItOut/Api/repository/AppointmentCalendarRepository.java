@@ -49,7 +49,7 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
     @Query(value= "Select u.startHour, u.endHour FROM appointmentcalendar u WHERE u.userTAGId=:userTAGId AND u.date=:date AND u.therapistAcceptance!=2 AND u.TAGacceptance=1", nativeQuery = true)
     java.util.List<Object[]> findRegistersOfUserTagAppointments(@Param("userTAGId") int userTAGId, @Param("date") Date date);
 
-    @Query(value = "Select a.appointmentId, a.date, a.startHour, a.endHour, a.userTherapistId FROM appointmentcalendar a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TAGacceptance=1 AND a.date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 14 DAY)", nativeQuery = true)
+    @Query(value = "Select a.appointmentId, a.date, a.startHour, a.endHour, a.userTherapistId FROM appointmentcalendar a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TAGacceptance=1 AND a.date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 14 DAY) ORDER BY a.date ASC", nativeQuery = true)
     java.util.List<Object[]> findNext14DaysAppointments(@Param("username") String username);
 
     @Query(value = "Select a.startHour, a.endHour, a.date from appointmentcalendar a INNER JOIN userstherapists t ON a.userTherapistId=t.userTherapistId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TherapistAcceptance=1 AND a.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY a.startHour ASC", nativeQuery = true)
@@ -67,4 +67,9 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
                         @Param("date") Date date,
                         @Param("therapistAcceptance") int therapistAcceptance,
                         @Param("TAGacceptance") int TAGacceptance);
+
+                        
+    @Query(value = "Select a.appointmentId, a.endHour, a.userTherapistId FROM appointmentcalendar a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TherapistAcceptance=1 AND a.TAGacceptance=0 ORDER BY a.date ASC", nativeQuery = true)
+    java.util.List<Object[]> findAppointmentsToConfirmByTherapist(@Param("username") String username);
+
 }

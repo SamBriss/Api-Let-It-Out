@@ -52,4 +52,7 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
                                             @Param("medsExistence") int medsExistence,
                                             @Param("umbral") int umbral,
                                             @Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select t.userTAGId from users u INNER JOIN userstag t ON u.userId=t.userId WHERE u.username=:username", nativeQuery = true)
+    Integer GetUserTAGIdByeUsername(@Param("username") String username);
 }

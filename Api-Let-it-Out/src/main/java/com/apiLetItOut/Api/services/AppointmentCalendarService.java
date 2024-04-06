@@ -61,4 +61,9 @@ public class AppointmentCalendarService {
     {
         return appointmentCalendarRepository.UpdateAppointment(appointmentId, startHour, endHour, date, therapistAcceptance, TAGacceptance);
     }
+    
+    public java.util.List<Object[]> findAppointmentsToConfirmByTherapistMethod(String username)
+    {
+        return appointmentCalendarRepository.findAppointmentsToConfirmByTherapist(username);
+    }
 }

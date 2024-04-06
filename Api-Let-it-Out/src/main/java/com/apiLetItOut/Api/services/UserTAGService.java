@@ -45,4 +45,8 @@ public class UserTAGService {
     {
         return userTAGRepository.UpdateUserTAGLevelMedsExistence(levelTAGId, medsExistence, umbral, userTAGId);
     }
+    public Integer GetUserTAGIdByeUsernameMethod(String username)
+    {
+        return userTAGRepository.GetUserTAGIdByeUsername(username);
+    }
 }

@@ -149,46 +149,28 @@ public class CalendarConfigurationUsersApiController {
     }
     
     @PostMapping("configCalendar/startHourJourney")
-    public ResponseEntity postMethodNameJourneyStart(@RequestParam("appointmentId") String appointmentIdString) {
-        
-        try
+    public ResponseEntity postMethodNameJourneyStart(@RequestParam("usernameTherapist") String usernameTherapist) {
+   
+        Object startHourJourney = calendarConfigurationUsersService.SearchStartHourJourneyMethod(usernameTherapist);
+        if(startHourJourney!=null)
         {
-            int appointmentId = Integer.parseInt(appointmentIdString);
-            if(appointmentId>0)
-            {
-                Object startHourJourney = calendarConfigurationUsersService.SearchStartHourJourneyMethod(appointmentId);
-                return ResponseEntity.ok().body(startHourJourney);
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        
+            return ResponseEntity.ok().body(startHourJourney);
+        }            
         return ResponseEntity.ok().body("n");
     }
     
     @PostMapping("configCalendar/endHourJourney")
-    public ResponseEntity postMethodNameJourneyEnd(@RequestParam("appointmentId") String appointmentIdString) {
+    public ResponseEntity postMethodNameJourneyEnd(@RequestParam("usernameTherapist") String usernameTherapist) {
+
+        Object startHourJourney = calendarConfigurationUsersService.SearchEndHourJourneyMethod(usernameTherapist);
         
-        try
+        if(startHourJourney!=null)
         {
-            int appointmentId = Integer.parseInt(appointmentIdString);
-            if(appointmentId>0)
-            {
-                Object startHourJourney = calendarConfigurationUsersService.SearchEndHourJourneyMethod(appointmentId);
-                return ResponseEntity.ok().body(startHourJourney);
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        
+            return ResponseEntity.ok().body(startHourJourney);
+        }            
         return ResponseEntity.ok().body("n");
     }
     
-
     @PostMapping("configCalendar/getPreferenceAppointmentsTAG")
     public ResponseEntity postmethodGetPreferencesAppointments(@RequestParam("usernameTAG") String usernameTAG)
     {
@@ -200,4 +182,5 @@ public class CalendarConfigurationUsersApiController {
         return ResponseEntity.ok().body(preferenceAppointments); 
     }
 
+    
 }

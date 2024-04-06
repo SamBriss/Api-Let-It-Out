@@ -244,4 +244,76 @@ public class AppointmentCalendarApiController {
 
         return ResponseEntity.ok().body("unsuccessful");
     }
+
+    @PostMapping("appointment/createAppointmentChatBot")
+    public ResponseEntity<String> addAppointmentChatBot(@RequestParam("usernameTAG") String usernameTAG,
+                                                        @RequestParam("usernameTherapist") String usernameTherapist,
+                                                        @RequestParam ("startHour") String startHourStr,
+                                                        @RequestParam("endHour") String endHourStr,
+                                                        @RequestParam("date") String dateStr) {
+
+    Integer userId = 0;
+    userId = this.userService.SearchUserTAGMethod(usernameTherapist); // find user therapist as his userId
+    if(userId!=0 && userId != null)
+    {
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date startHour;
+        java.util.Date endHour;
+        int therapistAcceptance, TAGacceptance, userTAGId;
+        java.util.Date date;
+        try {
+            startHour = formatoHora.parse(startHourStr);
+            endHour = formatoHora.parse(endHourStr);
+            date = formatoFecha.parse(dateStr);
+            therapistAcceptance = 0;
+            TAGacceptance = 1;
+
+            int userIdTAG = userService.SearchUserTAGMethod(usernameTAG);
+            userTAGId = userTAGService.FoundTAGMethod(userIdTAG);
+            int userTherapistId = this.userTherapistService.FoundTherapistIdMethod(userId);
+            //UsersTherapists userTherID = userTherapistService.FoundUserTherapistMethod(userId);
+            System.out.println("therapistID:  "+userTherapistId);
+            if (userTherapistId > 0 && userTAGId > 0) {
+                // agregar la actividad a la tabla de appointmentCalendar
+
+                int result = appointmentCalendarService.addNewAppointmentFromTherapistCalendarMethod(userTAGId, userTherapistId, date, startHour, endHour, therapistAcceptance, TAGacceptance);
+            
+                return ResponseEntity.status(HttpStatus.OK).body(""+result);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }            
+                                                
+        return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
+
+    @PostMapping("appointments/GetTAGAppointmentsToConfirm")
+    public ResponseEntity postMethodGetAppointmentsToConfirmTherapist(@RequestParam("username") String username) {
+        
+        java.util.List<Object[]> appointmentsToConfirm = appointmentCalendarService.findAppointmentsToConfirmByTherapistMethod(username);
+        if(!appointmentsToConfirm.isEmpty())
+        {
+            java.util.List<Object[]> usersTherapistInfoByAppointment = new ArrayList<>();
+            for(int i = 0; i < appointmentsToConfirm.size(); i ++)
+            {
+                int appointmentId = Integer.parseInt(appointmentsToConfirm.get(i)[0].toString());
+                Object[] d = userTherapistService.FindNameLastNamePUsernameTherapistByTherapistIdMethod(appointmentId);
+                usersTherapistInfoByAppointment.add(d);
+            }
+            
+            java.util.List<Object[]> combinedList = combineLists(appointmentsToConfirm, usersTherapistInfoByAppointment);
+            // Mostramos el resultado
+            for (Object[] array : combinedList) {
+                System.out.print(array[0] +" , "+ array[1]+" , "+array[2]+" , ");
+                Object[] objects = (Object[]) array[3];
+                System.out.println(objects[0]+" , "+objects[1]+" , "+objects[2]);
+            }
+            return ResponseEntity.ok().body(combinedList);
+
+        }
+        return ResponseEntity.ok().body("none");
+    }
+
 }
