@@ -4,7 +4,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apiLetItOut.Api.models.AppointmentCalendar;
 import com.apiLetItOut.Api.repository.AppointmentCalendarRepository;
 
 @Service

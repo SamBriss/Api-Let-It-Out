@@ -21,7 +21,6 @@ import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.CalendarTAGActivityService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController

@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -52,4 +53,9 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
                                             @Param("medsExistence") int medsExistence,
                                             @Param("umbral") int umbral,
                                             @Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select userTAGId from usersTAG ut join users u on ut.userId = u.userId where u.age>:bottomLimitAge AND age<:topLimitAge AND ut.levelTAGId = :levelTAGId", nativeQuery = true)
+    List<Integer> SearchUsersSimilarsId (@Param("bottomLimitAge") int bottomLimitAge,
+                                    @Param("topLimitAge") int topLimitAge,
+                                    @Param("levelTAGId") int levelTAGId);
 }

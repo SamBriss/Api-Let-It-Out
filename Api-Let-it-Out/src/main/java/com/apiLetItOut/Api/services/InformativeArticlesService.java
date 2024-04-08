@@ -12,7 +12,8 @@ public class InformativeArticlesService {
 
     public int SearchIdOfDocumentMethod(String topic)
     {
-        return informativeArticleRepository.SearchIdOfDocument(topic);
+        String topicFormated = topic.toLowerCase();
+        return informativeArticleRepository.SearchIdOfDocument(topicFormated);
     }
 
     public String SearchNameOfDocumentMethod(int articleId)

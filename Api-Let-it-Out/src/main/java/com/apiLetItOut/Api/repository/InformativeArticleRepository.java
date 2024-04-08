@@ -9,7 +9,7 @@ import com.apiLetItOut.Api.models.InformativeArticles;
 
 @Repository
 public interface InformativeArticleRepository extends CrudRepository <InformativeArticles, Integer> {
-    @Query(value = "SELECT articleId FROM informativeArticles WHERE name LIKE %:topic%", nativeQuery = true)
+    @Query(value = "Select articleId FROM informativeArticles WHERE name LIKE CONCAT('%', :topic, '%')", nativeQuery = true)
     Integer SearchIdOfDocument(@Param("topic") String topic);
 
     @Query(value = "Select name FROM informativeArticles WHERE  articleId = :articleId", nativeQuery=true)

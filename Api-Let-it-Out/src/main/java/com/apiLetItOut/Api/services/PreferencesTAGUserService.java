@@ -1,5 +1,7 @@
 package com.apiLetItOut.Api.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,26 @@ public class PreferencesTAGUserService {
     
     public int PreferencesTAGUserMethod(String name, int score, int userTAGId, int categoryId){
         return preferencestaguserRepository.RegisterNewUserPreferences(name, score, userTAGId, categoryId);
+    }
+
+    public int SearchScoreOfPreferenceUserTAG(int userTAGId, String name)
+    {
+        return preferencestaguserRepository.SearchScoreOfPreferenceUserTAG(userTAGId, name);
+    }
+
+    public List<String> SearchPreferenceAuditive0ScoreMethod(int userTAGId, int categoryId)
+    {
+        return preferencestaguserRepository.SearchPreferenceAuditive0Score(userTAGId, categoryId);
+    }
+
+    public List<String> SearchLastPreferencesSensoriales(int userTAGId, int categoryId)
+    {
+        return preferencestaguserRepository.SearchLastPreferencesSensoriales(userTAGId, categoryId);
+    }
+
+    public String SearchLifeStylePreference(int userTAGId, int categoryId)
+    {
+        return preferencestaguserRepository.SearchLifeStylePreference(userTAGId, categoryId);
     }
     
 }

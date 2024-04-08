@@ -1,67 +1,41 @@
 package com.apiLetItOut.Api.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table (name = "Reminders")
 public class Reminders {
-    public int getRemindersId() {
-        return remindersId;
-    }
-
-    public void setRemindersId(int remindersId) {
-        this.remindersId = remindersId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    public UsersTAG getUserTAG() {
-        return userTAG;
-    }
-
-    public void setUserTAG(UsersTAG userTAG) {
-        this.userTAG = userTAG;
-    }
-
-    public ReminderTypes getReminderType() {
-        return reminderType;
-    }
-
-    public void setReminderType(ReminderTypes reminderType) {
-        this.reminderType = reminderType;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int remindersId;
     private String name;
     private LocalTime time;
+    private int active;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="userTAGId")
     private UsersTAG userTAG;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="reminderTypeId")
     private ReminderTypes reminderType;
 
 

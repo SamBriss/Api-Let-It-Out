@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiLetItOut.Api.services.CognitiveDistortionsService;
 import com.apiLetItOut.Api.services.DomainsService;
 import com.apiLetItOut.Api.services.InformativeArticlesService;
 import com.apiLetItOut.Api.services.PsychiatricDomainService;
@@ -39,83 +40,176 @@ public class InformationSectionApiController {
     @Autowired
     InformativeArticlesService informativeArticlesService;
 
-    @PostMapping("getDomains")
-    public ResponseEntity<Map<String, Object>> getDomainsToShowArticles(@RequestParam("user") String user) {
-        int userId  = -1;
-        userId =userService.SearchUserTAGMethod(user);
-        if(userId==-1)
+    @Autowired
+    CognitiveDistortionsService cognitiveDistortionsService;
+
+    @PostMapping("dataGeneral")
+    public ResponseEntity<Map<String, Object>> getBasicDataOfDocs(@RequestParam("user") String user) {
+        //Obtención de datos
+        int userId = -1;
+        userId = userService.SearchUserTAGMethod(user); //busca por username
+        if (userId == -1) { // 
+            userId = userService.SearchUsersByEmailMethod(user);// Si no lo encuentra
+        }
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+        //Datos generales
+        int age = userService.SearchUserAgeMethod(userId);
+        String rangeAge="niñx";
+        if(age < 21 && age>13)
         {
-            userId = userService.SearchUsersByEmailMethod(user);
+            rangeAge = "adolescente";
+        } else if(age>20 && age<36)
+        {
+            rangeAge="adulto joven";
+        } else if(age>34 && age<60)
+        {
+            rangeAge = "adulto";
+        } else if(age>59)
+        {
+            rangeAge="tercera edad";
         }
-        List<Integer> domainsId = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userId);
-        for (int domain : domainsId) {
-            System.out.println(domain);
+        String gender = userService.SearchUserGenderMethod(userId);
+        if(gender.equals("F") || gender.equals("f"))
+        {
+            gender = "Mujer";
         }
-        System.out.println("llega aqui id");
-        List<Integer> scores = psychiatricDomainService.SearchScoreOfDomainsId(userId);
-        for (int domain : scores) {
-            System.out.println(domain);
+        if(gender.equals("M") || gender.equals("m"))
+        {
+            gender = "Hombre";
         }
-        List<String> domainNames = new ArrayList<>();
-        System.out.println("llega aqui score");
-        for (int domain : domainsId) {
-            domainNames.add(domainsService.SearchNameOfDomain(domain));
+        if(gender.equals("P") || gender.equals("p"))
+        {
+            gender = "Queer";
         }
-        System.out.println("llega aqui domain");
-        for (String domain : domainNames) {
-            System.out.println(domain);
+        int levelTAGId = userTAGService.SearchLevelTAGMethod(userTAGId);
+        String levelTAG = "Leve";
+        if(levelTAGId==2)
+        {
+            levelTAG="Moderada";
         }
+        else if (levelTAGId==3)
+        {
+            levelTAG="Severo";
+        }
+        else if(levelTAGId==4)
+        {
+            levelTAG="Grave";
+        }
+        //Distorsiones Cognitivas
+        List<String> cognitiveDistortions = fillListWithDistortions();
+        List<String> cognitiveDistortionsOfUser = cognitiveDistortionsService.SearchCongitiveDistortionsOfUserMethod(userTAGId);
+        cognitiveDistortions.removeAll(cognitiveDistortionsOfUser);
+        // Dominios
+        List<Integer> domainsId = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
+        List<String> namesDomains = new ArrayList<>();
+        for (Integer domainId : domainsId) {
+            namesDomains.add(domainsService.SearchNameOfDomain(domainId));
+        }
+        //Obtencion de datos a mandar
+        List<String> topics = fillListOfTopics(levelTAG, rangeAge, gender, namesDomains, cognitiveDistortionsOfUser, cognitiveDistortions);
+        List<String> names = new ArrayList<>();
+        List<String> classifications = new ArrayList<>();
+        List<Integer> types = new ArrayList<>();
+        for (String topic : topics) {
+            System.out.println("el topid es " + topic);
+            try
+            {
+                Integer articleId = informativeArticlesService.SearchIdOfDocumentMethod(topic);
+                if (articleId != null) {
+                    int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
+                    String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
+                    names.add(name);
+                    String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
+                    classifications.add(classification);
+                    int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
+                    types.add(type);
+                }
+            }catch (NullPointerException ex)
+            {
+                continue;
+            }
+        }
+        
+        
         Map<String, Object> responseData = new HashMap<>();
-        for(int i = 0; i<3; i++)
-        {
-            System.out.println(i);
-            responseData.put(domainNames.get(i), scores.get(i));
+        for (int i = 0; i < topics.size(); i++) {
+            System.out.println("name"+i + " es: " + names.get(i));
+            responseData.put("name" + i, names.get(i));
+            System.out.println("class"+i + " es: " + classifications.get(i));
+            responseData.put("classification" + i, classifications.get(i));
+            System.out.println("types"+i + " es: " + types.get(i));
+            responseData.put("type" + i, types.get(i));
         }
         return ResponseEntity.ok(responseData);
     }
 
-    @PostMapping("getDomains/DataGeneral")
-    public ResponseEntity<Map<String, Object>> getBasicDataOfDocs(@RequestParam("domains") List<String> domains ) {
-        int[] articlesId = new int[3];
-        int i=0;
+    public List<String> fillListWithDistortions()
+    {
+        List<String> cognitiveDistortions = new ArrayList<>();
+        //cognitiveDistortions.add("Leer la mente");
+        cognitiveDistortions.add("Adivinar el futuro");//
+        cognitiveDistortions.add("Personalizacion");
+        /*cognitiveDistortions.add("Maximizar/minimizar");
+        cognitiveDistortions.add("Etiquetar");
+        cognitiveDistortions.add("Descalificar");*/
+        cognitiveDistortions.add("Sobregeneralizacion negativa");//
+        /*cognitiveDistortions.add("“debo” o “tengo”");
+        cognitiveDistortions.add("Personalización");
+        cognitiveDistortions.add("Comparación falsa");
+        cognitiveDistortions.add("“y que sí...”");
+        cognitiveDistortions.add("Razonamiento emocional");*/
+        return cognitiveDistortions;
+    }
+
+    public List<String> fillListOfTopics(String levelTAG, String age, String gender, List<String> domains, List<String> distortionRecognized, List<String> distortions)
+    {
+        List<String> topics = new ArrayList<>();
+        //topics.add(age);
+        //topics.add(gender);
+        //distortion
+        for (String distortion : distortionRecognized) {
+            topics.add(distortion);
+        }
+        //domains
         for (String domain : domains) {
-            articlesId[i] = informativeArticlesService.SearchIdOfDocumentMethod(domain);
-            i++;
+            topics.add(domain);
         }
-        String[] names = new String[3];
-        String[] classifications = new String[3];
-        int[] types = new int[3];
-        i=0;
-        for (int articleId : articlesId) {
-            names[i] = informativeArticlesService.SearchNameOfDocumentMethod(articleId);
-            classifications[i] = informativeArticlesService.SearchClassificationOfDocumentMethod(articleId);
-            types[i] = informativeArticlesService.SearchTypeOfDocumentMethod(articleId);
-            i++;
+        /*//tag
+        topics.add("TrastornoDeAnsiedadGeneralizada_PodcastEstresAcademico");
+        topics.add("TrastornoDeAnsiedadGeneralizada_PodcastTrastornoAnsiedadGeneralizada");
+        //sintoms
+        topics.add("Sintomas_PodcastDesencadenantesAnsiedad");
+        topics.add("TrastornoDeAnsiedadGeneralizada_PodcastDeshacerAnsiedad");*/
+        //nivel tag
+        //topics.add(levelTAG);
+        //tecnicas
+        /*topics.add("TecnicasDeRelajacion_ProgramaPodcastRelajacionGuiada");
+        topics.add("EnDondeAfectaLaAnsiedad");
+        topics.add("AnsiedadSocial");
+        topics.add("TrastornoObsesivoCompulsivo");
+        topics.add("TodoSobreLaAnsiedad");*/
+        for (String distortion : distortions) {
+            topics.add(distortion);
         }
-        Map<String, Object> responseData = new HashMap<>();
-        String key;
-        i=0;
-        for (int j : articlesId) {
-            key = "name" + j;
-            responseData.put(key, names[i]);
-            i++;
-        }
-        i=0;
-        for (int j : articlesId) {
-            key = "classification" + j;
-            responseData.put(key, classifications[i]);
-            i++;
-        }
-
-        i=0;
-        for (int j : articlesId) {
-            key = "type" + j;
-            responseData.put(key, types[i]);
-            i++;
-        }
-
-        return ResponseEntity.ok(responseData);
+        /*topics.add("TastornoDePanico");
+        topics.add("Agorafobia");
+        topics.add("Fobias");*/
+        return topics;
     }
-    
-    
+
+    /*public void getDataOfDoc(@RequestParam("name") String name, @RequestParam("classification") String classification, @RequestParam("type") int type)
+    {
+        try
+        {
+            Integer articleId = informativeArticlesService.SearchIdOfDocumentMethod(name);
+            if (articleId != null) {
+                int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
+                
+            }
+        }catch (NullPointerException ex)
+        {
+            
+        }
+
+    }*/
 }

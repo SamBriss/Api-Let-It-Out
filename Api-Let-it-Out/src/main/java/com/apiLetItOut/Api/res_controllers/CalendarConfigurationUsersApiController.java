@@ -16,7 +16,6 @@ import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;
 import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
 import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
