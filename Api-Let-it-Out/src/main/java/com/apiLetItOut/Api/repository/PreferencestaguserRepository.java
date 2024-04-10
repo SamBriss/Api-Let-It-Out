@@ -29,6 +29,9 @@ public interface PreferencestaguserRepository extends CrudRepository <Preference
     @Query(value = "Select name from preferencestaguser where userTAGId=:userTAGId and categoryId = :categoryId and score = 0 LIMIT 2", nativeQuery = true)
     List<String> SearchPreferenceAuditive0Score(@Param ("userTAGId") int userTAGId, @Param("categoryId") int categoryId);
 
+    @Query(value = "Select name from preferencestaguser where userTAGId=:userTAGId and categoryId = :categoryId ORDER BY score ASC LIMIT 1 ", nativeQuery = true)
+    String SearchPreferenceAuditiveFavorite(@Param ("userTAGId") int userTAGId, @Param("categoryId") int categoryId);
+
     @Query(value = "Select name from preferencestaguser where userTAGId=:userTAGId and categoryId = :categoryId order by score ASC LIMIT 2", nativeQuery = true)
     List<String> SearchLastPreferencesSensoriales(@Param ("userTAGId") int userTAGId, @Param("categoryId") int categoryId);
 

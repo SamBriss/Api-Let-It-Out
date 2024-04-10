@@ -18,10 +18,6 @@ import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
 import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
 
-import jakarta.el.ELException;
-
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 
 @RestController

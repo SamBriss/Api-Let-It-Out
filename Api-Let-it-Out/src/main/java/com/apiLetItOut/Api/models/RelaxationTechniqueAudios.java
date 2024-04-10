@@ -34,6 +34,7 @@ public class RelaxationTechniqueAudios {
     private int techniqueLevel;
     private String preferenceSensorial;
     private String preferenceAuditive;
+    private String url;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "levelTAGId")

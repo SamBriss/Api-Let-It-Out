@@ -35,5 +35,10 @@ public class PreferencesTAGUserService {
     {
         return preferencestaguserRepository.SearchLifeStylePreference(userTAGId, categoryId);
     }
+
+    public String SearchPreferenceAuditivefavoriteMethod(int userTAGId, int categoryId)
+    {
+        return preferencestaguserRepository.SearchPreferenceAuditiveFavorite(userTAGId, categoryId);
+    }
     
 }

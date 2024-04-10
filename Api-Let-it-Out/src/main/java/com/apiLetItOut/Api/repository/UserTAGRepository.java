@@ -61,4 +61,7 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     List<Integer> SearchUsersSimilarsId (@Param("bottomLimitAge") int bottomLimitAge,
                                     @Param("topLimitAge") int topLimitAge,
                                     @Param("levelTAGId") int levelTAGId);
+
+    @Query(value = "Select username from usersTAG", nativeQuery = true)
+    List<String> SearchAllUsersTAG();
 }

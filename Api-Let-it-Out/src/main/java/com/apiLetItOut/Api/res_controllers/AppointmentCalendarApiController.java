@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiLetItOut.Api.models.MultipleDaysCalendarSettings;
 import com.apiLetItOut.Api.services.ActivityTherapistCalendarService;
 import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;
@@ -25,7 +23,6 @@ import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 import com.apiLetItOut.Api.services.UserTherapistService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController

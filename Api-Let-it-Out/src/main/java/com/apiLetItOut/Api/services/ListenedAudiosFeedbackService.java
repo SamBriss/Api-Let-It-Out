@@ -9,12 +9,13 @@ import com.apiLetItOut.Api.repository.ListenedAudiosFeedbackRepository;
 public class ListenedAudiosFeedbackService {
     @Autowired
     ListenedAudiosFeedbackRepository listenedAudiosFeedbackRepository;
+    
     public Double SearchScoreOfAudioMethod(int userTAGId, int audioId)
     {
         return listenedAudiosFeedbackRepository.searchScoreOfAudio(userTAGId, audioId);
     }
 
-    public Integer  SearchIdByScore(int userTAGId, int audioId)
+    public Integer SearchIdByScore(int userTAGId, int audioId)
     {
         return listenedAudiosFeedbackRepository.SearchIdByScore(userTAGId, audioId);
     }

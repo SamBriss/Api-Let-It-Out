@@ -143,6 +143,59 @@ public class InformationSectionApiController {
         return ResponseEntity.ok(responseData);
     }
 
+    @PostMapping("dataGeneral/domains")
+    public ResponseEntity<Map<String, Object>> getBasicDataDomains(@RequestParam("user") String user)
+    {
+        int userId = -1;
+        userId = userService.SearchUserTAGMethod(user); //busca por username
+        if (userId == -1) { // 
+            userId = userService.SearchUsersByEmailMethod(user);// Si no lo encuentra
+        }
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+        // Dominios
+        List<Integer> domainsId = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
+        List<String> namesDomains = new ArrayList<>();
+        for (Integer domainId : domainsId) {
+            namesDomains.add(domainsService.SearchNameOfDomain(domainId));
+        }
+        //Obtencion de datos a mandar
+        List<String> names = new ArrayList<>();
+        List<String> classifications = new ArrayList<>();
+        List<Integer> types = new ArrayList<>();
+        for (String domain : namesDomains) {
+            System.out.println("el domain es " + domain);
+            try
+            {
+                Integer articleId = informativeArticlesService.SearchIdOfDocumentMethod(domain);
+                if (articleId != null) {
+                    int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
+                    String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
+                    names.add(name);
+                    String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
+                    classifications.add(classification);
+                    int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
+                    types.add(type);
+                }
+            }catch (NullPointerException ex)
+            {
+                continue;
+            }
+        }
+        
+        
+        Map<String, Object> responseData = new HashMap<>();
+        for (int i = 0; i < domainsId.size(); i++) {
+            System.out.println("name"+i + " es: " + names.get(i));
+            responseData.put("name" + i, names.get(i));
+            System.out.println("class"+i + " es: " + classifications.get(i));
+            responseData.put("classification" + i, classifications.get(i));
+            System.out.println("types"+i + " es: " + types.get(i));
+            responseData.put("type" + i, types.get(i));
+        }
+        return ResponseEntity.ok(responseData);
+
+    }
+
     public List<String> fillListWithDistortions()
     {
         List<String> cognitiveDistortions = new ArrayList<>();
@@ -197,19 +250,35 @@ public class InformationSectionApiController {
         return topics;
     }
 
-    /*public void getDataOfDoc(@RequestParam("name") String name, @RequestParam("classification") String classification, @RequestParam("type") int type)
+    @PostMapping("especificData")
+    public ResponseEntity<Map<String, String>> getDataOfDocs (@RequestParam("name") String name)
     {
+        Map<String, String> data = new HashMap<>();
         try
         {
             Integer articleId = informativeArticlesService.SearchIdOfDocumentMethod(name);
             if (articleId != null) {
                 int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
-                
+                String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
+                String sinopsis = informativeArticlesService.SearchSinopsisOfDocumentMethod(id);
+                String url = informativeArticlesService.SearchUrlOfDocumentMethod(id);
+                if(classification!=null && sinopsis!=null && url!=null)
+                {
+                    data.put("name", name);
+                    data.put("classification", classification);
+                    data.put("sinopsis", sinopsis);
+                    data.put("url", url);
+                }
             }
+            
+
         }catch (NullPointerException ex)
         {
-            
+            data.put("name", "hola");
+            data.put("classification", "hola");
+            data.put("sinopsis", "hola");
+            data.put("url", "hola");
         }
-
-    }*/
+        return ResponseEntity.ok(data);
+    }
 }

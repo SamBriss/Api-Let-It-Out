@@ -19,17 +19,17 @@ public class RelaxationTechniquesService {
         return relaxationTechniquesRepository.allAudiosMinor5Min(cinco);
     }
 
-    public int SearchAudioAccordingToLifeStyleAndIdMethod(int audioId, char auditory)
+    public Integer SearchAudioAccordingToLifeStyleAndIdMethod(int audioId, char auditory)
     {
         return relaxationTechniquesRepository.SearchAudioAccordingToLifeStyleAndId(audioId, auditory);
     }
 
-    public int SearchAudioAccordingToAgeAndIdMethod(int audioId, char age)
+    public Integer SearchAudioAccordingToAgeAndIdMethod(int audioId, char age)
     {
         return relaxationTechniquesRepository.SearchAudioAccordingToAgeAndId(audioId, age);
     }
 
-    public int SearchAudioAccordingToHourAndId(int audioId, char schedule)
+    public Integer SearchAudioAccordingToHourAndId(int audioId, char schedule)
     {
         return relaxationTechniquesRepository.SearchAudioAccordingToHourAndId(audioId, schedule);
     }
@@ -44,27 +44,27 @@ public class RelaxationTechniquesService {
         return relaxationTechniquesRepository.SearchPreferenceAuditiveOfAudio(audioId);
     }
 
-    public int SearchAudioByPreferenceAuditive0AndIdMethod(int audioId, String preferenceAuditive)
+    public Integer SearchAudioByPreferenceAuditive0AndIdMethod(int audioId, String preferenceAuditive)
     {
         return relaxationTechniquesRepository.SearchAudioByPreferenceAuditive0AndId(audioId, preferenceAuditive);
     }
 
-    public int SearchAudioByPreferenceSensorialAndIdMethod(int audioId, String preferenceSensorial)
+    public Integer SearchAudioByPreferenceSensorialAndIdMethod(int audioId, String preferenceSensorial)
     {
         return relaxationTechniquesRepository.SearchAudioByPreferenceSensorialAndId(audioId, preferenceSensorial);
     }
 
-    public int SearchAudioByIdAndDifferentLevelTAGMethod(int audioId, int levelTAGId)
+    public Integer SearchAudioByIdAndDifferentLevelTAGMethod(int audioId, int levelTAGId)
     {
         return relaxationTechniquesRepository.SearchAudioByIdAndDifferentLevelTAG(audioId, levelTAGId);
     }
 
-    public int SearchAudioByIdAndDifferentGenderMethod(int audioId, char gender, char todo)
+    public Integer SearchAudioByIdAndDifferentGenderMethod(int audioId, char gender, char todo)
     {
         return relaxationTechniquesRepository.SearchAudioByIdAndDifferentGender(audioId, gender, todo);
     }
 
-    public int SearchAudioByIdAndDifferentAuditoryMethod(int audioId, char auditory)
+    public Integer SearchAudioByIdAndDifferentAuditoryMethod(int audioId, char auditory)
     {
         return relaxationTechniquesRepository.SearchAudioByIdAndDifferentAuditory(audioId, auditory);
     }

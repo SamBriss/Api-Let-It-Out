@@ -79,4 +79,9 @@ public class UserTAGService {
         return userTAGRepository.SearchUsersSimilarsId(bottomLimitAge, topLimitAge, levelTAGId);
     }
 
+    public List<String> SearchAllUsernameOfUsersTAGMethod()
+    {
+        return userTAGRepository.SearchAllUsersTAG();
+    }
+
 }
