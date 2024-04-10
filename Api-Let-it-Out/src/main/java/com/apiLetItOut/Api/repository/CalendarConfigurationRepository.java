@@ -26,5 +26,11 @@ public interface CalendarConfigurationRepository  extends CrudRepository <Calend
     @Query(value= "Select configurationId FROM CalendarConfigurationUsers WHERE userId=:userId", nativeQuery = true)
     Integer SearchConfigurationIdByUserId (@Param("userId") int userId);
 
+                         
+    @Query(value= "Select c.startWorkDay FROM CalendarConfigurationUsers c INNER JOIN users u ON c.userId=u.userId INNER JOIN userstherapists t ON u.userId=t.userId WHERE u.username=:usernameTherapist", nativeQuery = true)
+    Object SearchStartHourJourney (@Param("usernameTherapist") String usernameTherapist);
+                         
+    @Query(value= "Select c.endWorkDay FROM CalendarConfigurationUsers c INNER JOIN users u ON c.userId=u.userId INNER JOIN userstherapists t ON u.userId=t.userId WHERE u.username=:usernameTherapist", nativeQuery = true)
+    Object SearchEndHourJourney (@Param("usernameTherapist") String usernameTherapist);
     
 }
