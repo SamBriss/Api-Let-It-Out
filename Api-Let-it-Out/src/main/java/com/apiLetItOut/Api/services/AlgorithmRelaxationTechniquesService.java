@@ -107,4 +107,21 @@ public class AlgorithmRelaxationTechniquesService {
     {
         return algorithmRelaxationTechniquesRepository.selectLastExecutionDate();
     }
+
+    // 11-04-2024
+    
+    public Object[] getCategoryIdAndDateFromLastRankingIdMethod()
+    {
+        return algorithmRelaxationTechniquesRepository.getCategoryIdAndDateFromLastRankingId();
+    }
+
+    public Object getTechniqueOfTheWeekForEachUserMethod(String preference, Date date)
+    {
+        return algorithmRelaxationTechniquesRepository.getTechniqueOfTheWeekForEachUser(preference, date);
+    }
+    
+    public Date getDateFromLastRankingIdMethod()
+    {
+        return algorithmRelaxationTechniquesRepository.getDateFromLastRankingId();
+    }
 }

@@ -12,11 +12,11 @@ public class PreferencesTAGUserService {
     @Autowired
     PreferencestaguserRepository preferencestaguserRepository;
     
-    public int PreferencesTAGUserMethod(String name, int score, int userTAGId, int categoryId){
+    public Integer PreferencesTAGUserMethod(String name, int score, int userTAGId, int categoryId){
         return preferencestaguserRepository.RegisterNewUserPreferences(name, score, userTAGId, categoryId);
     }
 
-    public int SearchScoreOfPreferenceUserTAG(int userTAGId, String name)
+    public Integer SearchScoreOfPreferenceUserTAG(int userTAGId, String name)
     {
         return preferencestaguserRepository.SearchScoreOfPreferenceUserTAG(userTAGId, name);
     }

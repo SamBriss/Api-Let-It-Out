@@ -6,17 +6,29 @@ import org.springframework.http.ResponseEntity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.time.temporal.ChronoUnit;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.AlgorithmRelaxationTechniquesService;
+import com.apiLetItOut.Api.services.PreferencesTAGUserService;
+import com.apiLetItOut.Api.services.UserService;
+import com.apiLetItOut.Api.services.UserTAGService;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -29,11 +41,18 @@ public class AlgorithmRelaxationTechniquesApiController {
     AlgorithmRelaxationTechniquesService algorithmRelaxationTechniquesService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
+    PreferencesTAGUserService preferencesTAGUserService;
+
+    @Autowired
+    UserTAGService userTAGService;
 
 
     @PostMapping("techniquesRanking/AlgorithmBDSave")
     public ResponseEntity AlgorithmRankingRelaxationTechniquesAudios() {
-        //TODO: process POST request
+
         int countRanking = algorithmRelaxationTechniquesService.countRankingExitenceRegistersMethod();
         System.out.println("countRanking: "+countRanking);
         int categoryIdRanking;
@@ -162,7 +181,7 @@ public class AlgorithmRelaxationTechniquesApiController {
                             countPreferenceAudios = algorithmRelaxationTechniquesService.getCountOfFeedbacksByPreferenceDurationMethod(1,300);
                             result += processToEachPreferenceOfEveryCategory(list_cortas, countPreferenceAudios, categoryIdActual, "Cortas");
                             countPreferenceAudios = algorithmRelaxationTechniquesService.getCountOfFeedbacksByPreferenceDurationMethod(301,900);
-                            result += processToEachPreferenceOfEveryCategory(list_medianas, countPreferenceAudios, categoryIdActual, "Medianas");
+                            result += processToEachPreferenceOfEveryCategory(list_medianas, countPreferenceAudios, categoryIdActual, "Medias");
                             countPreferenceAudios = algorithmRelaxationTechniquesService.getCountOfFeedbacksByPreferenceDurationMethod(901,15000);
                             result += processToEachPreferenceOfEveryCategory(list_largas, countPreferenceAudios, categoryIdActual, "Largas");
                             
@@ -308,6 +327,193 @@ public class AlgorithmRelaxationTechniquesApiController {
         return result;
 
     }
-            
+     
+    @PostMapping("techniquesRanking/GetTechniqueForUser")
+    public ResponseEntity postMethodName(@RequestParam("username") String username) {
+        
+        
+        int countRanking = algorithmRelaxationTechniquesService.countRankingExitenceRegistersMethod();
+        System.out.println("countRanking: "+countRanking);
+        int categoryIdRanking;
+        int categoryIdActual;
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateExecution;
+        String categoryName = "0";
+
+        if(countRanking > 0)
+        {
+            try{
+                categoryIdRanking = algorithmRelaxationTechniquesService.getCategoryIdFromLastRankingIdMethod();
+                dateExecution = algorithmRelaxationTechniquesService.getDateFromLastRankingIdMethod();
+                
+                System.out.println("ctaegory id of the week: "+categoryIdRanking);
+                System.out.println("date execution: "+dateExecution);
+                int userId = userService.SearchUserTAGMethod(username);
+                int userTAGId = userTAGService.FindUserTAGMethod(userId);
+                String preference = "0";
+                HashMap scores = new HashMap<>();
+                List<Map.Entry<Integer, String>> listScores = new ArrayList<>(scores.entrySet());
+                switch(categoryIdRanking)
+                {
+                    // edad
+                    case 7:
+                        int age = userService.SearchUserAgeMethod(userId);
+                        if(age>=13 && age <=17)
+                        {
+                            preference = "13-17";
+                        }
+                        else if(age > 17 && age <=30)
+                        {
+                            preference = "18-30";
+                        }
+                        else if(age > 30 && age <= 45)
+                        {
+                            preference = "31-45";
+                        }
+                        else if(age > 45 && age <= 60)
+                        {
+                            preference = "46-60";
+                        }
+                        else if(age > 60)
+                        {
+                            preference = "60-Mas";
+                        }
+                    break;
+                        
+                    // preferencia sensorial 1
+                    case 2:
+                    System.out.println("usertagId:  "+userTAGId);
+                    System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Tacto")+ "tacto");
+                    System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Visual") + "Visual");
+                    System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Olfato")+ "Olfato");
+                    System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Gusto")+ "Gusto");
+                    System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Oido")+ "Oido");
+                   
+                    scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Tacto"), "Tacto");
+                    scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Visual"), "Visual");
+                    scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Olfato"), "Olfato");
+                    scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Gusto"), "Gusto");
+                    scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Oido"), "Oido");
+
+                    listScores = new ArrayList<>(scores.entrySet());
+                    Collections.sort(listScores, new Comparator<Map.Entry<Integer, String>>() {
+
+                        @Override
+                        public int compare(Entry<Integer, String> arg0, Entry<Integer, String> arg1) {
+                            // TODO Auto-generated method stub
+                            if(arg0 != null)
+                            {
+                            return arg0.getKey().compareTo(arg1.getKey());
+                            }
+                            return 0;
+                        }
+                        
+                    });
+
+                    Map.Entry<Integer, String> valueMaxPreferenceSensorial = listScores.get(listScores.size() -1);
+                    preference = valueMaxPreferenceSensorial.getValue();
+                    System.out.println("preference: "+preference);
+                    
+                    break;
+                    // segunda mayor preferencia sensorial
+                    case 6: 
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Tacto"), "Tacto");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Visual"), "Visual");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Olfato"), "Olfato");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Gusto"), "Gusto");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Oido"), "Oido");
+
+
+                        listScores = new ArrayList<>(scores.entrySet());
+                        Collections.sort(listScores, new Comparator<Map.Entry<Integer, String>>() {
+
+                            @Override
+                            public int compare(Entry<Integer, String> arg0, Entry<Integer, String> arg1) {
+                                // TODO Auto-generated method stub
+                                return arg0.getKey().compareTo(arg1.getKey());
+                            }
+                            
+                        });
+
+                        Map.Entry<Integer, String> secondMaxValue = listScores.get(listScores.size() -2);
+                        preference = secondMaxValue.getValue();
+
+                    break;
+                    // preferencias estilo de vida
+                    case 5:
+                        int scoreP = preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Pasivo");
+                        int scoreA = preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Activo");
+                        preference = "p";
+                        if(scoreA> scoreP)
+                        {
+                            preference = "a";
+                        }
+                    break;
+                    // preferencia duracion
+                    case 4:
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Cortas"), "Cortas");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Medias"), "Medias");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Largas"), "Largas");
+
+                        listScores = new ArrayList<>(scores.entrySet());
+
+                        Collections.sort(listScores, new Comparator<Map.Entry<Integer, String>>() {
+
+                            @Override
+                            public int compare(Entry<Integer, String> arg0, Entry<Integer, String> arg1) {
+                                // TODO Auto-generated method stub
+                                return arg0.getKey().compareTo(arg1.getKey());
+                            }
+                            
+                        });
+
+                        Map.Entry<Integer, String> valueDuracion = listScores.get(listScores.size() -1);
+                        preference = valueDuracion.getValue();
+                        break;
+                    // preferencia auditiva
+                    case 1:
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Sonido Ambiente"), "Sonido Ambiente");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "GuiaVoz"), "GuiaVoz");
+                        scores.put(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Musica"), "Musica");
+
+                        listScores = new ArrayList<>(scores.entrySet());
+
+                        Collections.sort(listScores, new Comparator<Map.Entry<Integer, String>>() {
+
+                            @Override
+                            public int compare(Entry<Integer, String> arg0, Entry<Integer, String> arg1) {
+                                // TODO Auto-generated method stub
+                                return arg0.getKey().compareTo(arg1.getKey());
+                            }
+                            
+                        });
+
+                        Map.Entry<Integer, String> valueAuditiva = listScores.get(listScores.size() -1);
+                        preference = valueAuditiva.getValue();
+                    break;
+
+                }
+                if(preference != "0")
+                {
+                    System.out.println("preference choosen: "+preference);
+                    
+                    Object resultToReturn = algorithmRelaxationTechniquesService.getTechniqueOfTheWeekForEachUserMethod(preference, dateExecution);
+                    if(resultToReturn!= null)
+                    {
+                        return ResponseEntity.ok().body(resultToReturn);
+                    }
+                    return ResponseEntity.ok().body("nadie ha usado su preferencia");
+                }
+                return ResponseEntity.ok().body("no se encontró su preferencia");
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        } 
+        
+        return ResponseEntity.ok().body("not found");
+    }
+    
     
 }
