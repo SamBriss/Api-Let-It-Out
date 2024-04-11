@@ -80,4 +80,8 @@ public class UserTAGService {
         return userTAGRepository.SearchAllUsersTAG();
     }
 
+    public Integer GetUserTAGIdByeUsernameMethod(String username)
+    {
+        return userTAGRepository.GetUserTAGIdByeUsername(username);
+    }
 }

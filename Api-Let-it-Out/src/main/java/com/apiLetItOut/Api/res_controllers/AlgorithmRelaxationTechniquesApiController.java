@@ -40,7 +40,7 @@ public class AlgorithmRelaxationTechniquesApiController {
         int categoryIdActual;
         if(countRanking == 0)
         {
-            categoryIdRanking = 5;
+            categoryIdRanking = 7;
         } 
         else
         {

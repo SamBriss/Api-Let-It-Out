@@ -61,4 +61,7 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
 
     @Query(value = "Select username from usersTAG", nativeQuery = true)
     List<String> SearchAllUsersTAG();
+    
+    @Query(value = "Select t.userTAGId from users u INNER JOIN userstag t ON u.userId=t.userId WHERE u.username=:username", nativeQuery = true)
+    Integer GetUserTAGIdByeUsername(@Param("username") String username);
 }

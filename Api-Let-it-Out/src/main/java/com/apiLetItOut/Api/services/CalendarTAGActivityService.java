@@ -1,7 +1,11 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.apiLetItOut.Api.repository.CalendarTAGActivityRepository;
@@ -33,6 +37,40 @@ public class CalendarTAGActivityService {
     public Integer SearchCountActivityUserTagCalendarMethod()
     {
         return calendarTAGActivityRepository.SearchCountActivityUserTagCalendar();
+    }
+
+    public java.util.List<Object[]> findAllActivitiesTAGAfterTodayDatesAndHoursMethod(String username)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesTAGAfterTodayDatesAndHours(username);
+    }
+
+    // therapist
+    
+    public java.util.List<Object[]> findAllActivitiesFromCalendarTherapistMethod(int userTherapistId)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesFromCalendarTherapist(userTherapistId);
+    } 
+    
+    public java.util.List<Object[]> findAllActivitiesAppointmentsFromCalendarTherapistMethod(int userTherapistId)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesAppointmentsFromCalendarTherapist(userTherapistId);
+    }
+    
+    public java.util.List<Object[]> findAllActivitiesFromCalendarTherapistByMonthPosMethod(int userTherapistId, int monthPos)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesFromCalendarTherapistByMonthPos(userTherapistId, monthPos);
+    }
+    public java.util.List<Object[]> findAllActivitiesFromCalendarTherapistByDateMethod(int userTherapistId, Date date)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesFromCalendarTherapistByDate(userTherapistId, date);
+    }    
+    public java.util.List<Object[]> findAllActivitiesAppointmentsFromCalendarTherapistByDateMethod(int userTherapistId, Date date)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesAppointmentsFromCalendarTherapistByDate(userTherapistId, date);
+    }
+    public java.util.List<Object[]> findAllActivitiesAppointmentsExternalFromCalendarTherapistByMonthPosMethod(int userTherapistId, int monthPos)
+    {
+        return calendarTAGActivityRepository.findAllActivitiesAppointmentExternalFromCalendarTherapistByMonthPos(userTherapistId, monthPos);
     }
 
 }
