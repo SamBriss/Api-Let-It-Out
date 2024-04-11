@@ -3,7 +3,6 @@ package com.apiLetItOut.Api.res_controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -144,39 +143,6 @@ public class CalendarConfigurationUsersApiController {
         return ResponseEntity.ok("UserIdNotFound");
     }
     
-    @PostMapping("configCalendar/startHourJourney")
-    public ResponseEntity postMethodNameJourneyStart(@RequestParam("usernameTherapist") String usernameTherapist) {
-   
-        Object startHourJourney = calendarConfigurationUsersService.SearchStartHourJourneyMethod(usernameTherapist);
-        if(startHourJourney!=null)
-        {
-            return ResponseEntity.ok().body(startHourJourney);
-        }            
-        return ResponseEntity.ok().body("n");
-    }
     
-    @PostMapping("configCalendar/endHourJourney")
-    public ResponseEntity postMethodNameJourneyEnd(@RequestParam("usernameTherapist") String usernameTherapist) {
 
-        Object startHourJourney = calendarConfigurationUsersService.SearchEndHourJourneyMethod(usernameTherapist);
-        
-        if(startHourJourney!=null)
-        {
-            return ResponseEntity.ok().body(startHourJourney);
-        }            
-        return ResponseEntity.ok().body("n");
-    }
-    
-    @PostMapping("configCalendar/getPreferenceAppointmentsTAG")
-    public ResponseEntity postmethodGetPreferencesAppointments(@RequestParam("usernameTAG") String usernameTAG)
-    {
-        List<Object[]> preferenceAppointments = preferenceDaysService.findPreferenceAppointmentsTAGMethod(usernameTAG);
-        if(preferenceAppointments.isEmpty())
-        {
-            return ResponseEntity.ok().body("none");
-        }
-        return ResponseEntity.ok().body(preferenceAppointments); 
-    }
-
-    
 }

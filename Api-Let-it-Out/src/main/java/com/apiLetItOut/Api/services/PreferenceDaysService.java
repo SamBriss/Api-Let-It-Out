@@ -20,8 +20,4 @@ public class PreferenceDaysService {
         return preferenceDaysRepository.findRegistersOfTherapistExclusionTimes(configurationId);
     }
 
-    public java.util.List<Object[]> findPreferenceAppointmentsTAGMethod(String usernameTAG)
-    {
-        return preferenceDaysRepository.findPreferenceAppointmentsTAG(usernameTAG);
-    }
 }

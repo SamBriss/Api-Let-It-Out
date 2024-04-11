@@ -1,7 +1,6 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -46,6 +45,4 @@ public interface CalendarTAGActivityRepository extends CrudRepository<CalendarTA
     @Query(value= "Select COUNT(*) FROM calendar_tag_activity", nativeQuery = true)
     int SearchCountActivityUserTagCalendar();
                     
-    @Query(value = "Select a.startHour, a.endHour, a.date from calendar_tag_activity a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.date>=DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY a.startHour ASC", nativeQuery = true)
-    List<Object[]> findAllActivitiesTAGAfterTodayDatesAndHours(@Param("username") String username);
 }

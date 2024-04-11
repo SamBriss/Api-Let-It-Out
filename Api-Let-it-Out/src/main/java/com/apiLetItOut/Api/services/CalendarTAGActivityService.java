@@ -1,7 +1,6 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +35,4 @@ public class CalendarTAGActivityService {
         return calendarTAGActivityRepository.SearchCountActivityUserTagCalendar();
     }
 
-    public java.util.List<Object[]> findAllActivitiesTAGAfterTodayDatesAndHoursMethod(String username)
-    {
-        return calendarTAGActivityRepository.findAllActivitiesTAGAfterTodayDatesAndHours(username);
-    }
 }

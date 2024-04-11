@@ -24,6 +24,7 @@ public class cronConfig {
 
     @Autowired
     AlgorithmRelaxationTechniquesApiController algorithmRelaxationTechniquesApiController;
+    
     @Scheduled(cron = "0 0 23 ? * SUN")
     public void scheduledTaskSunday23pmAlgorithmRanking()
     {            
@@ -32,11 +33,11 @@ public class cronConfig {
 
     }
 
-    @Scheduled(cron = "0 0 4 * * *") // Se ejecuta todos los días a las 4 am
+    /*@Scheduled(cron = "0 0 4 * * *") // Se ejecuta todos los días a las 4 am
     public void executeAlgorithmOfTechniques() {
         List<String> usernames = userTAGService.SearchAllUsernameOfUsersTAGMethod();
         for (String user : usernames) {
             algorithmOfTechniquesController.getTechniques(user);
         }
-    }
+    }*/
 }

@@ -1,7 +1,6 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +24,6 @@ public class ActivityTherapistCalendarService {
     public Integer SearchCountActivityTherapistCalendarMethod()
     {
         return activityTherapistCalendarRepository.SearchCountActivityTherapistCalendar();
-    }
-
-    public java.util.List<Object[]> findActivitiesDatesAndHourTherapistMethod(String username)
-    {
-        return activityTherapistCalendarRepository.findActivitiesDatesAndHourTherapist(username);
     }
 
 }

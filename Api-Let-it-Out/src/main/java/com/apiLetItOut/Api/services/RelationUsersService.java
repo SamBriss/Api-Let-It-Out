@@ -35,8 +35,4 @@ public class RelationUsersService {
     {
         return relationUsersRepository.ExistenceOfUserTAGWithTherapist(userTAGId);
     }
-    public List<Object[]> SearchRelationTherapistsByUserTAGIdMethod(int userTAGId)
-    {
-        return relationUsersRepository.SearchRelationTherapistsByUserTAGId(userTAGId);
-    }
 }

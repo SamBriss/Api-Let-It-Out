@@ -59,7 +59,4 @@ public interface UserTherapistRepository extends CrudRepository <UsersTherapists
     @Query(value = "Update usersTherapists set licence = :licence where userTherapistId =:userTherapistId", nativeQuery = true)
     Integer UpdateLicenceTherapist(@Param("userTherapistId") int userTherapistId,
     @Param("licence") String licence);
-
-    @Query(value = "Select u.name, u.lastnameP, u.username from users u INNER JOIN usersTherapists t ON u.userId=t.userId INNER JOIN appointmentcalendar a ON t.userTherapistId=a.userTherapistId WHERE a.appointmentId=:appointmentId", nativeQuery = true)
-    Object[] FindNameLastNamePUsernameTherapistByTherapistId(@Param("appointmentId") int appointmentId);
 }

@@ -1,7 +1,6 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,8 +33,5 @@ public interface ActivityTherapistCalendarRepository extends CrudRepository<Acti
                         
     @Query(value= "Select COUNT(*) FROM activity_therapist_calendar", nativeQuery = true)
     int SearchCountActivityTherapistCalendar ();
-
-    @Query(value = "Select a.startHour, a.endHour, a.date from activity_therapist_calendar a INNER JOIN userstherapists t ON a.userTherapistId=t.userTherapistId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.date>=DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY a.startHour ASC", nativeQuery = true)
-    List<Object[]> findActivitiesDatesAndHourTherapist(@Param("username") String username);
                     
 }

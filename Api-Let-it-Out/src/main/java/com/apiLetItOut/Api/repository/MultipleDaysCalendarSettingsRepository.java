@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.apiLetItOut.Api.models.MultipleDaysCalendarSettings;
-import java.util.List;
+
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -20,9 +20,5 @@ public interface MultipleDaysCalendarSettingsRepository extends CrudRepository<M
         )
     Integer RegisterNewMultipleDaysCalendarSettings(@Param("configurationId") int configurationId,
                         @Param("weekDayId") int weekDayId);
-
-
-    @Query(value = "Select m.weekDayId from MultipleDaysCalendarSettings m INNER JOIN calendarconfigurationusers c ON m.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
-    List<Integer> FindWeekDaysLabourTherapist(@Param("username") String username);
 
 }
