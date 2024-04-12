@@ -108,4 +108,20 @@ public class UsersApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el token");
         }
     }
+
+    @PostMapping("user/nameTAGByUsername")
+    public ResponseEntity<String> getNameUserTAG(@RequestParam("username") String username)
+    {
+        int userId = userService.SearchUserTAGMethod(username);
+        if(userId > 0)
+        {
+            String name = userService.SearchNameMethod(userId);
+            name = name + " " + userService.SearchUserLPMethod(userId);
+            if(name != null)
+            {
+                return ResponseEntity.ok().body(name);
+            }
+        }
+        return ResponseEntity.ok().body("n");
+    }
 }
