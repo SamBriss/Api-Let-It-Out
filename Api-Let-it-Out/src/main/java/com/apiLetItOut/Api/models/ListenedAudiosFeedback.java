@@ -6,50 +6,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table (name = "ListenedAudiosFeedback")
 public class ListenedAudiosFeedback {
-    public int getListenedId() {
-        return listenedId;
-    }
-
-    public void setListenedId(int listenedId) {
-        this.listenedId = listenedId;
-    }
-
-    public String getProgress() {
-        return progress;
-    }
-
-    public void setProgress(String progress) {
-        this.progress = progress;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public UsersTAG getUserTAG() {
-        return userTAG;
-    }
-
-    public void setUserTAG(UsersTAG userTAG) {
-        this.userTAG = userTAG;
-    }
-
-    public RelaxationTechniqueAudios getAudio() {
-        return audio;
-    }
-
-    public void setAudio(RelaxationTechniqueAudios audio) {
-        this.audio = audio;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int listenedId;
@@ -61,7 +29,5 @@ public class ListenedAudiosFeedback {
 
     @ManyToOne
     private RelaxationTechniqueAudios audio;
-
-    // Getters and setters
 }
 

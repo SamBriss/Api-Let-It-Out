@@ -1,5 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,4 +26,7 @@ public interface CognitiveDistortionsRepository extends CrudRepository <Cognitiv
                     @Param("consequence") String consequence,
                     @Param("cognitiveDistortion") String cognitiveDistortion,
                     @Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select cognitiveDistortion from cognitivedistortions where userTAGId = :userTAGId", nativeQuery = true)
+    List<String> SearchCongitiveDistortionsOfUser(@Param("userTAGId") int userTAGId);
 }

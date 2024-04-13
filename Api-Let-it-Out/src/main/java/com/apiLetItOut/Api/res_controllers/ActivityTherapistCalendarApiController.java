@@ -41,7 +41,7 @@ public class ActivityTherapistCalendarApiController {
                                             @RequestParam("appointment") String appointmeStr) {
 
         
-          
+          System.out.println("entra en addTherapistActivityCalendarrrrrr");
       Integer userId = 0;
       userId = this.userService.SearchUserTAGMethod(username);
       if(userId!=0 && userId != null)

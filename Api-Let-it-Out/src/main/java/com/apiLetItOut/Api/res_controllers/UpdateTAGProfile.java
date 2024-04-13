@@ -32,7 +32,7 @@ public class UpdateTAGProfile {
     @PostMapping("/userProfile/getDataGeneralUsername")
     public ResponseEntity<Map<String, Object>> getUserProfileGeneralByUsername(@RequestParam("username") String username) {
         Map<String, Object> responseData = new HashMap<>();
-        int userId = userService.SearchUserTAGMethod(username);
+        Integer userId = userService.SearchUserTAGMethod(username);
         String email = userService.SearchEmailByUsernameMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
         String name = userService.SearchNameMethod(userId);

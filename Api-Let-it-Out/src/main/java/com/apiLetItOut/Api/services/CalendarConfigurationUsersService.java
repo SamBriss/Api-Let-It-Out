@@ -21,4 +21,13 @@ public class CalendarConfigurationUsersService {
     {
         return calendarConfigurationRepository.SearchConfigurationIdByUserId(userId);
     }
+    public Object SearchStartHourJourneyMethod(String usernameTherapist)
+    {
+        return calendarConfigurationRepository.SearchStartHourJourney(usernameTherapist);
+    }
+    
+    public Object SearchEndHourJourneyMethod(String usernameTherapist)
+    {
+        return calendarConfigurationRepository.SearchEndHourJourney(usernameTherapist);
+    }
 }

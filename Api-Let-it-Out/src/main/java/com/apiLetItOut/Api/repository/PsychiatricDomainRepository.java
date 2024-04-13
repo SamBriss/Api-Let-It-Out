@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.apiLetItOut.Api.models.PsychiatricDomainsQuestionaire;
 
 import jakarta.transaction.Transactional;
 
+@Repository
 public interface PsychiatricDomainRepository extends CrudRepository <PsychiatricDomainsQuestionaire, Integer>{
         @Transactional
         @Modifying
@@ -36,6 +38,6 @@ public interface PsychiatricDomainRepository extends CrudRepository <Psychiatric
         @Query (value = "Select domainId from psychiatricDomainsQuestionaire where userTAGId = :userTAGId ORDER BY score DESC", nativeQuery = true)
         List<Integer> SearchDomainsOfUserTAG(@Param("userTAGId") int userTAGId);
 
-        @Query (value = "Select scores from psychiatricDomainsQuestionaire where userTAGId = :userTAGId ORDER BY score DESC", nativeQuery = true)
+        @Query (value = "Select score from psychiatricDomainsQuestionaire where userTAGId = :userTAGId ORDER BY score DESC", nativeQuery = true)
         List<Integer> SearchScoresOfDomainId(@Param("userTAGId") int userTAGId);
 }

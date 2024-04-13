@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 
 @Repository
 public interface ActivitiesFromTherapistRepository extends CrudRepository <ActivitiesFromTherapist, Integer>{
-     @Transactional
+    @Transactional
     @Modifying
     @Query(value = "INSERT INTO activitiesfromtherapist " + 
         "(userTAGId, userTherapistId, label, description, dateAsign, dateMax, completed, document) " +
@@ -26,22 +26,22 @@ public interface ActivitiesFromTherapistRepository extends CrudRepository <Activ
                     @Param("dateAsign") Date dateAsign,
                     @Param("dateMax") Date dateMax,
                     @Param("completed") int completed,
-                    @Param("document") String document);
+                    @Param("document") String document);                                            
+    @Query(value= "Select u.label, u.description, u.dateAsign, u.dateMax, t.name, t.lastnameP, t.username FROM activitiesfromtherapist u INNER JOIN userstherapists i ON u.userTherapistId=i.userTherapistId INNER JOIN users t ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND u.completed=0", nativeQuery = true)
+    java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAG(@Param("userTAGId") int userTAGId);
+    @Query(value= "Select u.label, u.description, u.dateAsign, u.dateMax, i.name, i.lastnameP, i.username FROM activitiesfromtherapist u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND u.dateMax=:date AND u.completed=0", nativeQuery = true)
+    java.util.List<Object[]> findAllActivitiesToDoFromCalendarTAGByDate(@Param("userTAGId") int userTAGId, @Param("date") Date date);
     @Query(value= "Select COUNT(*) FROM activitiesfromtherapist WHERE userTAGId=:userTAGId", nativeQuery = true)
     Integer CountRequestQuantityActivities(@Param("userTAGId") int userTAGId);
-
     @Query(value= "Select activityTId FROM activitiesfromtherapist WHERE userTAGId=:userTAGId", nativeQuery = true)
     List<Integer> SelectActiivityId(@Param("userTAGId") int userTAGId);
-
     @Query(value= "Select userTherapistId FROM activitiesfromtherapist WHERE userTAGId=:userTAGId", nativeQuery = true)
     List<Integer> SelectTherapistId (@Param("userTAGId") int userTAGId);
-
     @Transactional
     @Modifying
     @Query(value = "Update activitiesfromtherapist set comments = :comments where activityTId =:activityTId", nativeQuery = true)
     Integer UpdateCommentsTherapist(@Param("activityTId") int activityTId,
     @Param("comments") String comments);
-
     @Query(value= "Select COUNT(*) FROM activitiesfromtherapist WHERE userTAGId=:userTAGId AND completed=:completed", nativeQuery = true)
     Integer CountRequestQuantityActivitiesCompleted(@Param("userTAGId") int userTAGId,
                                                     @Param("completed") int completed);

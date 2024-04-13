@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table (name = "TechniquesRanking")
+@Table (name = "techniques_ranking")
 public class TechniquesRanking {
     public int getRankingId() {
         return rankingId;

@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.Random;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -123,5 +122,21 @@ public class UsersApiController {
                 return ResponseEntity.status(HttpStatus.OK).body("error");
             }
         }
+    }
+
+    @PostMapping("user/nameTAGByUsername")
+    public ResponseEntity<String> getNameUserTAG(@RequestParam("username") String username)
+    {
+        int userId = userService.SearchUserTAGMethod(username);
+        if(userId > 0)
+        {
+            String name = userService.SearchNameMethod(userId);
+            name = name + " " + userService.SearchUserLPMethod(userId);
+            if(name != null)
+            {
+                return ResponseEntity.ok().body(name);
+            }
+        }
+        return ResponseEntity.ok().body("n");
     }
 }
