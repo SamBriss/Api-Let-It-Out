@@ -109,4 +109,19 @@ public class UsersApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el token");
         }
     }
+    @PostMapping("/user/findEmail")
+    public ResponseEntity postMethodEmail(@RequestParam("email") String email) {
+
+        int result = userService.SearchUsersByEmailMethod(email);
+
+        if (result > 0) {
+            return ResponseEntity.status(HttpStatus.FOUND).body("1");
+        } else {
+            if (result == 0) {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).body("error");
+            }
+        }
+    }
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +24,13 @@ public class ActivitiesFromTherapist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int activityTId;
-
     private String label;
     private String description;
     private LocalDate dateAsign;
     private LocalDate dateMax;
     private boolean completed;
+    private String comments;
+    private String document;
 
     @ManyToOne
     private UsersTAG userTAG;

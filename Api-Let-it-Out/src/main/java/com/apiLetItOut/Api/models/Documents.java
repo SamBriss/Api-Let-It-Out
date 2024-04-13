@@ -30,14 +30,6 @@ public class Documents {
         this.referenceURL = referenceURL;
     }
 
-    public char getStatus() {
-        return status;
-    }
-
-    public void setStatus(char status) {
-        this.status = status;
-    }
-
     public ActivitiesFromTherapist getActivity() {
         return activity;
     }
@@ -47,7 +39,6 @@ public class Documents {
     }
 
     private String referenceURL;
-    private char status;
 
     @ManyToOne
     private ActivitiesFromTherapist activity;

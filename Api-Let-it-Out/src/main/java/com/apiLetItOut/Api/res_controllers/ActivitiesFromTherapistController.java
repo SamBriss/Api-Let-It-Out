@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.ActivitiesFromTherapistService;
+import com.apiLetItOut.Api.services.DocumentsService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 import com.apiLetItOut.Api.services.UserTherapistService;
@@ -32,6 +33,9 @@ public class ActivitiesFromTherapistController {
 
     @Autowired
     UserTherapistService userTherapistService;
+
+    @Autowired
+    DocumentsService documentsService;
     
     @PostMapping("/userTherapist/ActivitiesFromTherapist")
     public ResponseEntity postMethodName(@RequestParam("usernameTherapist") String usernameTherapist,
@@ -40,7 +44,8 @@ public class ActivitiesFromTherapistController {
                                         @RequestParam("description") String description,
                                         @RequestParam("dateAsign") String dateAsignstr,
                                         @RequestParam("dateMax") String dateMaxstr,
-                                        @RequestParam("completed") String completedstr) throws ParseException {
+                                        @RequestParam("completed") String completedstr,
+                                        @RequestParam("document") String document) throws ParseException {
 
         int userIdTTAG = userService.SearchUserTAGMethod(usernameTAG);
         int userTAGId = userTAGService.FindUserTAGMethod(userIdTTAG);
@@ -66,7 +71,8 @@ public class ActivitiesFromTherapistController {
 
         if (userTAGId > 0) 
         {
-            int RegisterActivity = activitiesFromTherapistService.RegisterNewActivityFromTherapistMethod(userTAGId, userTherapistId, label, description, dateAsign, dateMax, completed);
+            int RegisterActivity = activitiesFromTherapistService.RegisterNewActivityFromTherapistMethod
+            (userTAGId, userTherapistId, label, description, dateAsign, dateMax, completed, document);
             
             if (RegisterActivity > 0)
             {
@@ -144,7 +150,6 @@ public class ActivitiesFromTherapistController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
         }
     }
-
     @PostMapping("/userTherapist/TherapistUsername")
     public ResponseEntity postMethodRquest(@RequestParam("username") String username){
 
@@ -177,7 +182,7 @@ public class ActivitiesFromTherapistController {
         }
     }
     @PostMapping("/userTherapist/updateActivityComments")
-    public ResponseEntity<String> updateTherapistVinculationCode(@RequestParam("activityTId") String activityTIdstr,
+    public ResponseEntity<String> updateTherapistComment(@RequestParam("activityTId") String activityTIdstr,
                                                                 @RequestParam("comments") String comments){
 
         int activityTId;
@@ -201,5 +206,408 @@ public class ActivitiesFromTherapistController {
         }
 
     }
+    @PostMapping("/userTAG/RequestQuantityActivitiesPendientes")
+    public ResponseEntity postMethodNameCountActivitiesPendientes(@RequestParam("username") String username){
 
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 0;
+
+        if(userTAGId > 0)
+        {
+            int countRequest = activitiesFromTherapistService.CountRequestQuantityActivitiesCompletedMethod(userTAGId, completed);
+
+            if (countRequest > 0)
+            {
+                String count = String.valueOf(countRequest);
+                return ResponseEntity.status(HttpStatus.OK).body(count);
+            }
+            else if (countRequest == 0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error numero no valido");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/RequestQuantityActivitiesCompletado")
+    public ResponseEntity postMethodNameCountActivitiesCompletado(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 1;
+
+        if(userTAGId > 0)
+        {
+            int countRequest = activitiesFromTherapistService.CountRequestQuantityActivitiesCompletedMethod(userTAGId, completed);
+
+            if (countRequest > 0)
+            {
+                String count = String.valueOf(countRequest);
+                return ResponseEntity.status(HttpStatus.OK).body(count);
+            }
+            else if (countRequest == 0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error numero no valido");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/ViewActivitiesIdsPendiente")
+    public ResponseEntity postMethodRquestIdsPendiente(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 0;
+
+        if(userTAGId > 0)
+        {
+            List<Integer> ActivitiesIds = activitiesFromTherapistService.SelectActivityIdCompletedMethod(userTAGId, completed);
+            if (!ActivitiesIds.isEmpty()) {
+                List<String> ActivitiesIdsString = new ArrayList<>();
+                for (int ActivityId : ActivitiesIds) {
+                    String id = String.valueOf(ActivityId);
+                    if (id != null) {
+                        ActivitiesIdsString.add(id);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+                    }    
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(ActivitiesIdsString);
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/ViewActivitiesIdsCompletado")
+    public ResponseEntity postMethodRquestIdsCompleted(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 1;
+
+        if(userTAGId > 0)
+        {
+            List<Integer> ActivitiesIds = activitiesFromTherapistService.SelectActivityIdCompletedMethod(userTAGId, completed);
+            if (!ActivitiesIds.isEmpty()) {
+                List<String> ActivitiesIdsString = new ArrayList<>();
+                for (int ActivityId : ActivitiesIds) {
+                    String id = String.valueOf(ActivityId);
+                    if (id != null) {
+                        ActivitiesIdsString.add(id);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+                    }    
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(ActivitiesIdsString);
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
+        }
+    }
+    @PostMapping("/userTAG/TherapistUsernamePendiente")
+    public ResponseEntity TerapeutaPendiente(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 0;
+        
+        if(userTAGId > 0)
+        {
+            List<Integer> userTherapistIds =  activitiesFromTherapistService.SelectTherapistIdCompletedMethod(userTAGId, completed);
+
+            if (!userTherapistIds.isEmpty()) {
+                List<String> usernames = new ArrayList<>();
+                for (int userTherapistId : userTherapistIds) {
+                    int userIdT = userTherapistService.SearchIdByTherapistMethod(userTherapistId);
+                    String usernameT = userService.SearchUsernameByIdMethod(userIdT);
+                    if (usernameT != null) {
+                        usernames.add(usernameT);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+                    }
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(usernames);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/TherapistUsernameCompletado")
+    public ResponseEntity TerapeutaCompletado(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 1;
+        
+        if(userTAGId > 0)
+        {
+            List<Integer> userTherapistIds =  activitiesFromTherapistService.SelectTherapistIdCompletedMethod(userTAGId, completed);
+
+            if (!userTherapistIds.isEmpty()) {
+                List<String> usernames = new ArrayList<>();
+                for (int userTherapistId : userTherapistIds) {
+                    int userIdT = userTherapistService.SearchIdByTherapistMethod(userTherapistId);
+                    String usernameT = userService.SearchUsernameByIdMethod(userIdT);
+                    if (usernameT != null) {
+                        usernames.add(usernameT);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+                    }
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(usernames);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/ViewActivityDatesPendiente")
+    public ResponseEntity postMethodDatesPendiente(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 0;
+
+        if(userTAGId > 0)
+        {
+            List<Date> DiaryDates =  activitiesFromTherapistService.SelectActivityDateCompletedMethod(userTAGId, completed);
+            if (!DiaryDates.isEmpty()) {
+                List<String> DiaryIdStr = new ArrayList<>();
+                for (Date DiaryDate : DiaryDates) {
+                    String date = String.valueOf(DiaryDate);
+                    if (date != null) {
+                        DiaryIdStr.add(date);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+                    }    
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(DiaryIdStr);
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/ViewActivityDatesCompletado")
+    public ResponseEntity postMethodDatesCompletado(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTAGId = userTAGService.FindUserTAGMethod(userId);
+
+        int completed = 1;
+
+        if(userTAGId > 0)
+        {
+            List<Date> DiaryDates =  activitiesFromTherapistService.SelectActivityDateCompletedMethod(userTAGId, completed);
+            if (!DiaryDates.isEmpty()) {
+                List<String> DiaryIdStr = new ArrayList<>();
+                for (Date DiaryDate : DiaryDates) {
+                    String date = String.valueOf(DiaryDate);
+                    if (date != null) {
+                        DiaryIdStr.add(date);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+                    }    
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(DiaryIdStr);
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay actividades");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
+    @PostMapping("/userTAG/dateActivity")
+    public ResponseEntity postMethodDate(@RequestParam("activityTId") String activityTIdstr){
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        Date dateMax = activitiesFromTherapistService.SelectDateMaxActivityMethod(activityTId);
+
+        if(dateMax != null)
+        {
+            String datestr = String.valueOf(dateMax);
+            return ResponseEntity.status(HttpStatus.OK).body(datestr);
+            
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
+    }
+    @PostMapping("/userTAG/labelActivity")
+    public ResponseEntity postMethodLabel(@RequestParam("activityTId") String activityTIdstr){
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        String label = activitiesFromTherapistService.SelectLabelActivityMethod(activityTId);
+
+        if(label != null)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(label);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
+    }
+    @PostMapping("/userTAG/descriptionActivity")
+    public ResponseEntity postMethodDescrip(@RequestParam("activityTId") String activityTIdstr){
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        String descript = activitiesFromTherapistService.SelectDescriptionActivityMethod(activityTId);
+
+        if(descript != null)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(descript);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
+    }
+    @PostMapping("/userTAG/documentActivity")
+    public ResponseEntity postMethodDocument(@RequestParam("activityTId") String activityTIdstr){
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        String document = activitiesFromTherapistService.SelectDocumentActivityMethod(activityTId);
+
+        if(document != null)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(document);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
+    }
+    @PostMapping("/usersTAG/ActivitiesDocuments")
+    public ResponseEntity postMethodName(@RequestParam("activityTId") String activityTIdstr,
+                                        @RequestParam("referenceURL") String referenceURL) {
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        int register = documentsService.RegisterNewActivityDocumentMethod(activityTId, referenceURL);
+
+        if (register > 0) 
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("success");
+           
+        } 
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
+    }
+    @PostMapping("/userTAG/updateCompleted")
+    public ResponseEntity<String> updateCompleted(@RequestParam("activityTId") String activityTIdstr){
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        int completed = 1;
+        int updateActivity = activitiesFromTherapistService.UpdateCompletedMethod(activityTId, completed);
+
+        if(updateActivity > 0)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("update");
+        }
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No update");
+        }
+
+    }
 }
