@@ -338,7 +338,15 @@ public class AlgorithmOfTechniques {
         String namePreferenceSensorial = relaxationTechniquesService.SearchPreferenceSensorialOfAudioMethod(audioId);
         // Busca la calificacion de la preferencia
         Integer scorePreferenceAuditive = preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, namePreferenceAuditive);
+        if(scorePreferenceAuditive == null)
+        {
+            scorePreferenceAuditive=0;
+        }
         Integer scorePreferenceSensorial = preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, namePreferenceSensorial);
+        if(scorePreferenceSensorial==null)
+        {
+            scorePreferenceSensorial=0;
+        }
         // Busca el promedio de calificacion personal del audio
         Double calificationPersonal = listenedAudiosFeedbackService.SearchScoreOfAudioMethod(userTAGId, audioId);
         if(calificationPersonal == null)

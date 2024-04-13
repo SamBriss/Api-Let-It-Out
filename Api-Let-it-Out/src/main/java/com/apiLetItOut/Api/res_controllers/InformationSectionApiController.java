@@ -98,7 +98,10 @@ public class InformationSectionApiController {
         //Distorsiones Cognitivas
         List<String> cognitiveDistortions = fillListWithDistortions();
         List<String> cognitiveDistortionsOfUser = cognitiveDistortionsService.SearchCongitiveDistortionsOfUserMethod(userTAGId);
-        cognitiveDistortions.removeAll(cognitiveDistortionsOfUser);
+        if(cognitiveDistortionsOfUser != null && !cognitiveDistortionsOfUser.isEmpty())
+        {
+            cognitiveDistortions.removeAll(cognitiveDistortionsOfUser);
+        }
         // Dominios
         List<Integer> domainsId = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
         List<String> namesDomains = new ArrayList<>();
@@ -132,13 +135,14 @@ public class InformationSectionApiController {
         
         
         Map<String, Object> responseData = new HashMap<>();
-        for (int i = 0; i < topics.size(); i++) {
-            System.out.println("name"+i + " es: " + names.get(i));
-            responseData.put("name" + i, names.get(i));
-            System.out.println("class"+i + " es: " + classifications.get(i));
-            responseData.put("classification" + i, classifications.get(i));
-            System.out.println("types"+i + " es: " + types.get(i));
-            responseData.put("type" + i, types.get(i));
+        for (int i = 0; i < names.size(); i++) {
+            int j = i;
+            System.out.println("name"+j + " es: " + names.get(j));
+            responseData.put("name" + j, names.get(j));
+            System.out.println("class"+j + " es: " + classifications.get(j));
+            responseData.put("classification" + j, classifications.get(j));
+            System.out.println("types"+j + " es: " + types.get(j));
+            responseData.put("type" + j, types.get(j));
         }
         return ResponseEntity.ok(responseData);
     }
@@ -220,9 +224,13 @@ public class InformationSectionApiController {
         //topics.add(age);
         //topics.add(gender);
         //distortion
-        for (String distortion : distortionRecognized) {
-            topics.add(distortion);
+        if(distortionRecognized!=null)
+        {
+            for (String distortion : distortionRecognized) {
+                topics.add(distortion);
+            }
         }
+        
         //domains
         for (String domain : domains) {
             topics.add(domain);
