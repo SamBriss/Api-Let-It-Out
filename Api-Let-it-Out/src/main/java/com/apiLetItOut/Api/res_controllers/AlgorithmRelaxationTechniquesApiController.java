@@ -27,7 +27,6 @@ import com.apiLetItOut.Api.services.PreferencesTAGUserService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -83,6 +82,7 @@ public class AlgorithmRelaxationTechniquesApiController {
             
             // Calcula la diferencia de días entre la fecha actual y la última fecha de ejecución
             daysDifference = ChronoUnit.DAYS.between(lastExecutionLocalDate, currentDate);
+            System.out.println("days diference:  "+daysDifference);
             }
             if(daysDifference >= 7 || daysDifference == 0)
             {
@@ -92,6 +92,12 @@ public class AlgorithmRelaxationTechniquesApiController {
                 Object[] obj = new Object[2];
                 if(totalUsesOfTechniques > 0)
                 {
+                    List<Integer> usersTAGIdList = algorithmRelaxationTechniquesService.GetUserTAGIdFromCountRankingMethod();
+                    for(int u : usersTAGIdList)
+                    {
+                        int res = algorithmRelaxationTechniquesService.UpdateCountRankingMethod(u, 0);
+                        System.out.println("res de update: "+res);
+                    }
                     switch (categoryIdRanking) {
                         case 5:
                         // semana 2 primera preferencia sensorial 1 
@@ -382,6 +388,7 @@ public class AlgorithmRelaxationTechniquesApiController {
                         
                     // preferencia sensorial 1
                     case 2:
+                    System.out.println("entra en category 2");
                     System.out.println("usertagId:  "+userTAGId);
                     System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Tacto")+ "tacto");
                     System.out.println(preferencesTAGUserService.SearchScoreOfPreferenceUserTAG(userTAGId, "Visual") + "Visual");
@@ -403,7 +410,7 @@ public class AlgorithmRelaxationTechniquesApiController {
                             // TODO Auto-generated method stub
                             if(arg0 != null)
                             {
-                            return arg0.getKey().compareTo(arg1.getKey());
+                                return arg0.getKey().compareTo(arg1.getKey());
                             }
                             return 0;
                         }
@@ -513,6 +520,38 @@ public class AlgorithmRelaxationTechniquesApiController {
         } 
         
         return ResponseEntity.ok().body("not found");
+    }
+    
+    @PostMapping("countByUser/getCountForTAGUser")
+    public ResponseEntity getCountForTAGUserRanking(@RequestParam("username") String username) {
+        
+        int count = algorithmRelaxationTechniquesService.getCountByUserTAGMethod(username);
+        if(count>0)
+        {
+            return ResponseEntity.ok().body("1");
+        }
+        return ResponseEntity.ok().body(count);
+    }
+
+    @PostMapping("countByUser/changeCountForTAGUser")
+    public ResponseEntity UpdateCountForTAGUserRanking(@RequestParam("username") String username) {
+        
+        int userId = userService.SearchUserTAGMethod(username);
+        int count = algorithmRelaxationTechniquesService.getCountByUserTAGMethod(username);
+        count ++;
+        if(userId>0)
+        {
+            int userTAGId = userTAGService.FindUserTAGMethod(userId);
+            if(userTAGId>0)
+            {
+                int result = algorithmRelaxationTechniquesService.UpdateCountRankingMethod(userTAGId, count);
+                if(result > 0)
+                {
+                    return ResponseEntity.ok().body("1");
+                }
+            }
+        }
+        return ResponseEntity.ok().body("0");
     }
     
     
