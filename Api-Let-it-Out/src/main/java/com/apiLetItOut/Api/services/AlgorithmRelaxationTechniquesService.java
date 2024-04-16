@@ -124,4 +124,18 @@ public class AlgorithmRelaxationTechniquesService {
     {
         return algorithmRelaxationTechniquesRepository.getDateFromLastRankingId();
     }
+
+    // 13-04-2024
+    public int getCountByUserTAGMethod(String username)
+    {
+        return algorithmRelaxationTechniquesRepository.getCountByUserTAG(username);
+    }
+    public int UpdateCountRankingMethod(int userTAGId, int count)
+    {
+        return algorithmRelaxationTechniquesRepository.UpdateCountRanking(userTAGId, count);
+    }
+    public java.util.List<Integer> GetUserTAGIdFromCountRankingMethod()
+    {
+        return algorithmRelaxationTechniquesRepository.GetUserTAGIdFromCountRanking();
+    }
 }

@@ -151,5 +151,17 @@ List<Object[]> getAverageScoreRepetitionsAudioIdByAgeUser(@Param("startAge") int
     "ORDER BY rankingId DESC LIMIT 1", nativeQuery = true)
     Date getDateFromLastRankingId();
 
+    // 13-04-2023
+    @Query(value = "Select c.count from count_ranking_technique_by_user c INNER JOIN usersTAG t ON c.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username", nativeQuery = true)
+    int getCountByUserTAG(@Param("username") String username);
+    
+    @Transactional
+    @Modifying
+    @Query(value = "Update count_ranking_technique_by_user set count =:count WHERE userTAGId =:userTAGId", nativeQuery = true)
+    Integer UpdateCountRanking(@Param("userTAGId") int userTAGId, 
+                        @Param("count") int count);
+
+    @Query(value = "Select userTAGId from count_ranking_technique_by_user", nativeQuery = true)
+    List<Integer> GetUserTAGIdFromCountRanking();
 
 }
