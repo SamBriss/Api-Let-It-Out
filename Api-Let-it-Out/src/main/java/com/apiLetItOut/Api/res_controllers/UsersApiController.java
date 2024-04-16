@@ -108,22 +108,23 @@ public class UsersApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el token");
         }
     }
-    @PostMapping("/user/findEmail")
-    public ResponseEntity postMethodEmail(@RequestParam("email") String email) {
+    @PostMapping("/user/findTel")
+    public ResponseEntity postMethodtel(@RequestParam("tel") String tel) {
 
-        int result = userService.SearchUsersByEmailMethod(email);
+        int result = userService.SearchUsersByTelMethod(tel);
 
-        if (result > 0) {
-            return ResponseEntity.status(HttpStatus.FOUND).body("1");
-        } else {
-            if (result == 0) {
-                return ResponseEntity.status(HttpStatus.OK).body("0");
-            } else {
-                return ResponseEntity.status(HttpStatus.OK).body("error");
-            }
+        if (result > 0) 
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("1");
+        } else if (result == 0)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("0");
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("error");
         }
     }
-
     @PostMapping("user/nameTAGByUsername")
     public ResponseEntity<String> getNameUserTAG(@RequestParam("username") String username)
     {
@@ -138,5 +139,23 @@ public class UsersApiController {
             }
         }
         return ResponseEntity.ok().body("n");
+    }
+    @PostMapping("/user/updatePassword")
+    public ResponseEntity UpdatePassword(@RequestParam("tel") String tel,
+    @RequestParam("password") String password) {
+
+        int result = userService.UpdatePasswordMethod(tel, password);
+
+        if (result > 0) 
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("update");
+        } else if (result == 0)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("0");
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("error");
+        }
     }
 }

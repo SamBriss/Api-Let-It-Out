@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -17,22 +18,6 @@ public class FrecuencyGraphics {
 
     public void setFrecuencyGraphicId(int frecuencyGraphicId) {
         this.frecuencyGraphicId = frecuencyGraphicId;
-    }
-
-    public String getURL() {
-        return URL;
-    }
-
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-
-    public String getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public void setElapsedTime(String elapsedTime) {
-        this.elapsedTime = elapsedTime;
     }
 
     public LocalDate getDate() {
@@ -54,10 +39,19 @@ public class FrecuencyGraphics {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int frecuencyGraphicId;
-    private String URL;
-    private String elapsedTime;
     private LocalDate date;
     private int count;
+
+    @ManyToOne
+    private UsersTAG usersTAG;
+
+    public UsersTAG getUsersTAG() {
+        return usersTAG;
+    }
+
+    public void setUsersTAG(UsersTAG usersTAG) {
+        this.usersTAG = usersTAG;
+    }
 
     // Getters and setters
 }

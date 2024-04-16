@@ -91,10 +91,15 @@ public interface UserRepository extends CrudRepository<Users, Integer>{
                         @Param("tel") String tel,
                         @Param("age") int age,
                         @Param("gender") String gender);
-
     @Query (value = "Select email from Users where username =:username", nativeQuery = true)
     String SearchEmailByUsername(@Param("username") String username);
-    
     @Query (value = "Select username from Users where email =:email", nativeQuery = true)
     String SearchUsernameByEmail(@Param("email") String email);
+    @Query(value= "SELECT COUNT(*) FROM Users WHERE tel LIKE CONCAT('%', :tel, '%')", nativeQuery = true)
+    Integer SearchUsersByTel (@Param("tel") String tel);
+    @Transactional
+    @Modifying
+    @Query(value = "Update Users set password = :password where tel LIKE CONCAT('%', :tel, '%')", nativeQuery = true)
+    Integer UpdatePassword(@Param("password") String password,
+    @Param("tel") String tel);
 }
