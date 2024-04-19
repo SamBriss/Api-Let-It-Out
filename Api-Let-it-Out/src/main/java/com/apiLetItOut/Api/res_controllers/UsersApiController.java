@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api")
@@ -98,63 +99,78 @@ public class UsersApiController {
     }
 
     @PostMapping("/userProfile/logOut")
-    public ResponseEntity<String> logOutProfile(@RequestParam ("username") String username, @RequestParam("email") String email)
-    {
+    public ResponseEntity<String> logOutProfile(@RequestParam("username") String username,
+            @RequestParam("email") String email) {
         int countRows = userService.updateTokenMethod("0", username, email);
-        if(countRows>0)
-        {
+        if (countRows > 0) {
             return ResponseEntity.status(HttpStatus.CREATED).body("success");
-        } else{
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el token");
         }
     }
+
     @PostMapping("/user/findTel")
     public ResponseEntity postMethodtel(@RequestParam("tel") String tel) {
 
         int result = userService.SearchUsersByTelMethod(tel);
 
-        if (result > 0) 
-        {
+        if (result > 0) {
             return ResponseEntity.status(HttpStatus.OK).body("1");
-        } else if (result == 0)
-        {
+        } else if (result == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("0");
-        }
-        else
-        {
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body("error");
         }
     }
+
     @PostMapping("user/nameTAGByUsername")
-    public ResponseEntity<String> getNameUserTAG(@RequestParam("username") String username)
-    {
+    public ResponseEntity<String> getNameUserTAG(@RequestParam("username") String username) {
         int userId = userService.SearchUserTAGMethod(username);
-        if(userId > 0)
-        {
+        if (userId > 0) {
             String name = userService.SearchNameMethod(userId);
             name = name + " " + userService.SearchUserLPMethod(userId);
-            if(name != null)
-            {
+            if (name != null) {
                 return ResponseEntity.ok().body(name);
             }
         }
         return ResponseEntity.ok().body("n");
     }
+
     @PostMapping("/user/updatePassword")
     public ResponseEntity UpdatePassword(@RequestParam("tel") String tel,
-    @RequestParam("password") String password) {
+            @RequestParam("password") String password) {
 
         int result = userService.UpdatePasswordMethod(tel, password);
 
-        if (result > 0) 
-        {
+        if (result > 0) {
             return ResponseEntity.status(HttpStatus.OK).body("update");
-        } else if (result == 0)
-        {
+        } else if (result == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("0");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("error");
         }
-        else
-        {
+    }
+
+    @PostMapping("/userTAG/existenciaTAG")
+    public ResponseEntity postMethodExistencia(@RequestParam("username") String username) {
+        Integer existencia = userService.SearchUserTAGMethod(username);
+        if (existencia == null) {
+            return ResponseEntity.status(HttpStatus.OK).body("no existe");
+        } else if (existencia > 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("existe");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("error");
+        }
+    }
+    @PostMapping("/userTAG/verificaVinculacion")
+    public ResponseEntity postMethodverificaVinculacion(@RequestParam("username") String username) {
+        
+        Integer existencia = userService.SearchUserTAGMethod(username);
+        if (existencia == null) {
+            return ResponseEntity.status(HttpStatus.OK).body("no existe");
+        } else if (existencia > 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("existe");
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body("error");
         }
     }

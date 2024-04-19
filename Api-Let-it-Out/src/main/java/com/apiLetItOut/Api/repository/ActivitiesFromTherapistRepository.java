@@ -67,5 +67,7 @@ public interface ActivitiesFromTherapistRepository extends CrudRepository <Activ
     @Query(value = "Update activitiesfromtherapist set completed = :completed where activityTId =:activityTId", nativeQuery = true)
     Integer UpdateCompleted(@Param("activityTId") int activityTId,
                             @Param("completed") int completed);
+    @Query(value= "Select comments FROM activitiesfromtherapist WHERE activityTId=:activityTId", nativeQuery = true)
+    String SelectcommentsActivity (@Param("activityTId") int activityTId);
 }
 

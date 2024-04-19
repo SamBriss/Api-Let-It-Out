@@ -610,4 +610,28 @@ public class ActivitiesFromTherapistController {
         }
 
     }
+    @PostMapping("/userTherapist/ViewActivityComments")
+    public ResponseEntity<String> ViewActivityComments(@RequestParam("activityTId") String activityTIdstr){
+
+        int activityTId;
+
+        try {
+            activityTId = Integer.parseInt(activityTIdstr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        String viewComment = activitiesFromTherapistService.SelectCommentActivityMethod(activityTId);
+
+        if(viewComment != null)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(viewComment);
+        }
+        else 
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("no hay");
+        }
+
+    }
 }

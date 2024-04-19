@@ -80,4 +80,8 @@ public class ActivitiesFromTherapistService {
     {
         return activitiesFromTherapistRepository.UpdateCompleted(activityTId, completed);
     }
+    public String SelectCommentActivityMethod( int activityTId)
+    {
+        return activitiesFromTherapistRepository.SelectcommentsActivity(activityTId);
+    }
 }

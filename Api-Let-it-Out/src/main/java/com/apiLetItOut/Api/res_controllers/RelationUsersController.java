@@ -263,20 +263,26 @@ public class RelationUsersController {
         }
     }
 
-    @PostMapping("userTAG/TherapistsRelatedToUserTagUsername")
-    public ResponseEntity postMethodNameRelationTherapists(@RequestParam("username") String username) {
+    @PostMapping("/users/verificaVinculacion")
+    public ResponseEntity postMethodNameVinculacion(@RequestParam("usernameTAG") String usernameTAG,
+                                                @RequestParam("usernameTherapist") String usernameTherapist) {
         
-        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(usernameTAG);
+        Integer userTerapistId = userTherapistService.findUserTherapistIdByUsernameMethod(usernameTherapist);
+
         if(userTAGId!=null)
         {
-            List<Object[]> therapistsRelated = relationUsersService.SearchRelationTherapistsByUserTAGIdMethod(userTAGId);
-            if(therapistsRelated.isEmpty())
+            Integer vinculacion = relationUsersService.ExistenceOfVinculationMethod(userTAGId, userTerapistId);
+            if(vinculacion > 0)
             {
-                return ResponseEntity.ok().body("none");
+                return ResponseEntity.ok().body("si hay");
             }
-            return ResponseEntity.ok().body(therapistsRelated);
+            else{
+
+                return ResponseEntity.ok().body("no hay");
+            }
         }
-        return ResponseEntity.ok().body("TAGNotFound");
+        return ResponseEntity.ok().body("No es TAG");
     }
     
 }

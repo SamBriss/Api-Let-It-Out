@@ -39,4 +39,8 @@ public class RelationUsersService {
     {
         return relationUsersRepository.SearchRelationTherapistsByUserTAGId(userTAGId);
     }
+    public int ExistenceOfVinculationMethod(int userTAGId, int userTherapistId)
+    {
+        return relationUsersRepository.ExistenceOfVinculation(userTAGId, userTherapistId);
+    }
 }
