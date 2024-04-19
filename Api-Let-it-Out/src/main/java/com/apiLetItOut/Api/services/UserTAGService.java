@@ -84,4 +84,20 @@ public class UserTAGService {
     {
         return userTAGRepository.GetUserTAGIdByeUsername(username);
     }
+
+    
+    public Integer GetUserTAGIdByEmailMethod(String email)
+    {
+        return userTAGRepository.GetUserTAGIdByEmail(email);
+    }
+
+    public Integer SearchLevelTechniqueMethod(int userTAGId)
+    {
+        return userTAGRepository.SearchLevelTechnique(userTAGId);
+    }
+
+    public Integer UpdateUserTAGLevelTechniques(int userTAGId, int levelTechiniques)
+    {
+        return userTAGRepository.UpdateUserTAGLevelTechniques(levelTechiniques, userTAGId);
+    }
 }

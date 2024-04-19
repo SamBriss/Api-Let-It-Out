@@ -41,4 +41,8 @@ public class PreferencesTAGUserService {
         return preferencestaguserRepository.SearchPreferenceAuditiveFavorite(userTAGId, categoryId);
     }
     
+    public Integer UpdatePreferencesUserMethod(int userTAGId, String name, int score)
+    {
+        return preferencestaguserRepository.UpdateUserPreferences(name, score, userTAGId);
+    }
 }

@@ -73,4 +73,9 @@ public class RelaxationTechniquesService {
     {
         return relaxationTechniquesRepository.SearchUrlOfAudioId(audioId);
     }
+
+    public LocalTime SearchDurationByAudioIdMethod(int audioId)
+    {
+        return relaxationTechniquesRepository.SearchDurationByAudioId(audioId);
+    }
 }
