@@ -1,14 +1,10 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import com.apiLetItOut.Api.models.AppointmentCalendar;
 import com.apiLetItOut.Api.repository.AppointmentCalendarRepository;
 
 @Service

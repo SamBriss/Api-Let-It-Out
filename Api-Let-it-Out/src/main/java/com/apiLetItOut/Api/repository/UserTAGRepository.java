@@ -64,4 +64,17 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     
     @Query(value = "Select t.userTAGId from users u INNER JOIN userstag t ON u.userId=t.userId WHERE u.username=:username", nativeQuery = true)
     Integer GetUserTAGIdByeUsername(@Param("username") String username);
+
+    @Query(value = "Select t.userTAGId from users u INNER JOIN userstag t ON u.userId=t.userId WHERE u.email=:email", nativeQuery = true)
+    Integer GetUserTAGIdByEmail(@Param("email") String email);
+
+    @Transactional
+    @Modifying
+    @Query(value= "Update UsersTAG SET levelTechiniques = :levelTechiniques where userTAGId = :userTAGId", nativeQuery = true)
+    Integer UpdateUserTAGLevelTechniques(@Param("levelTechiniques") int levelTechiniques,
+                                            @Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select levelTechiniques From userstag where userTAGId=:userTAGId", nativeQuery = true)
+    Integer SearchLevelTechnique(@Param("userTAGId") int userTAGId);
+
 }

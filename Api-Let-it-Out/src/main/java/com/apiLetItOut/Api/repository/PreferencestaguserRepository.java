@@ -22,6 +22,13 @@ public interface PreferencestaguserRepository extends CrudRepository <Preference
                         @Param("score") int score,
                         @Param("userTAGId") int userTAGId,
                         @Param("categoryId") int categoryId);
+    @Transactional
+    @Modifying
+    @Query(value = "Update preferencestaguser " + 
+            "set score = :score where userTAGId = :userTAGId and name = :name", nativeQuery = true)
+    Integer UpdateUserPreferences(@Param("name") String name,
+                                    @Param("score") int score,
+                                    @Param("userTAGId") int userTAGId);
 
     @Query(value="Select score from preferencestaguser where userTAGId=:userTAGId and name LIKE CONCAT('%', :name, '%')", nativeQuery = true)
     Integer SearchScoreOfPreferenceUserTAG(@Param ("userTAGId") int userTAGId, @Param ("name") String name);
