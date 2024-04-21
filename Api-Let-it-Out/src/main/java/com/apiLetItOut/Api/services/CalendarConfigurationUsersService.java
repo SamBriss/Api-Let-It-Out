@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,18 @@ public class CalendarConfigurationUsersService {
     public Object SearchEndHourJourneyMethod(String usernameTherapist)
     {
         return calendarConfigurationRepository.SearchEndHourJourney(usernameTherapist);
+    }
+    // 20-04-2024
+    public List<Object[]> getPreferenceDaysUserMethod(String username)
+    {
+        return calendarConfigurationRepository.getPreferenceDaysUser(username);
+    }
+    public int findConfigurationIdByUsernameMethod(String username)
+    {
+        return calendarConfigurationRepository.findConfigurationIdByUsername(username);
+    }
+    public int updatePreferenceDaysMethod(int preferenceDayId, int weekDayId, Date StartHour, Date EndHour, String label)
+    {
+        return calendarConfigurationRepository.UpdatePreferenceDays(preferenceDayId,  StartHour, EndHour,weekDayId, label);
     }
 }

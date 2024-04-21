@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,5 +31,21 @@ public interface CalendarConfigurationRepository  extends CrudRepository <Calend
                          
     @Query(value= "Select c.endWorkDay FROM CalendarConfigurationUsers c INNER JOIN users u ON c.userId=u.userId INNER JOIN userstherapists t ON u.userId=t.userId WHERE u.username=:usernameTherapist", nativeQuery = true)
     Object SearchEndHourJourney (@Param("usernameTherapist") String usernameTherapist);
-    
+
+    //20-04-2024
+    @Query(value = "Select c.configurationId, p.preferenceDayId, p.weekDayId, p.StartHour, p.EndHour from preference_days p INNER JOIN calendarconfigurationusers c ON p.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
+    List<Object[]> getPreferenceDaysUser(@Param("username") String username);
+
+    @Query(value = "Select c.configurationId from preference_days p INNER JOIN calendarconfigurationusers c ON p.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
+    int findConfigurationIdByUsername(@Param("username") String username);
+     
+    @Transactional
+    @Modifying
+    @Query(value = "Update preference_days set weekDayId =:weekDayId, StartHour =:startHour, EndHour =:endHour, label =:label where preferenceDayId=:preferenceDayId", nativeQuery = true)
+    Integer UpdatePreferenceDays(@Param("preferenceDayId") int preferenceDayId, 
+                        @Param("startHour") Date startHour,
+                        @Param("endHour") Date endHour,
+                        @Param("weekDayId") int weekDayId,
+                        @Param("label") String label);
+
 }

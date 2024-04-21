@@ -18,12 +18,6 @@ import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
 import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
 
-import jakarta.el.ELException;
-
-import org.springframework.web.bind.annotation.RequestBody;
-
-
-
 @RestController
 @RequestMapping("api")
 public class CalendarConfigurationUsersApiController {
@@ -182,5 +176,85 @@ public class CalendarConfigurationUsersApiController {
         return ResponseEntity.ok().body(preferenceAppointments); 
     }
 
+    @PostMapping("configCalendar/getCalendarSettings")
+    public ResponseEntity getCalendarSettings(@RequestParam("username") String username) {
+        
+        List<Object[]> preferenceDaysUser = calendarConfigurationUsersService.getPreferenceDaysUserMethod(username);
+        if(!preferenceDaysUser.isEmpty())
+        {
+            return ResponseEntity.ok().body(preferenceDaysUser);
+        }
+
+        return ResponseEntity.ok().body("none");
+    }
+    
+    @PostMapping("/preferenceDays/addPreferenceDaysModify")
+    public ResponseEntity<String> addPreferenceDaysModify(@RequestParam("weekDayId") String weekDayIdStr,
+                                            @RequestParam("startHour") String StartHourStr,
+                                            @RequestParam("endHour") String EndHourStr,
+                                            @RequestParam("label") String label,
+                                            @RequestParam("username") String username) {
+
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        try {
+            int configurationId = calendarConfigurationUsersService.findConfigurationIdByUsernameMethod(username);
+            Date EndHour = formatoHora.parse(EndHourStr);
+            Date StartHour = formatoHora.parse(StartHourStr);
+            int weekDayId = Integer.parseInt(weekDayIdStr);
+
+            int result = preferenceDaysService.insertPreferenceDays(configurationId, weekDayId, StartHour, EndHour, label);
+            System.out.println("result:  "+result);
+
+            if(result==0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(""+result);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
+ 
+    @PostMapping("/preferenceDays/UpdatePreferenceDays")
+    public ResponseEntity<String> UpdatePreferenceDaysModify( @RequestParam("preferenceDayId") String preferenceDayIdStr,
+                                            @RequestParam("weekDayId") String weekDayIdStr,
+                                            @RequestParam("startHour") String StartHourStr,
+                                            @RequestParam("endHour") String EndHourStr,
+                                            @RequestParam("label") String label) {
+
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        try {
+            int preferenceDayId = Integer.valueOf(preferenceDayIdStr);
+            System.out.println("preferenceDayId :   "+preferenceDayId);
+            Date EndHour = formatoHora.parse(EndHourStr);
+            Date StartHour = formatoHora.parse(StartHourStr);
+            int weekDayId = Integer.parseInt(weekDayIdStr);
+
+            int result = calendarConfigurationUsersService.updatePreferenceDaysMethod(preferenceDayId, weekDayId, StartHour, EndHour, label);
+            System.out.println("result:  "+result);
+
+            if(result==0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(""+result);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
     
 }
