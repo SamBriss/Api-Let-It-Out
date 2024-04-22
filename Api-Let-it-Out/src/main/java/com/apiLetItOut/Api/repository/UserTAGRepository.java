@@ -77,4 +77,12 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     @Query(value = "Select levelTechiniques From userstag where userTAGId=:userTAGId", nativeQuery = true)
     Integer SearchLevelTechnique(@Param("userTAGId") int userTAGId);
 
+    @Query(value = "Select 	levelTAGQuestionaireDate From userstag where userTAGId=:userTAGId", nativeQuery = true)
+    Date SelectDateLevelQuiz(@Param("userTAGId") int userTAGId);
+
+    @Transactional
+    @Modifying
+    @Query(value= "UPDATE userstag SET levelTAGQuestionaireDate = CURRENT_DATE(), levelTAGId =:levelTAGId WHERE userTAGId =:userTAGId", nativeQuery = true)
+    Integer UpdateUserTAGLevelTAGId(@Param("levelTAGId") int levelTAGId,
+                                            @Param("userTAGId") int userTAGId);
 }

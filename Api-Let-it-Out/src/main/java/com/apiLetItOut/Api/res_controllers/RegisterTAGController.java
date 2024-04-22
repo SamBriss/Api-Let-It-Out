@@ -1,5 +1,6 @@
 package com.apiLetItOut.Api.res_controllers;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -85,6 +86,69 @@ public class RegisterTAGController {
             }
         }
         return null;
-    
+    }
+    @PostMapping("/userTAG/dateLevelQuiz")
+    public ResponseEntity postMethodNameVinculacion(@RequestParam("username") String username) {
+        
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+        if(userTAGId!=null)
+        {
+            Date levelTAG = userTAGService.SelectDateLevelQuiz(userTAGId);
+            if(levelTAG != null)
+            {
+                // Obtener la fecha actual
+                Date fechaActual = new Date();
+                
+                // Calcular la fecha hace 6 meses
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(fechaActual);
+                calendar.add(Calendar.MONTH, -6);
+                Date fechaHace6Meses = calendar.getTime();
+                
+                // Comparar las fechas
+                if(levelTAG.after(fechaHace6Meses)) {
+                    return ResponseEntity.ok().body("menor");
+                } else {
+                    return ResponseEntity.ok().body("mayor");
+                }
+            }
+            else{
+
+                return ResponseEntity.ok().body("no hay");
+            }
+        }
+        return ResponseEntity.ok().body("No es TAG");
+    }
+    @PostMapping("/userTAG/updateLevel")
+    public ResponseEntity<String> RegisterNewLevelId(@RequestParam("username") String username,
+                                                    @RequestParam("levelTAGId") String levelTAGIdStr){
+
+        int levelTAGId;
+        try {
+            levelTAGId = Integer.parseInt(levelTAGIdStr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
+        }
+
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+
+        if(userTAGId > 0)
+        {
+            Integer update = userTAGService.UpdateUserTAGLevelTAGId(levelTAGId, userTAGId);
+            
+            if(update>0)
+            {
+                return ResponseEntity.ok().body("update");
+            }
+            else
+            {
+                return ResponseEntity.ok().body("no update");
+            }
+            
+        }
+        else
+        {
+            return ResponseEntity.ok().body("No hay TAG");
+        }
     }
 }

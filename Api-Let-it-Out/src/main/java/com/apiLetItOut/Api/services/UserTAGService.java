@@ -100,4 +100,15 @@ public class UserTAGService {
     {
         return userTAGRepository.UpdateUserTAGLevelTechniques(levelTechiniques, userTAGId);
     }
+
+    public Date SelectDateLevelQuiz(int userTAGId)
+    {
+        return userTAGRepository.SelectDateLevelQuiz(userTAGId);
+    }
+
+    public Integer UpdateUserTAGLevelTAGId( int levelTAGId, int userTAGId)
+    {
+        return userTAGRepository.UpdateUserTAGLevelTAGId(levelTAGId, userTAGId);
+        
+    }
 }
