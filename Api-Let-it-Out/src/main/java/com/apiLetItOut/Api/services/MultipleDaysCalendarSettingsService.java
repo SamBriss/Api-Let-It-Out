@@ -19,4 +19,9 @@ public class MultipleDaysCalendarSettingsService {
     {
         return multipleDaysCalendarSettingsRepository.FindWeekDaysLabourTherapist(username);
     }
+
+    public Integer DeleteMultipleDaysMethod(String username)
+    {
+        return multipleDaysCalendarSettingsRepository.DeleteMultipleDays(username);
+    }
 }

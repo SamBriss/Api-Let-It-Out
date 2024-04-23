@@ -17,6 +17,8 @@ import com.apiLetItOut.Api.services.CalendarConfigurationUsersService;
 import com.apiLetItOut.Api.services.MultipleDaysCalendarSettingsService;
 import com.apiLetItOut.Api.services.PreferenceDaysService;
 import com.apiLetItOut.Api.services.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("api")
@@ -255,6 +257,44 @@ public class CalendarConfigurationUsersApiController {
 
 
         return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
+    
+    @PostMapping("multPrefDays/deleteMultipleDays")
+    public ResponseEntity deleteMultipleDays(@RequestParam("username") String username) {
+        Integer res = multipleDaysCalendarSettings.DeleteMultipleDaysMethod(username);
+        if(res !=null)
+        {
+            if(res > 0)
+            {
+                int configurationId = calendarConfigurationUsersService.findConfigurationIdByUsernameMethod(username);
+                if(configurationId > 0)
+                {
+                    return ResponseEntity.ok().body(configurationId);
+                }
+            }
+        }
+        return ResponseEntity.ok().body("none");
+    }
+    
+    @PostMapping("prefDay/updateJourneyTimes")
+    public ResponseEntity updateJourneyTimes(@RequestParam("configurationId") String configurationIdString,
+    @RequestParam("startHour") String startHourString, @RequestParam("endHour") String endHourString) {
+        
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        java.util.Date startWorkDay;
+        java.util.Date endWorkDay;
+        try {
+            startWorkDay = formatoHora.parse(startHourString);
+            endWorkDay = formatoHora.parse(endHourString);
+            int configurationId = Integer.parseInt(configurationIdString);
+            int res = calendarConfigurationUsersService.UpdateWorkTimesMethod(configurationId, startWorkDay, endWorkDay);
+            return ResponseEntity.ok().body(res);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body("unsuccessful");
     }
     
 }

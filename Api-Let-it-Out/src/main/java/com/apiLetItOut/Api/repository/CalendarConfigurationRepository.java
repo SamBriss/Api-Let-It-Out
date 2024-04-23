@@ -33,7 +33,7 @@ public interface CalendarConfigurationRepository  extends CrudRepository <Calend
     Object SearchEndHourJourney (@Param("usernameTherapist") String usernameTherapist);
 
     //20-04-2024
-    @Query(value = "Select c.configurationId, p.preferenceDayId, p.weekDayId, p.StartHour, p.EndHour from preference_days p INNER JOIN calendarconfigurationusers c ON p.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
+    @Query(value = "Select c.configurationId, p.preferenceDayId, p.weekDayId, p.StartHour, p.EndHour, p.label, c.userId from preference_days p INNER JOIN calendarconfigurationusers c ON p.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
     List<Object[]> getPreferenceDaysUser(@Param("username") String username);
 
     @Query(value = "Select c.configurationId from preference_days p INNER JOIN calendarconfigurationusers c ON p.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
@@ -47,5 +47,12 @@ public interface CalendarConfigurationRepository  extends CrudRepository <Calend
                         @Param("endHour") Date endHour,
                         @Param("weekDayId") int weekDayId,
                         @Param("label") String label);
+
+                        
+    @Transactional
+    @Modifying
+    @Query(value = "Update calendarconfigurationusers set startWorkDay =:startHour, endWorkDay =:endHour where configurationId=:configurationId", nativeQuery = true)
+    Integer UpdateWorkTimes(@Param("configurationId") int configurationId, 
+    @Param("startHour") Date startHour, @Param("endHour") Date endHour);
 
 }

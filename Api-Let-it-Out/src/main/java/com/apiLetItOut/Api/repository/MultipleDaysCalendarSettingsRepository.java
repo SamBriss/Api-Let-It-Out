@@ -25,4 +25,11 @@ public interface MultipleDaysCalendarSettingsRepository extends CrudRepository<M
     @Query(value = "Select m.weekDayId from MultipleDaysCalendarSettings m INNER JOIN calendarconfigurationusers c ON m.configurationId=c.configurationId INNER JOIN users u ON c.userId=u.userId WHERE u.username=:username", nativeQuery = true)
     List<Integer> FindWeekDaysLabourTherapist(@Param("username") String username);
 
+    // 22-04-2024
+    @Transactional
+    @Modifying
+    @Query(
+    value = "DELETE FROM MultipleDaysCalendarSettings WHERE configurationId IN (SELECT c.configurationId FROM calendarconfigurationusers c INNER JOIN users u ON c.userId = u.userId WHERE u.username = :username)", 
+    nativeQuery = true)
+    Integer DeleteMultipleDays(@Param("username") String username);
 }

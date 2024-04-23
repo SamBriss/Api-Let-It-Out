@@ -44,4 +44,8 @@ public class CalendarConfigurationUsersService {
     {
         return calendarConfigurationRepository.UpdatePreferenceDays(preferenceDayId,  StartHour, EndHour,weekDayId, label);
     }
+    public int UpdateWorkTimesMethod(int configurationId, Date startHour, Date endHour)
+    {
+        return calendarConfigurationRepository.UpdateWorkTimes(configurationId, startHour, endHour);
+    }
 }
