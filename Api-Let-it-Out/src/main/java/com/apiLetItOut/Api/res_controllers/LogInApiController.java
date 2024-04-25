@@ -50,16 +50,16 @@ public class LogInApiController {
     }
 
     @PostMapping("users/login/ByEmail")
-    public ResponseEntity authenticateUserByEmail(@RequestParam(value = "email") String email,
+    public ResponseEntity authenticateUserByEmail(@RequestParam("username") String email,
                                             @RequestParam("password") String password)
     {
        int userId = userService.SearchUserByEmailMethod(email, password);
 
         if (userId > 0 ) 
         {
-            Integer find = userTherapistService.FindUserTherapistsMethod(userId);
+            int find = userTherapistService.FindUserTherapistsMethod(userId);
 
-            if (find == null)
+            if (find == 0)
             {
                 find = userTAGService.FindUserTAGMethod(userId);
                 return ResponseEntity.status(HttpStatus.OK).body("success UserTAG");
@@ -74,5 +74,20 @@ public class LogInApiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuario no encontrado");
         }
         return null;
+    }
+    @PostMapping("users/login/getUsername")
+    public ResponseEntity getUsername(@RequestParam("email") String email)
+    {
+       String username = userService.SearchUsernameByEmailMethod(email);
+
+        if (username != null) 
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(username);
+            
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuario no encontrado");
+        }
     }
 }

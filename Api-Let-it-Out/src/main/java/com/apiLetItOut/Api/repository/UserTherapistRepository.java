@@ -22,7 +22,7 @@ public interface UserTherapistRepository extends CrudRepository <UsersTherapists
                         @Param("directionId") int directionId);
 
     @Query(value = "SELECT COUNT(*) FROM UsersTherapists WHERE userId=:userId", nativeQuery = true)
-    Integer FindUserTherapists(@Param(value="userId") int userId);
+    int FindUserTherapists(@Param(value="userId") int userId);
 
     @Query(value = "Select COUNT(*) FROM UsersTherapists WHERE vinculationCode=:vinculationCode", nativeQuery = true)
     int SearchTherapistCode (@Param("vinculationCode") int vinculationCode);

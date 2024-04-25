@@ -16,7 +16,7 @@ public class UserTherapistService {
                 directionId);
     }
 
-    public Integer FindUserTherapistsMethod(int userId) {
+    public int FindUserTherapistsMethod(int userId) {
         return userTherapistRepository.FindUserTherapists(userId);
     }
 

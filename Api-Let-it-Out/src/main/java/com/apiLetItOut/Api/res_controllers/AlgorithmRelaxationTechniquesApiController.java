@@ -553,6 +553,4 @@ public class AlgorithmRelaxationTechniquesApiController {
         }
         return ResponseEntity.ok().body("0");
     }
-    
-    
 }
