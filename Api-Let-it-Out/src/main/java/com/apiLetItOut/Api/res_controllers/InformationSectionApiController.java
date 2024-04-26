@@ -121,11 +121,17 @@ public class InformationSectionApiController {
                 if (articleId != null) {
                     int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
                     String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
-                    names.add(name);
-                    String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
-                    classifications.add(classification);
-                    int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
-                    types.add(type);
+                    if(!names.contains(name))
+                    {
+                        names.add(name);
+                        String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
+                        classifications.add(classification);
+                        int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
+                        types.add(type);
+                    }else
+                    {
+                        continue;
+                    }
                 }
             }catch (NullPointerException ex)
             {

@@ -115,18 +115,24 @@ public class TechniquesSectionController {
     @PostMapping("/registerListenedNotComplete")
     public ResponseEntity<String> RegisterTechniqueListenedNotComplete(@RequestParam("user") String user, 
                                                     @RequestParam("audioId") String audioIdStr,
-                                                    @RequestParam("progress") String progressStr )
+                                                    @RequestParam("progress") String progressStr,
+                                                    @RequestParam("score") String scoreStr)
     {
-        Integer audioId=0;
+        Integer audioId=0, score=0;
         Long progressLong=0L;
         try{
             audioId = Integer.parseInt(audioIdStr);
             progressLong = Long.parseLong(progressStr);
+            score = Integer.parseInt(scoreStr);
         }catch(NumberFormatException e)
         {
             return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
         }
         LocalDate feedbackDate = LocalDate.now();
+        if(score < 0)
+        {
+            score = 2;
+        }
         LocalTime duration = relaxationTechniquesService.SearchDurationByAudioIdMethod(audioId);
         long durationMillis = duration.toSecondOfDay() * 1000;
         // Calcular el porcentaje de progreso
@@ -142,7 +148,7 @@ public class TechniquesSectionController {
             Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
             if(userTAGId !=null)
             {
-                int rows = listenedAudiosFeedbackService.RegisterTechniqueListenedMethod(userTAGId, audioId, progress, 2, feedbackDate);
+                int rows = listenedAudiosFeedbackService.RegisterTechniqueListenedMethod(userTAGId, audioId, progress, score, feedbackDate);
                 if(rows==1)
                 {
                     return new ResponseEntity<>("Se registro de manera correcta", HttpStatus.ACCEPTED);

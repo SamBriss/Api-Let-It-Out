@@ -37,4 +37,9 @@ public class ListenedAudiosFeedbackService {
         int attackRegisterId = 1;
         return listenedAudiosFeedbackRepository.RegisterTechniqueListened(userTAGId, audioId, progress, score, feedbackDate, attackRegisterId);
     }
+
+    public Integer RegisterTechniquesOfAttack(int userTAGId, int audioId, String progress, int score, LocalDate feedbackDate, Integer attackRegisterId)
+    {
+        return listenedAudiosFeedbackRepository.RegisterTechniqueListened(userTAGId, audioId, progress, score, feedbackDate, attackRegisterId);
+    }
 }

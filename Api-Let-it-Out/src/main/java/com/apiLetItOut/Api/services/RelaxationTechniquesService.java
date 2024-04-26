@@ -19,6 +19,11 @@ public class RelaxationTechniquesService {
         return relaxationTechniquesRepository.allAudiosMinor5Min(cinco);
     }
 
+    public List<Integer> allAudios()
+    {
+        return relaxationTechniquesRepository.allAudios();
+    }
+
     public Integer SearchAudioAccordingToLifeStyleAndIdMethod(int audioId, char auditory)
     {
         return relaxationTechniquesRepository.SearchAudioAccordingToLifeStyleAndId(audioId, auditory);
@@ -72,6 +77,11 @@ public class RelaxationTechniquesService {
     public String SearchUrlOfAudioIdMethod(int audioId)
     {
         return relaxationTechniquesRepository.SearchUrlOfAudioId(audioId);
+    }
+
+    public Integer SearchAudioIdByUrl (String url)
+    {
+        return relaxationTechniquesRepository.SearchAudioIdByUrl(url);
     }
 
     public LocalTime SearchDurationByAudioIdMethod(int audioId)

@@ -27,11 +27,6 @@ import com.apiLetItOut.Api.services.PreferencesTAGUserService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
-
-
-
-
-
 @RestController
 @RequestMapping("api")
 public class AlgorithmRelaxationTechniquesApiController {
