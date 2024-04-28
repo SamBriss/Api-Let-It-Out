@@ -48,7 +48,7 @@ public class cronConfig {
         }
     }*/
     
-    @Scheduled(cron = "0 0 22 * * *")
+    @Scheduled(cron = "0 05 12 * * *")
     public void scheduledTaskSunday22AlgorithmTriggerPatterns()
     {
 
@@ -66,7 +66,7 @@ public class cronConfig {
             DayOfWeek dayOfWeek = today.getDayOfWeek();
             
             // Comparar si es domingo
-            if (dayOfWeek == DayOfWeek.SUNDAY) {
+            if (dayOfWeek == DayOfWeek.THURSDAY) {
                 System.out.println("Hoy es domingo.");
                 System.out.println("Realizando el algoritmo de patrones desencadenantes!");
                 algorithmTriggerElementsApiController.algorithmTriggerPatternsAndElements();                
