@@ -16,8 +16,8 @@ public interface RelaxationTechniquesRepository extends CrudRepository<Relaxatio
     @Query(value = "SELECT audioId FROM relaxationtechniqueaudios WHERE duration < CONCAT('', :duration, '')", nativeQuery = true)
     List<Integer> allAudiosMinor5Min(@Param("duration") LocalTime duration);
 
-    @Query(value = "SELECT audioId FROM relaxationtechniqueaudios", nativeQuery = true)
-    List<Integer> allAudios();
+    @Query(value = "SELECT audioId FROM relaxationtechniqueaudios where techniqueLevel<= :techniqueLevel", nativeQuery = true)
+    List<Integer> allAudiosOfLevelAndBelowUser(@Param("techniqueLevel") int techniqueLevel);
 
     @Query(value = "Select audioId FROM relaxationtechniqueaudios where audioId = :audioId and auditory = :auditory", nativeQuery = true)
     Integer SearchAudioAccordingToLifeStyleAndId(@Param("audioId") int audioId, @Param("auditory") char auditory);

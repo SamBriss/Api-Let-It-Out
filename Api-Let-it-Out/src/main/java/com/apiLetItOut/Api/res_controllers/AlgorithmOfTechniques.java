@@ -66,7 +66,7 @@ public class AlgorithmOfTechniques {
         }
         // Ordenar el HashMap por calificación
         scoresAndId = sortByValue(scoresAndId);
-        if (scoresAndId.size() > 14) // Filtro por edades
+        if (scoresAndId.size() > 15) // Filtro por edades
         { 
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -84,7 +84,7 @@ public class AlgorithmOfTechniques {
             }
             // Eliminar las claves marcadas para eliminación
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -106,7 +106,7 @@ public class AlgorithmOfTechniques {
                 System.out.println("el audioId es: " +key + " la calificacion es: "+ value);
             }
         }
-        if(scoresAndId.size()>14)//Busca tecnicas que tengan una calificacion menor a 3
+        if(scoresAndId.size()>15)//Busca tecnicas que tengan una calificacion menor a 3
         {
             
             List<Integer> keysToRemove = new ArrayList<>();
@@ -121,7 +121,7 @@ public class AlgorithmOfTechniques {
 
             // Eliminar las claves marcadas para eliminación
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -130,7 +130,7 @@ public class AlgorithmOfTechniques {
             }
             scoresAndId = sortByValue(scoresAndId);
         }
-        if(scoresAndId.size()>14) //Por estilo de vida
+        if(scoresAndId.size()>15) //Por estilo de vida
         {
             List<Integer> audiosPassivesId = new ArrayList<>();
             int i=0;
@@ -171,7 +171,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -180,7 +180,7 @@ public class AlgorithmOfTechniques {
             }
             scoresAndId = sortByValue(scoresAndId);
         }
-        if(scoresAndId.size()>14) // Filtro por hora del día
+        if(scoresAndId.size()>15) // Filtro por hora del día
         {
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -194,7 +194,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -203,7 +203,7 @@ public class AlgorithmOfTechniques {
             }
             scoresAndId = sortByValue(scoresAndId);
         }
-        if (scoresAndId.size() > 14) // Filtro de preferencias auditivas con 0
+        if (scoresAndId.size() > 15) // Filtro de preferencias auditivas con 0
         {
             List<Integer> keysToRemove = new ArrayList<>();
             List<String> preferencesAuditives0 = preferencesTAGUserService.SearchPreferenceAuditive0ScoreMethod(userTAGId, 1);
@@ -218,7 +218,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if (scoresAndId.size() > 14) {
+                if (scoresAndId.size() > 15) {
                     scoresAndId.remove(key);
                 } else {
                     break;
@@ -226,7 +226,7 @@ public class AlgorithmOfTechniques {
             }
             scoresAndId = sortByValue(scoresAndId);
         }
-        if (scoresAndId.size() > 14) // Filtro por preferencias sensoriales menos gustadas
+        if (scoresAndId.size() > 15) // Filtro por preferencias sensoriales menos gustadas
         { 
             List<Integer> keysToRemove = new ArrayList<>();
             List<String> lastPreferencesSensoriales = preferencesTAGUserService.SearchLastPreferencesSensoriales(userTAGId, 2);
@@ -241,7 +241,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if (scoresAndId.size() > 14) {
+                if (scoresAndId.size() > 15) {
                     scoresAndId.remove(key);
                 } else {
                     break;
@@ -249,7 +249,7 @@ public class AlgorithmOfTechniques {
             }
             scoresAndId = sortByValue(scoresAndId);
         }
-        if(scoresAndId.size()>14) // Filtro de calificaciones de usuarios similares
+        if(scoresAndId.size()>15) // Filtro de calificaciones de usuarios similares
         {
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -261,7 +261,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if (scoresAndId.size() > 14) {
+                if (scoresAndId.size() > 15) {
                     scoresAndId.remove(key);
                 } else {
                     break;
@@ -269,7 +269,7 @@ public class AlgorithmOfTechniques {
             }
             scoresAndId = sortByValue(scoresAndId);
         }
-        if(scoresAndId.size()>14) // Filtro de nivel de ansieadad
+        if(scoresAndId.size()>15) // Filtro de nivel de ansieadad
         {
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -283,7 +283,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -291,7 +291,7 @@ public class AlgorithmOfTechniques {
                 }
             }
         }
-        if(scoresAndId.size()>14)// Filtro diferente genero
+        if(scoresAndId.size()>15)// Filtro diferente genero
         {   
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -305,7 +305,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -339,6 +339,7 @@ public class AlgorithmOfTechniques {
         int age = userService.SearchUserAgeMethod(userId);
         char ageRange = getAgeRange(age);
         int levelTAGId = userTAGService.SearchLevelTAGMethod(userTAGId);
+        int levelTechiniques = userTAGService.SearchLevelTechniqueMethod(userTAGId);
         String genderStr  = userService.SearchUserGenderMethod(userId);
         char gender = genderStr.charAt(0);
         List<Integer> usersTAGSimilarsId = new ArrayList<>();
@@ -346,16 +347,15 @@ public class AlgorithmOfTechniques {
             usersTAGSimilarsId = userTAGService.SearchUsersSimilarsId(age, levelTAGId);
         } catch (NullPointerException ex )
         {
+            
         }
         Map<Integer, Double> scoresAndId = new HashMap<>();
-        List<Integer> firstFilterAudios = relaxationTechniquesService.allAudios();
+        List<Integer> firstFilterAudios = relaxationTechniquesService.allAudiosOfLevelAndBelowUserMethod(levelTechiniques);
         for (Integer audioId : firstFilterAudios) {
             double calificationOfAudio = getCalification(userTAGId, audioId, usersTAGSimilarsId);
             scoresAndId.put(audioId, calificationOfAudio);
         }
-        // Ordenar el HashMap por calificación
-        scoresAndId = sortByValue(scoresAndId);
-        if (scoresAndId.size() > 14) // Filtro por edades
+        if (scoresAndId.size() > 15) // Filtro por edades
         { 
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -373,7 +373,7 @@ public class AlgorithmOfTechniques {
             }
             // Eliminar las claves marcadas para eliminación
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -395,104 +395,9 @@ public class AlgorithmOfTechniques {
                 System.out.println("el audioId es: " +key + " la calificacion es: "+ value);
             }
         }
-        if(scoresAndId.size()>14)//Busca tecnicas que tengan una calificacion menor a 3
-        {
-            
-            List<Integer> keysToRemove = new ArrayList<>();
-            for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
-                Integer audioId = entry.getKey();
-                Integer filteredAudioId = listenedAudiosFeedbackService.SearchIdByScore(userTAGId, audioId);
-                if (filteredAudioId != null) {
-                    System.out.println("filtro cal personal agregado a keysToRemove: " + filteredAudioId);
-                    keysToRemove.add(filteredAudioId);
-                }
-            }
-
-            // Eliminar las claves marcadas para eliminación
-            for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
-                {
-                    scoresAndId.remove(key);
-                }else{
-                    break;
-                }
-            }
-            scoresAndId = sortByValue(scoresAndId);
-        }
-        if(scoresAndId.size()>14) //Por estilo de vida
-        {
-            List<Integer> audiosPassivesId = new ArrayList<>();
-            int i=0;
-            Map<Integer, Double> audiosPassives = new HashMap<>();
-            String lifeStylePrefered = preferencesTAGUserService.SearchLifeStylePreference(userTAGId, 5);
-            lifeStylePrefered = lifeStylePrefered.toLowerCase();
-            char auditory = lifeStylePrefered.charAt(0);
-            if(lifeStylePrefered.equals("Activo"))
-            {
-                for (Integer audioId : scoresAndId.keySet()) {
-                    if(i<6)
-                    {
-                        Integer audioIdPassive = relaxationTechniquesService.SearchAudioByIdAndDifferentAuditoryMethod(audioId, 'a');
-                        if(audioIdPassive!=null)
-                        {
-                            System.out.println("audios pasivos para activos agregado a keysToRemove: " + audioIdPassive);
-                            audiosPassivesId.add(audioIdPassive);
-                            i++; 
-                        }
-                        
-                    }
-                }
-                for (Integer audioId : audiosPassivesId) {
-                    double calificationOfAudio = getCalification(userTAGId, audioId, usersTAGSimilarsId);
-                    audiosPassives.put(audioId, calificationOfAudio);
-                }
-                audiosPassives = sortByValue(audiosPassives);
-                //scoresAndId.putAll(audiosPassives);
-            }
-            List<Integer> keysToRemove = new ArrayList<>();
-            for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
-                Integer audioId = entry.getKey();
-                Integer filteredAudioId = relaxationTechniquesService.SearchAudioByIdAndDifferentAuditoryMethod(audioId, auditory);
-                if(filteredAudioId!=null)
-                {
-                    System.out.println("audios activos o pasivos agregado a keysToRemove: " + filteredAudioId);
-                    keysToRemove.add(filteredAudioId);
-                }
-            }
-            for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
-                {
-                    scoresAndId.remove(key);
-                }else{
-                    break;
-                }
-            }
-            scoresAndId = sortByValue(scoresAndId);
-        }
-        if(scoresAndId.size()>14) // Filtro por hora del día
-        {
-            List<Integer> keysToRemove = new ArrayList<>();
-            for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
-                Integer audioId = entry.getKey();
-                Integer filteredAudioId = null;
-                filteredAudioId = relaxationTechniquesService.SearchAudioAccordingToHourAndId(audioId, 't');
-                if(filteredAudioId!=null)
-                {
-                    System.out.println("audios todo el día agregado a keysToRemove: " + filteredAudioId);
-                    keysToRemove.add(filteredAudioId);
-                }
-            }
-            for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
-                {
-                    scoresAndId.remove(key);
-                }else{
-                    break;
-                }
-            }
-            scoresAndId = sortByValue(scoresAndId);
-        }
-        if (scoresAndId.size() > 14) // Filtro de preferencias auditivas con 0
+        
+        
+        if (scoresAndId.size() > 15) // Filtro de preferencias auditivas con 0
         {
             List<Integer> keysToRemove = new ArrayList<>();
             List<String> preferencesAuditives0 = preferencesTAGUserService.SearchPreferenceAuditive0ScoreMethod(userTAGId, 1);
@@ -507,15 +412,14 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if (scoresAndId.size() > 14) {
+                if (scoresAndId.size() > 15) {
                     scoresAndId.remove(key);
                 } else {
                     break;
                 }
             }
-            scoresAndId = sortByValue(scoresAndId);
         }
-        if (scoresAndId.size() > 14) // Filtro por preferencias sensoriales menos gustadas
+        if (scoresAndId.size() > 15) // Filtro por preferencias sensoriales menos gustadas
         { 
             List<Integer> keysToRemove = new ArrayList<>();
             List<String> lastPreferencesSensoriales = preferencesTAGUserService.SearchLastPreferencesSensoriales(userTAGId, 2);
@@ -536,9 +440,8 @@ public class AlgorithmOfTechniques {
                     break;
                 }
             }
-            scoresAndId = sortByValue(scoresAndId);
         }
-        if(scoresAndId.size()>14) // Filtro de calificaciones de usuarios similares
+        if(scoresAndId.size()>15) // Filtro de calificaciones de usuarios similares
         {
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -556,9 +459,8 @@ public class AlgorithmOfTechniques {
                     break;
                 }
             }
-            scoresAndId = sortByValue(scoresAndId);
         }
-        if(scoresAndId.size()>14) // Filtro de nivel de ansieadad
+        if(scoresAndId.size()>15) // Filtro de nivel de ansieadad
         {
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -580,7 +482,7 @@ public class AlgorithmOfTechniques {
                 }
             }
         }
-        if(scoresAndId.size()>14)// Filtro diferente genero
+        if(scoresAndId.size()>15)// Filtro diferente genero
         {   
             List<Integer> keysToRemove = new ArrayList<>();
             for (Map.Entry<Integer, Double> entry : scoresAndId.entrySet()) {
@@ -594,7 +496,7 @@ public class AlgorithmOfTechniques {
                 }
             }
             for (Integer key : keysToRemove) {
-                if(scoresAndId.size()>14)
+                if(scoresAndId.size()>15)
                 {
                     scoresAndId.remove(key);
                 }else{
@@ -602,7 +504,6 @@ public class AlgorithmOfTechniques {
                 }
             }
         }
-        scoresAndId = sortByValue(scoresAndId);
         Map<String, Object> responseData = new HashMap<>();
         
         int i=0;

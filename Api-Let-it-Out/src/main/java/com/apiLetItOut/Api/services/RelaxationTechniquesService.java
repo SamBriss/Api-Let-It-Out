@@ -19,9 +19,9 @@ public class RelaxationTechniquesService {
         return relaxationTechniquesRepository.allAudiosMinor5Min(cinco);
     }
 
-    public List<Integer> allAudios()
+    public List<Integer> allAudiosOfLevelAndBelowUserMethod(int techniqueLevel)
     {
-        return relaxationTechniquesRepository.allAudios();
+        return relaxationTechniquesRepository.allAudiosOfLevelAndBelowUser(techniqueLevel);
     }
 
     public Integer SearchAudioAccordingToLifeStyleAndIdMethod(int audioId, char auditory)
