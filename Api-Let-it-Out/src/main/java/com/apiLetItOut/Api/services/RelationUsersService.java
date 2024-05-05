@@ -43,4 +43,8 @@ public class RelationUsersService {
     {
         return relationUsersRepository.ExistenceOfVinculation(userTAGId, userTherapistId);
     }
+    public List<Object[]> SearchDataOfPatientsMethod(int userTherapistId)
+    {
+        return relationUsersRepository.SearchDataOfPatients(userTherapistId);
+    }
 }

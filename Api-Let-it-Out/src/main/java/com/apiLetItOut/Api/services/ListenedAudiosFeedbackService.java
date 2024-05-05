@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.services;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,20 @@ public class ListenedAudiosFeedbackService {
     public Integer RegisterTechniquesOfAttack(int userTAGId, int audioId, String progress, int score, LocalDate feedbackDate, Integer attackRegisterId)
     {
         return listenedAudiosFeedbackRepository.RegisterTechniqueListened(userTAGId, audioId, progress, score, feedbackDate, attackRegisterId);
+    }
+
+    public List<String> SearchUrlsOfTechniquesOfAttacksMethod(int attackRegisterId)
+    {
+        return listenedAudiosFeedbackRepository.SearchUrlsOfTechniquesOfAttacks(attackRegisterId);
+    }
+
+    public List<Object[]> SearchCountAverageOfTechnique(int usersTAGId)
+    {
+        return listenedAudiosFeedbackRepository.SearchCountAverageOfTechnique(usersTAGId);
+    }
+
+    public List<Integer> SearchAudiosIdListenedTAG(int userTAGId)
+    {
+        return listenedAudiosFeedbackRepository.SearchAudiosIdListenedTAG(userTAGId);
     }
 }

@@ -77,4 +77,9 @@ public class UserTherapistService {
     {
         return userTherapistRepository.findUserTherapistIdByUsername(username);
     }
+
+    public Integer findUserTherapistIdByEmailMethod(String email)
+    {
+        return userTherapistRepository.findUserTherapistIdByEmail(email);
+    }
 }

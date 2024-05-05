@@ -46,4 +46,9 @@ public interface RelationUsersRepository extends CrudRepository<RelationUsers, I
         @Query (value="Select COUNT(*) from relationusers where userTAGId = :userTAGId AND userTherapistId=:userTherapistId", nativeQuery = true)
         int ExistenceOfVinculation(@Param("userTAGId") int userTAGId,
         @Param("userTherapistId") int userTherapistId);
+
+        @Query(value = "select ug.name, ug.lastnameP, ug.age, l.level, ug.username"+
+        " from users ug JOIN userstag tag ON tag.userId=ug.userId JOIN levelstag l ON tag.levelTAGId = l.levelTAGId" +
+        " where tag.userTAGId= ALL(select userTAGId from relationUsers r where r.userTherapistId = :userTherapistId)", nativeQuery = true)
+        List<Object[]> SearchDataOfPatients(@Param("userTherapistId") int userTherapistId);
 }

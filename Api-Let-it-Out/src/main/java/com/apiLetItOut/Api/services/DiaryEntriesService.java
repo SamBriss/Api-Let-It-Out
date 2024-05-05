@@ -37,4 +37,13 @@ public class DiaryEntriesService {
     {
         return diaryEntriesRepository.SelectDiaryEmotionId(userTAGId);
     }
+    public List<Object[]> SearchDiariesEntriesMethod(int userTherapistId, int userTAGId)
+    {
+        return diaryEntriesRepository.SearchDiariesEntries(userTherapistId, userTAGId);
+    }
+
+    public String SearchTextOfDiaryEntryMethod(Integer diaryId)
+    {
+        return diaryEntriesRepository.SearchTextOfDiaryEntry(diaryId);
+    }
 }

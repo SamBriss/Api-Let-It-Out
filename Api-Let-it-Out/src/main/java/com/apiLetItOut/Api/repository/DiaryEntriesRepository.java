@@ -40,4 +40,15 @@ public interface DiaryEntriesRepository extends CrudRepository <DiaryEntries, In
 
         @Query(value= "Select emotionId FROM diaryEntries WHERE userTAGId=:userTAGId ORDER BY date DESC", nativeQuery = true)
         List<Integer> SelectDiaryEmotionId (@Param("userTAGId") int userTAGId);
+
+        @Query(value = "Select d.date, d.hour, d.diaryId from diaryEntries d join sharediaryentries sd on sd.diaryId= d.diaryId "
+        + "where sd.userTherapistId = :userTherapistId AND d.userTAGId = :userTAGId", nativeQuery = true)
+        List<Object[]> SearchDiariesEntries(@Param("userTherapistId") int userTherapistId,
+                                            @Param("userTAGId") int userTAGId);
+        
+        @Query(value = " Select text from diaryEntries where diaryId = :diaryId", nativeQuery = true)
+        String SearchTextOfDiaryEntry(@Param("diaryId") int diaryId);
+
+        
+    
 }
