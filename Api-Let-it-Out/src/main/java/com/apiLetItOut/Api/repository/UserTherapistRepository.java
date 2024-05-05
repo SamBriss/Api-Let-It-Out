@@ -68,4 +68,7 @@ public interface UserTherapistRepository extends CrudRepository <UsersTherapists
 
     @Query(value = "Select t.userTherapistId from usersTherapists t INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username", nativeQuery = true)
     Integer findUserTherapistIdByUsername(@Param("username") String username);
+
+    @Query(value = "Select t.userTherapistId from usersTherapists t INNER JOIN users u ON t.userId=u.userId WHERE u.email= :email", nativeQuery = true)
+    Integer findUserTherapistIdByEmail(@Param("email") String email);
 }

@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +37,13 @@ public interface ListenedAudiosFeedbackRepository extends CrudRepository<Listene
                                         @Param("score") int score, 
                                         @Param("feedbackDate") LocalDate feedbackDate,
                                         @Param("attackRegisterId") int attackRegisterId);
+                                        
+    @Query(value = "Select rt.url from relaxationtechniques rt join listenedAudiosFeedBack lf ON rt.audioId = lf.audioId where lf.attackRegisterId = :attackRegisterId", nativeQuery = true)
+    List<String> SearchUrlsOfTechniquesOfAttacks(@Param("attackRegisterId") int attackRegisterId);
+
+    @Query(value = "select count(*) as quantity, AVG(l.score), r.url from listenedaudiosfeedback l join relaxationtechniqueaudios r ON r.audioId = l.audioId where userTAGId = :userTAGId GROUP BY r.audioId", nativeQuery = true)
+    List<Object[]> SearchCountAverageOfTechnique(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select distinct audioId from listenedaudiosfeedback where userTAGId = :userTAGId", nativeQuery = true)
+    List<Integer> SearchAudiosIdListenedTAG(@Param("userTAGId") int userTAGId);
 }

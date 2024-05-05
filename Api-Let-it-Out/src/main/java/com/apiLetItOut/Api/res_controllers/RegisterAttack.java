@@ -38,7 +38,7 @@ public class RegisterAttack {
 
 
     @PostMapping("registerDataAttack")
-    public ResponseEntity<String> RegisterAttack(@RequestParam("user") String user, 
+    public ResponseEntity<String> RegisterAttackAnxietyButton(@RequestParam("user") String user, 
                                 @RequestParam("startHour") String startHourStr, 
                                 @RequestParam("endHour") String endHourStr, 
                                 @RequestParam("type") String typeStr)

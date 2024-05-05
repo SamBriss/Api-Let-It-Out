@@ -2,6 +2,7 @@ package com.apiLetItOut.Api.services;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,27 @@ public class AttackRegistersService {
                                         Integer userTAGId)
     {
         return attackRegistersRepository.SearchAttackId(date, startHour, endHour, userTAGId);
+    }
+
+    public Integer SearchAttackIdForReportsMethod(LocalDate date, 
+                                        LocalTime startHour,
+                                        Integer userTAGId)
+    {
+        return attackRegistersRepository.SearchAttackIdForReports(date, startHour, userTAGId);
+    }
+
+    public List<Object[]> SearchAttacksOfUserMethod(Integer userTAGId)
+    {
+        return attackRegistersRepository.SearchAttacksOfUser(userTAGId);
+    }
+
+    public List<String> SearchDurations(LocalDate actualDate, LocalDate beforeDate, int userTAGId)
+    {
+        return attackRegistersRepository.SearchDurations(actualDate, beforeDate, userTAGId);
+    }
+
+    public String SearchDurationByAttackIdMethod(int attackRegisterId)
+    {
+        return attackRegistersRepository.SearchDurationByAttackId(attackRegisterId);
     }
 }
