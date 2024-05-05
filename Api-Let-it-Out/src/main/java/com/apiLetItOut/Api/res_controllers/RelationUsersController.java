@@ -284,4 +284,19 @@ public class RelationUsersController {
         }
         return ResponseEntity.ok().body("No es TAG");
     }   
+    @PostMapping("userTAG/TherapistsRelatedToUserTagUsername")
+    public ResponseEntity postMethodNameRelationTherapists(@RequestParam("username") String username) {
+        
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+        if(userTAGId!=null)
+        {
+            List<Object[]> therapistsRelated = relationUsersService.SearchRelationTherapistsByUserTAGIdMethod(userTAGId);
+            if(therapistsRelated.isEmpty())
+            {
+                return ResponseEntity.ok().body("none");
+            }
+            return ResponseEntity.ok().body(therapistsRelated);
+        }
+        return ResponseEntity.ok().body("TAGNotFound");
+    }
 }

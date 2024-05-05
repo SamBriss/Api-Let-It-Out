@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.DiaryEntriesService;
+import com.apiLetItOut.Api.services.DictionaryCountService;
+import com.apiLetItOut.Api.services.DictionaryWordsService;
 import com.apiLetItOut.Api.services.EmotionsService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
@@ -33,6 +35,12 @@ public class DiaryEntriesController {
 
     @Autowired
     DiaryEntriesService diaryEntriesService;
+
+    @Autowired
+    DictionaryCountService dictionaryCountService;
+
+    @Autowired
+    DictionaryWordsService dictionaryWordsService;
 
     @PostMapping("/userTAG/DiaryEntries")
     public ResponseEntity<String> RegisterNewDiaryEntries(@RequestParam("username") String username,
@@ -60,6 +68,7 @@ public class DiaryEntriesController {
             int entryDiary = diaryEntriesService.RegisterNewDiaryEntryMethod(date, hour, text, userTAGId, emotionId);
 
             if (entryDiary > 0){
+                processDiaryTextAndCount(userTAGId, text, date);
                 return ResponseEntity.status(HttpStatus.CREATED).body("success");
             }
             else
@@ -69,6 +78,77 @@ public class DiaryEntriesController {
             
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
+
+    private void processDiaryTextAndCount(int userTAGId, String text, Date date) {
+        
+        // Limpieza y normalización
+        String cleanedText = text.toLowerCase()
+                .replace('á', 'a')
+                .replace('é', 'e')
+                .replace('í', 'i')
+                .replace('ó', 'o')
+                .replace('ú', 'u');
+
+        // Eliminar palabras de la categoría "13"
+        String[] words = cleanedText.split("\\s+");
+        for (String word : words) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(13, word) > 0) {
+                cleanedText = cleanedText.replace(word, "");
+                System.out.println(cleanedText);
+            }
+        }
+
+        // Procesar palabras de la categoría "1"
+        String[] words1 = cleanedText.split("\\s+");
+        for (String word : words1) {
+            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(1, word);
+            if (wordId != null) {
+                processWord(userTAGId, wordId, date);
+                cleanedText = cleanedText.replace(word, "");
+            }
+        }
+
+        // Procesar palabras de la categoría "8"
+        String[] words8 = cleanedText.split("\\s+");
+        for (String word : words8) {
+            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(8, word);
+            if (wordId != null) {
+                processWord(userTAGId, wordId, date);
+                cleanedText = cleanedText.replace(word, "");
+            }
+        }
+
+        // Procesar palabras de la categoría "9"
+        String[] words9 = cleanedText.split("\\s+");
+        for (String word : words9) {
+            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(9, word);
+            if (wordId != null) {
+                processWord(userTAGId, wordId, date);
+                cleanedText = cleanedText.replace(word, "");
+            }
+        }
+
+        // Procesar palabras de la categoría "10"
+        String[] words10 = cleanedText.split("\\s+");
+        for (String word : words10) {
+            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(10, word);
+            if (wordId != null) {
+                processWord(userTAGId, wordId, date);
+                cleanedText = cleanedText.replace(word, "");
+            }
+        }
+    }
+
+    private void processWord(int userTAGId, int wordId, Date date) {
+        System.out.println(date);
+        Integer wordCountId = dictionaryCountService.findCountIdByUserTagAndWordIdAndDateMethod(userTAGId, wordId, date);
+        System.out.println(wordCountId);
+        if (wordCountId == null) {
+            dictionaryCountService.RegisterNewDictionaryCountMethod(userTAGId, wordId, 1, date, 0);
+        } else {
+            dictionaryCountService.UpdateRepetitionsAndDateMethod(wordCountId);
         }
     }
 

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apiLetItOut.Api.services.ActivitiesFromTherapistService;
 import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.CalendarTAGActivityService;
+import com.apiLetItOut.Api.services.DictionaryCountService;
+import com.apiLetItOut.Api.services.DictionaryWordsService;
+import com.apiLetItOut.Api.services.TemporaryDictionaryService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
@@ -41,6 +44,15 @@ public class CalendarTAGActivityApiController {
     @Autowired
     ActivitiesFromTherapistService activitiesFromTherapistService;
 
+    @Autowired
+    DictionaryCountService dictionaryCountService;
+
+    @Autowired
+    DictionaryWordsService dictionaryWordsService;
+
+    @Autowired
+    TemporaryDictionaryService temporaryDictionaryService;
+
     @PostMapping("/userTAGCalendar/addUserTAGActivityCalendar")
     public ResponseEntity<String> newCalendarConfiguration(@RequestParam("username") String username,
                                             @RequestParam("label") String label,
@@ -52,8 +64,6 @@ public class CalendarTAGActivityApiController {
                                             @RequestParam("comments") String comments,
                                             @RequestParam("reminders") String remindersStr) {
 
-        
-          
       Integer userId = 0;
       userId = this.userService.SearchUserTAGMethod(username);
       if(userId!=0 && userId != null)
@@ -82,7 +92,8 @@ public class CalendarTAGActivityApiController {
             System.out.println("TAGid:  "+userTAGId);
             if (userTAGId > 0) {
             int count = calendarTAGActivityService.SearchCountActivityUserTagCalendarMethod();
-System.out.println("count of registers:   "+count);
+            System.out.println("count of registers:   "+count);
+
                 if(count > 0)
                 {
                     // tabla de activitytherapistcalendar
@@ -100,7 +111,6 @@ System.out.println("count of registers:   "+count);
                                 return ResponseEntity.status(HttpStatus.OK).body("sobrepuesta");
                             }
                         }
-                        
                     }
 
                     // tabla de appointments
@@ -126,8 +136,13 @@ System.out.println("count of registers:   "+count);
                 // si llegó aqui es por que no está sobrepuesta
                 // agregar la actividad a la tabla de activitytherapistcalendar
 
-                int result = calendarTAGActivityService.addNewActivityUserTagCalendarMethod(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders);
-                
+                int result;
+                result = calendarTAGActivityService.addNewActivityUserTagCalendarMethod(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders);
+                processWordsInLocation(userTAGId, location);
+                processWordsInDirection(userTAGId, direction);
+                recognizeWordsInLocation(userTAGId, location);
+                recognizeWordsInDirection(userTAGId, direction);
+                recognizeWordsInStartHour(userTAGId, startHourStr);
                 return ResponseEntity.status(HttpStatus.OK).body(""+result);
             }
         } catch (ParseException e) {
@@ -136,6 +151,196 @@ System.out.println("count of registers:   "+count);
       }            
                                                 
         return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
+    }
+
+    private void recognizeWordsInLocation(int userTAGId, String location){
+        // Limpieza y normalización de palabras en el campo "location"
+        String cleanedLocation = location.toLowerCase()
+                .replace('á', 'a')
+                .replace('é', 'e')
+                .replace('í', 'i')
+                .replace('ó', 'o')
+                .replace('ú', 'u')
+                .replaceAll("[.,]", ""); // Quitar puntos y comas
+    
+        // Eliminar palabras de la categoría "13"
+        String[] words = cleanedLocation.split("\\s+");
+        for (String word : words) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(13, word) > 0) {
+                cleanedLocation = cleanedLocation.replace(word, "");
+            }
+        }
+
+        // Eliminar palabras de la categoría "1"
+        String[] words1 = cleanedLocation.split("\\s+");
+        for (String word : words1) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(1, word) > 0) {
+                cleanedLocation = cleanedLocation.replace(word, "");
+            }
+        }
+
+        System.out.println("palabras: " + cleanedLocation);
+        if(!cleanedLocation.isEmpty()){
+            String[] Newwords = cleanedLocation.split("\\s+");
+            for (String word : Newwords) {
+                Integer tempWordId = temporaryDictionaryService.SelectTemporaryIdMethod(word, 1);
+                System.out.println(tempWordId);
+                if (tempWordId != null) {
+                    temporaryDictionaryService.DeleteTemporaryWord(tempWordId);
+                    dictionaryWordsService.registerNewWord(word, 1);
+                } else {
+                    temporaryDictionaryService.RegisterNewTemporaryWord(word, 1, 1);
+                }
+            }
+        }
+    }
+
+    private void recognizeWordsInDirection(int userTAGId, String direction){
+        // Limpieza y normalización de palabras en el campo "location"
+        String cleanedDirection = direction.toLowerCase()
+                .replace('á', 'a')
+                .replace('é', 'e')
+                .replace('í', 'i')
+                .replace('ó', 'o')
+                .replace('ú', 'u')
+                .replaceAll("\\d", "") //Quitar numeros y secuencias
+                .replaceAll("[.,]", ""); // Quitar puntos y comas
+    
+        // Eliminar palabras de la categoría "13"
+        String[] words = cleanedDirection.split("\\s+");
+        for (String word : words) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(13, word) > 0) {
+                cleanedDirection = cleanedDirection.replace(word, "");
+            }
+        }
+
+        // Eliminar palabras de la categoría "1"
+        String[] words1 = cleanedDirection.split("\\s+");
+        for (String word : words1) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(1, word) > 0) {
+                cleanedDirection = cleanedDirection.replace(word, "");
+            }
+        }
+
+        // Eliminar palabras de la categoría "4"
+        String[] words4 = cleanedDirection.split("\\s+");
+        for (String word : words4) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(4, word) > 0) {
+                cleanedDirection = cleanedDirection.replace(word, "");
+            }
+        }
+
+        System.out.println("palabras: " + cleanedDirection);
+        if(!cleanedDirection.isEmpty()){
+            Integer tempWordId = temporaryDictionaryService.SelectTemporaryIdMethod(cleanedDirection, 4);
+            System.out.println(tempWordId);
+            if (tempWordId != null) {
+                temporaryDictionaryService.DeleteTemporaryWord(tempWordId);
+                dictionaryWordsService.registerNewWord(cleanedDirection, 4);
+            } else {
+                temporaryDictionaryService.RegisterNewTemporaryWord(cleanedDirection, 1, 1);
+            }
+            
+        }
+    }
+
+    private void recognizeWordsInStartHour(int userTAGId, String startHour){
+        if (dictionaryWordsService.countByCategoryIdAndWord(10, startHour) > 0) {
+            startHour = "";
+        }
+        
+
+        System.out.println("palabras: " + startHour);
+        if(startHour != ""){
+            Integer tempWordId = temporaryDictionaryService.SelectTemporaryIdMethod(startHour, 10);
+            System.out.println(tempWordId);
+            if (tempWordId != null) {
+                temporaryDictionaryService.DeleteTemporaryWord(tempWordId);
+                dictionaryWordsService.registerNewWord(startHour, 10);
+            } else {
+                temporaryDictionaryService.RegisterNewTemporaryWord(startHour, 10, 1);
+            }
+        }
+    }
+
+    private void processWordsInLocation(int userTAGId, String location) throws ParseException {
+        // Limpieza y normalización de palabras en el campo "location"
+        String cleanedLocation = location.toLowerCase()
+                .replace('á', 'a')
+                .replace('é', 'e')
+                .replace('í', 'i')
+                .replace('ó', 'o')
+                .replace('ú', 'u')
+                .replaceAll("[.,]", ""); // Quitar puntos y comas
+    
+        // Eliminar palabras de la categoría "13"
+        String[] words = cleanedLocation.split("\\s+");
+        for (String word : words) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(13, word) > 0) {
+                cleanedLocation = cleanedLocation.replace(word, "");
+            }
+        }
+    
+        // Procesar palabras de la categoría "1"
+        String[] words1 = cleanedLocation.split("\\s+");
+        for (String word : words1) {
+            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(1, word);
+            if (wordId != null) {
+                processWord(userTAGId, wordId);
+                cleanedLocation = cleanedLocation.replace(word, "");
+            }
+        }
+    }  
+
+    private void processWordsInDirection(int userTAGId, String direction) throws ParseException {
+        // Limpieza y normalización de palabras en el campo "location"
+        String cleanedDirection = direction.toLowerCase()
+                .replace('á', 'a')
+                .replace('é', 'e')
+                .replace('í', 'i')
+                .replace('ó', 'o')
+                .replace('ú', 'u')
+                .replaceAll("[.,]", ""); // Quitar puntos y comas
+    
+        // Eliminar palabras de la categoría "13"
+        String[] words = cleanedDirection.split("\\s+");
+        for (String word : words) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(13, word) > 0) {
+                cleanedDirection = cleanedDirection.replace(word, "");
+            }
+        }
+    
+        // Procesar palabras de la categoría "4"
+        String[] words4 = cleanedDirection.split("\\s+");
+        for (String word : words4) {
+            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(4, word);
+            if (wordId != null) {
+                processWord(userTAGId, wordId);
+                cleanedDirection = cleanedDirection.replace(word, "");
+            }
+        }
+    } 
+    
+    private void processWord(int userTAGId, int wordId) throws ParseException {
+        Date referenceDate = new Date();
+        Calendar calendarReference = Calendar.getInstance();
+        calendarReference.setTime(referenceDate);
+        int referenceMonth = calendarReference.get(Calendar.MONTH);
+        int referenceYear = calendarReference.get(Calendar.YEAR);
+        int referenceDay = calendarReference.get(Calendar.DAY_OF_MONTH);
+        String Month = String.valueOf(referenceMonth);
+        String year = String.valueOf(referenceYear);
+        String day = String.valueOf(referenceDay);
+        String date = year + "-" + Month + "-" + day;
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = formatoFecha.parse(date);
+        System.out.println("reference: " + fecha);
+        Integer wordCountId = dictionaryCountService.findCountIdByUserTagAndWordIdAndDateMethod(userTAGId, wordId, fecha);
+        if (wordCountId == null) {
+            dictionaryCountService.RegisterNewDictionaryCountMethod(userTAGId, wordId, 1, new Date(), 0);
+        } else {
+            dictionaryCountService.UpdateRepetitionsAndDateMethod(wordCountId);
+        }
     }
 
     @PostMapping("/userTAGCalendar/GetAllAppointmentsMonth")
