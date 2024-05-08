@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.RelationUsersService;
 import com.apiLetItOut.Api.services.UserService;
+import com.apiLetItOut.Api.services.UserTAGRequestService;
 import com.apiLetItOut.Api.services.UserTAGService;
 import com.apiLetItOut.Api.services.UserTherapistService;
 
@@ -30,6 +31,9 @@ public class RelationUsersController {
 
     @Autowired
     UserTherapistService userTherapistService;
+
+    @Autowired
+    UserTAGRequestService userTAGRequestService;
 
     @PostMapping("/users/AcceptRequest")
     public ResponseEntity postMethodName(@RequestParam("usernameTherapist") String usernameTherapist,
@@ -296,6 +300,29 @@ public class RelationUsersController {
                 return ResponseEntity.ok().body("none");
             }
             return ResponseEntity.ok().body(therapistsRelated);
+        }
+        return ResponseEntity.ok().body("TAGNotFound");
+    }
+    @PostMapping("/userTAG/countMaxVinculation")
+    public ResponseEntity postMethodMaxVinculation(@RequestParam("username") String username) {
+        
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+        if(userTAGId!=null)
+        {
+            int count = relationUsersService.CountMaxVinculationMethod(userTAGId);
+            if(count > 0)
+            {
+                if (count == 3){
+                    userTAGRequestService.DeleteRequestWithMaxVinculationMethod(userTAGId);
+                    return ResponseEntity.ok().body(count);
+                }else{
+                    return ResponseEntity.ok().body(count);
+                }
+            }
+            else
+            {
+                return ResponseEntity.ok().body("0");
+            }
         }
         return ResponseEntity.ok().body("TAGNotFound");
     }

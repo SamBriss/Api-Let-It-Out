@@ -26,4 +26,12 @@ public class UserTAGRequestService {
     {
         return userTAGRequestRepository.DeleteRequest(userTAGId, userTherapistId);
     }
+    public Integer DeleteRequestWithMaxVinculationMethod(int userTAGId)
+    {
+        return userTAGRequestRepository.DeleteRequesWithMaxVinculation(userTAGId);
+    }
+    public int CountExistenceRequestMethod(int userTAGId, int userTherapistId)
+    {
+        return userTAGRequestRepository.CountExistenceRequest(userTAGId, userTherapistId);
+    }
 }

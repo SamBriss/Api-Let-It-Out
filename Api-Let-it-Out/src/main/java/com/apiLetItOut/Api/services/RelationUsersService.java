@@ -46,5 +46,9 @@ public class RelationUsersService {
     public List<Object[]> SearchDataOfPatientsMethod(int userTherapistId)
     {
         return relationUsersRepository.SearchDataOfPatients(userTherapistId);
+    } 
+    public int CountMaxVinculationMethod(int userTAGId)
+    {
+        return relationUsersRepository.CountMaxVinculation(userTAGId);
     }
 }

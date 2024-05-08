@@ -16,6 +16,7 @@ import com.apiLetItOut.Api.services.DictionaryCountService;
 import com.apiLetItOut.Api.services.DictionaryWordsService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
+import com.apiLetItOut.Api.services.UserTherapistService;
 
 @RestController
 @RequestMapping("api")
@@ -35,6 +36,9 @@ public class CognitiveDistortionsController {
     @Autowired
     DictionaryWordsService dictionaryWordsService;
 
+    @Autowired
+    UserTherapistService userTherapistService;
+
     @PostMapping("/userTAG/CognitiveDistortion")
     public ResponseEntity<String> RegisterNewDiaryEntries(@RequestParam("username") String username,
                                                     @RequestParam("dateSituation") String dateSituation,
@@ -42,14 +46,25 @@ public class CognitiveDistortionsController {
                                                     @RequestParam("physicalSensation") String physicalSensation,
                                                     @RequestParam("emotionalFeeling") String emotionalFeeling,
                                                     @RequestParam("consequence") String consequence,
-                                                    @RequestParam("cognitiveDistortion") String cognitiveDistortion){
+                                                    @RequestParam("cognitiveDistortion") String cognitiveDistortion,
+                                                    @RequestParam("usernameTherapist") String usernameTherapist){
 
         int userId = userService.SearchUserTAGMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
+        int userTherapistId;
 
         if (userTAGId > 0) {
 
-            int cognitiveDistortionReg = cognitiveDistortionsService.RegisterNewCognitiveDistortionMethod(dateSituation, thought, physicalSensation, emotionalFeeling, consequence, cognitiveDistortion, userTAGId);
+            if(usernameTherapist == "no"){
+                userTherapistId = 0;
+            }else{
+                int userIdT = userService.SearchUserTAGMethod(usernameTherapist);
+                userTherapistId = userTherapistService.FoundTherapistIdMethod(userIdT);
+            }
+
+        if(userTherapistId > 0){
+
+            int cognitiveDistortionReg = cognitiveDistortionsService.RegisterNewCognitiveDistortionMethod(dateSituation, thought, physicalSensation, emotionalFeeling, consequence, cognitiveDistortion, userTAGId, userTherapistId);
 
             if (cognitiveDistortionReg > 0){
                 processEmotionalFeelingAndCount(userTAGId, emotionalFeeling);
@@ -62,6 +77,11 @@ public class CognitiveDistortionsController {
             {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar la herramienta");
             }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No existe ese usuario");
+        }
             
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
@@ -175,6 +195,61 @@ public class CognitiveDistortionsController {
             dictionaryCountService.RegisterNewDictionaryCountMethod(userTAGId, wordId, 1, new Date(), 0);
         } else {
             dictionaryCountService.UpdateRepetitionsAndDateMethod(wordCountId);
+        }
+    }
+
+    @PostMapping("/userTAG/QuantityCognitiveDistortionsSharedTherapist")
+    public ResponseEntity postMethodNameCountByTherapist(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTherapistId = userTherapistService.FoundTherapistIdMethod(userId);
+
+        if(userTherapistId > 0)
+        {
+            int countRequest = cognitiveDistortionsService.countByUserTherapistIdCognitiveDistortionsSharedMethod(userTherapistId);
+
+            if (countRequest > 0)
+            {
+                String count = String.valueOf(countRequest);
+                return ResponseEntity.status(HttpStatus.OK).body(count);
+            }
+            else if (countRequest == 0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("0");
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error numero no valido");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
+        }
+    }
+
+    @PostMapping("/userTAG/CognitiveDistortionsSharedTherapist")
+    public ResponseEntity DatosDiarioParaTerapeuta(@RequestParam("username") String username){
+
+        int userId = userService.SearchUserTAGMethod(username);
+        int userTherapistId = userTherapistService.FoundTherapistIdMethod(userId);
+
+        if(userTherapistId > 0)
+        {
+            List<Object[]> informacion = cognitiveDistortionsService.findCognitiveDistortionsSharedMethod(userTherapistId);
+
+            if (!informacion.isEmpty())
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(informacion);
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No hay compartidos");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
         }
     }
 }

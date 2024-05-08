@@ -20,6 +20,7 @@ import com.apiLetItOut.Api.services.DictionaryWordsService;
 import com.apiLetItOut.Api.services.EmotionsService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
+import com.apiLetItOut.Api.services.UserTherapistService;
 
 @RestController
 @RequestMapping("api")
@@ -41,6 +42,9 @@ public class DiaryEntriesController {
 
     @Autowired
     DictionaryWordsService dictionaryWordsService;
+
+    @Autowired
+    UserTherapistService userTherapistService;
 
     @PostMapping("/userTAG/DiaryEntries")
     public ResponseEntity<String> RegisterNewDiaryEntries(@RequestParam("username") String username,
@@ -271,7 +275,6 @@ public class DiaryEntriesController {
     
     @PostMapping("/userTAG/ViewDiaryEmotions")
     public ResponseEntity postMethodEmotions(@RequestParam("username") String username){
-
         int userId = userService.SearchUserTAGMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
 
@@ -298,4 +301,5 @@ public class DiaryEntriesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
         }
     }
+
 }

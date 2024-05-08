@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiLetItOut.Api.services.RelationUsersService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGRequestService;
 import com.apiLetItOut.Api.services.UserTAGService;
@@ -29,6 +30,9 @@ public class UserTAGRequestController {
 
     @Autowired
     UserTherapistService userTherapistService;
+
+    @Autowired
+    RelationUsersService relationUsersService;
 
     @PostMapping("/userTAG/requestUserTAG")
     public ResponseEntity postMethodName(@RequestParam("username") String username,
@@ -177,4 +181,47 @@ public class UserTAGRequestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
         }
     }    
+
+    
+    @PostMapping("/users/ExistanceRequestOrRelation")
+    public ResponseEntity ExistanceRequestOrRelation(@RequestParam("username") String username,
+                                                        @RequestParam("vinculationCode") String vinculationCodeStr){
+
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+        int vinculationCode;
+
+        try {
+            vinculationCode = Integer.parseInt(vinculationCodeStr);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if(userTAGId!=null)
+        {
+            Integer userTherapistId = userTherapistService.FindTherapistIdByCodeMethod(vinculationCode);
+
+            if(userTherapistId != null){
+
+                int countRequest = userTAGRequestService.CountExistenceRequestMethod(userTAGId, userTherapistId);
+                int countRelation = relationUsersService.ExistenceOfVinculationMethod(userTAGId, userTherapistId);
+                if (countRequest > 0 || countRelation > 0)
+                {
+                    return ResponseEntity.status(HttpStatus.OK).body("ya existe");
+                }
+                else
+                {
+                    return ResponseEntity.status(HttpStatus.OK).body("no existe");
+                }
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario terapeuta");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");
+        }
+    }
 }

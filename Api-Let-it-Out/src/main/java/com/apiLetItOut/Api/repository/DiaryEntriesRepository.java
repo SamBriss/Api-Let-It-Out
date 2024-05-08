@@ -28,7 +28,7 @@ public interface DiaryEntriesRepository extends CrudRepository <DiaryEntries, In
 
         @Query(value= "Select COUNT(*) FROM diaryEntries WHERE userTAGId=:userTAGId", nativeQuery = true)
         Integer CountRequestQuantityDiary(@Param("userTAGId") int userTAGId);
-
+        
         @Query(value= "Select diaryId FROM diaryEntries WHERE userTAGId=:userTAGId ORDER BY date DESC", nativeQuery = true)
         List<Integer> SelectDiaryId (@Param("userTAGId") int userTAGId);
 
