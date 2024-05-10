@@ -26,9 +26,9 @@ public class CalendarTAGActivityService {
         return calendarTAGActivityRepository.findAllActivitiesFromCalendarTAGByDate(userTAGId, date);
     }
 
-    public Integer addNewActivityUserTagCalendarMethod(int userTAGId, String label, String location, String direction, Date date, Date startHour, Date endHour, Date dateRegister, String comments, int reminders)
+    public Integer addNewActivityUserTagCalendarMethod(int userTAGId, String label, String location, String direction, Date date, Date startHour, Date endHour, Date dateRegister, String comments, int reminders, double activityProbability)
     {
-        return calendarTAGActivityRepository.addNewActivityUserTagCalendar(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders);
+        return calendarTAGActivityRepository.addNewActivityUserTagCalendar(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders, activityProbability);
     }
 
     public Integer SearchCountActivityUserTagCalendarMethod()

@@ -29,7 +29,7 @@ public interface CalendarTAGActivityRepository extends CrudRepository<CalendarTA
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO calendar_tag_activity (userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders)VALUES (:userTAGId, :label, :location, :direction, :date, :startHour, :endHour, :dateRegister, :comments, :reminders)", nativeQuery = true)
+    @Query(value = "INSERT INTO calendar_tag_activity (userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders, activityProbability)VALUES (:userTAGId, :label, :location, :direction, :date, :startHour, :endHour, :dateRegister, :comments, :reminders, :activityProbability)", nativeQuery = true)
     Integer addNewActivityUserTagCalendar(@Param("userTAGId") int userTAGId,
                         @Param("label") String label,
                         @Param("location") String location,
@@ -39,7 +39,8 @@ public interface CalendarTAGActivityRepository extends CrudRepository<CalendarTA
                         @Param("endHour") Date endHour,
                         @Param("dateRegister") Date dateRegister,
                         @Param("comments") String comments,
-                        @Param("reminders") int reminders);
+                        @Param("reminders") int reminders,
+                        @Param("activityProbability") double activityProbability);
 
                         
     @Query(value= "Select COUNT(*) FROM calendar_tag_activity", nativeQuery = true)

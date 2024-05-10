@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface AlgorithmTriggerElementsRepository extends CrudRepository<TriggerElements, Integer>  {
 
-    @Query(value = "Select c.dictionaryWordId from dictionarycount c INNER JOIN dictionarywords w ON c.dictionaryWordId=w.dictionaryWordId WHERE w.categoryId=:categoryId AND c.userTAGId=:userTAGId GROUP BY c.dictionaryWordId", nativeQuery = true)
+    @Query(value = "Select c.dictionaryWordId from dictionarycount c INNER JOIN dictionarywords w ON c.dictionaryWordId=w.dictionaryWordId WHERE w.categoryId=:categoryId AND c.userTAGId=:userTAGId AND c.attackStatus=1 GROUP BY c.dictionaryWordId", nativeQuery = true)
     List<Integer> getAllDictionaryWordsByCategoryAndUserTAG(@Param("userTAGId") int userTAGId,
                                                             @Param("categoryId") int categoryId);
 
@@ -65,10 +65,20 @@ public interface AlgorithmTriggerElementsRepository extends CrudRepository<Trigg
     @Query(value = "Select COUNT(manualAttackRegister) from manualattackregister WHERE userTAGId=:userTAGId", nativeQuery = true)
     int selectCountManualAttacksByUserTAG(@Param("userTAGId") int userTAGId);
 
-
+// aplicacion del algoritmo de patrones desencadenantes
+    @Query(value = "Select triggerpatternId from triggerpatterns WHERE userTAGId=:userTAGId ORDER BY(triggerpatternId) DESC LIMIT 1", nativeQuery = true)
+    Integer SelectLastTriggerPatternId(@Param("userTAGId") int userTAGId);
     
-    
+    @Query(value = "Select individualProbability from triggerelements WHERE dictionaryWordId=:dictionaryWordId AND triggerPatternId=:triggerPatternId", nativeQuery = true)
+    Integer selectIndividualProbabilityDesencadenanteWord(@Param("dictionaryWordId") int dictionaryWordId,
+                                                        @Param("triggerPatternId") int triggerPatternId);
 
-
+                                                        
+    @Query(value = "Select triggerpatternId from triggerpatterns WHERE userTAGId=:userTAGId AND date=:date", nativeQuery = true)
+    Integer SelectLastTriggerPatternIdByDate(@Param("userTAGId") int userTAGId,
+                                            @Param("date") Date date);
+                                            
+    @Query(value = "Select COUNT(manualAttackRegister) from manualattackregister WHERE userTAGId=:userTAGId", nativeQuery = true)
+    int selectCountAttacksManualByUserTAG(@Param("userTAGId") int userTAGId);
 
 }
