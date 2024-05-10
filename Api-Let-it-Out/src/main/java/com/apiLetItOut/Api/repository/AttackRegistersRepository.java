@@ -54,5 +54,27 @@ public interface AttackRegistersRepository extends CrudRepository<AttackRegister
         @Query(value = "Select duration from attackRegisters where attackRegisterId=:attackRegisterId", nativeQuery=true)
         String SearchDurationByAttackId (@Param("attackRegisterId") int attackRegisterId);
                 
+                               
+        // pulsera
+        @Query(value = "Select attackRegisterId FROM attackregisters WHERE userTAGId=:userTAGId AND date=:date ORDER BY(attackRegisterId) DESC LIMIT 1", nativeQuery = true)
+        Integer searchLastAttackRegister(@Param("userTAGId") int userTAGId,
+                                                @Param("date") java.util.Date date);
+
+        @Transactional
+        @Modifying
+        @Query(value = "INSERT INTO attackPulsera(attackRegisterId, firstBeat, maxBeat, lastBeat, avgBeats, avgAnalisisBeats, lastAnalisisBeat, duration) VALUES(:attackRegisterId, :firstBeat, :maxBeat, :lastBeat, :avgBeats, :avgAnalisisBeats, :lastAnalisisBeat, :duration)", nativeQuery = true)
+        Integer RegisterAttackPulsera(@Param("attackRegisterId") int attackRegisterId, 
+                                        @Param("firstBeat") double firstBeat,
+                                        @Param("maxBeat") double maxBeat,
+                                        @Param("lastBeat") double lastBeat,
+                                        @Param("avgBeats") double avgBeats,
+                                        @Param("lastAnalisisBeat") double lastAnalisisBeat,
+                                        @Param("avgAnalisisBeats") double avgAnalisisBeats,
+                                        @Param("duration") double duration);
+                     
+        @Transactional
+        @Modifying
+        @Query(value = "Update attackregisters set typeId =1 WHERE attackRegisterId=:attackRegisterId", nativeQuery = true)
+        int UpdateAttackRegisterType(@Param("attackRegisterId") int attackRegisterId);
                      
 }

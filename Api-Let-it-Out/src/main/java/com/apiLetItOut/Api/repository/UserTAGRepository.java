@@ -85,4 +85,17 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     @Query(value= "UPDATE userstag SET levelTAGQuestionaireDate = CURRENT_DATE(), levelTAGId =:levelTAGId WHERE userTAGId =:userTAGId", nativeQuery = true)
     Integer UpdateUserTAGLevelTAGId(@Param("levelTAGId") int levelTAGId,
                                             @Param("userTAGId") int userTAGId);
+
+    // agregue de la pulsera
+    @Query(value = "Select pulsera from usersTAG where userId = :userId", nativeQuery = true)
+    Integer SearchUserPulsera (@Param("userId") int userId);
+
+    @Query(value = "Select nameContact, numberContact from emergencycontacts WHERE userTAGId=:userTAGId", nativeQuery = true)
+    List<Object[]> SearchEmergencyContactsByUserTAGId(@Param("userTAGId") int userTAGId);
+    
+    @Transactional
+    @Modifying
+    @Query(value = "Update userstag set pulsera =1 WHERE userId=:userId", nativeQuery = true)
+    int UpdateExistencePulseraTAG(@Param("userId") int userId);
+                                        
 }
