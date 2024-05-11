@@ -21,7 +21,7 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
     @Query(value= "Select u.startHour, u.endHour FROM appointmentcalendar u WHERE u.userTherapistId=:userTherapistId AND u.date=:date AND u.therapistAcceptance=1 AND u.TAGacceptance!=2", nativeQuery = true)
     java.util.List<Object[]> findRegistersOfTherapistAppointments(@Param("userTherapistId") int userTherapistId, @Param("date") Date date);
 
-    @Query(value= "Select u.appointmentId, i.name, i.lastnameP, i.username, u.date, u.startHour, u.endHour FROM appointmentcalendar u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND therapistAcceptance=1 AND TAGacceptance=1 AND a.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY(a.date) DESC", nativeQuery = true)
+    @Query(value= "Select u.appointmentId, i.name, i.lastnameP, i.username, u.date, u.startHour, u.endHour FROM appointmentcalendar u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND therapistAcceptance=1 AND TAGacceptance=1 AND u.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY(u.date) DESC", nativeQuery = true)
     java.util.List<Object[]> findAllAppointmentsFromCalendarTAG(@Param("userTAGId") int userTAGId);
         
     @Query(value= "Select u.appointmentId, i.name, i.lastnameP, i.username, u.date, u.startHour, u.endHour FROM appointmentcalendar u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND u.date=:date AND therapistAcceptance=1 AND TAGacceptance=1", nativeQuery = true)
@@ -93,5 +93,27 @@ public interface AppointmentCalendarRepository extends CrudRepository<Appointmen
     @Modifying
     @Query(value = "Update appointmentcalendar set therapistAcceptance =:therapistAcceptance WHERE appointmentId=:appointmentId", nativeQuery = true)
     int updateTherapistAcceptance(@Param("appointmentId") int appointmentId, @Param("therapistAcceptance") int therapistAcceptance);
+        
+    // reprogramar cita desde el terapeuta
+    
+    @Query(value= "Select u.appointmentId, i.name, i.lastnameP, i.username, u.date, u.startHour, u.endHour FROM appointmentcalendar u INNER JOIN userstag t ON u.userTAGId=t.userTAGId INNER JOIN users i ON i.userId=t.userId WHERE u.userTherapistId=:userTherapistId AND therapistAcceptance=1 AND TAGacceptance=1 AND u.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY(u.date) ASC", nativeQuery = true)
+    java.util.List<Object[]> findAppointmentsReprogramFromCalendarTAG(@Param("userTherapistId") int userTherapistId);
+  
+    @Query(value = "Select a.appointmentId, a.startHour, a.endHour, a.date, a.userTherapistId FROM appointmentcalendar a INNER JOIN usersTAG t ON a.userTAGId=t.userTAGId INNER JOIN users u ON t.userId=u.userId WHERE u.username=:username AND a.TherapistAcceptance=3 AND a.TAGacceptance=0 ORDER BY a.date ASC", nativeQuery = true)
+    java.util.List<Object[]> findAppointmentsToReprogramByTherapist(@Param("username") String username);
+
+    
+    @Query(value= "Select u.appointmentId, u.startHour, u.endHour, u.date, u.userTherapistId, i.name, i.lastnameP, i.username FROM appointmentcalendar u INNER JOIN userstherapists t ON u.userTherapistId=t.userTherapistId INNER JOIN users i ON i.userId=t.userId WHERE u.userTAGId=:userTAGId AND therapistAcceptance=3 AND TAGacceptance=0 AND u.date>= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY(u.date) ASC", nativeQuery = true)
+    java.util.List<Object[]> findAppointmentsReprogramForTAG(@Param("userTAGId") int userTAGId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Update appointmentcalendar set TAGacceptance =:therapistAcceptance WHERE appointmentId=:appointmentId", nativeQuery = true)
+    int updateTAGAcceptance(@Param("appointmentId") int appointmentId, @Param("therapistAcceptance") int therapistAcceptance);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Delete from appointmentcalendar WHERE appointmentId=:appointmentId", nativeQuery = true)
+    int deleteAppointment(@Param("appointmentId") int appointmentId);
         
 }

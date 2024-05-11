@@ -351,5 +351,80 @@ public class AppointmentCalendarApiController {
         return ResponseEntity.ok().body("none");
     }
     
+    @PostMapping("appointments/reprogramByTherapist")
+    public ResponseEntity appointmentsToReprogram(@RequestParam("username") String username)
+    {
+        Integer userTherapistId = userTherapistService.findUserTherapistIdByUsernameMethod(username);
+        if(userTherapistId != null)
+        {
+            System.out.println("usertherapist:  "+userTherapistId);
+            List<Object[]> listAppointments = appointmentCalendarService.findAppointmentsReprogramFromCalendarTAG(userTherapistId);
+            if(listAppointments.isEmpty())
+            {
+                System.out.println("is empty");
+                return ResponseEntity.ok().body("none");
+            }
+            for(Object[] ob : listAppointments)
+            {
+                System.out.println("object:   "+ob);
+            }
+            return ResponseEntity.ok().body(listAppointments);
+        }
+        System.out.println("user therapist error");
+        return ResponseEntity.ok().body("none");
+    }
+    @PostMapping("appointments/getAppointmentsToReprogramTAG")
+    public ResponseEntity getAppointmentsToReprogramTAG(@RequestParam("username") String username) {
+        
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(username);
+        if(userTAGId != null)
+        {
+            java.util.List<Object[]> appointmentsToConfirm = appointmentCalendarService.findAppointmentsReprogramForTAG(userTAGId);
+            if(!appointmentsToConfirm.isEmpty())
+            {
+                
+                return ResponseEntity.ok().body(appointmentsToConfirm);
+
+            }
+        }
+        return ResponseEntity.ok().body("none");
+    }
     
+    @PostMapping("appointments/updateTAGAcceptance")
+    public ResponseEntity updateTAGAcceptance(@RequestParam("appointmentId") String appointmentIdStr,
+                                                    @RequestParam("therapistAcceptance") String therapistAcceptanceStr) {
+      
+        try
+        {
+           int appointmentId = Integer.parseInt(appointmentIdStr);
+           int therapistAcceptance = Integer.parseInt(therapistAcceptanceStr);
+           int result = appointmentCalendarService.updateTAGAcceptanceMethod(appointmentId, therapistAcceptance);
+           return ResponseEntity.ok().body(result);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body("none");
+    }
+
+    @PostMapping("appointments/deleteAppointment")
+    public ResponseEntity<String> deleteAppointment(@RequestParam("appointmentId") String appointmentIdString)
+    {
+        try{
+            Integer appointmentId = Integer.parseInt(appointmentIdString);
+            if(appointmentId != null)
+            {
+               int res = appointmentCalendarService.deleteAppointment(appointmentId);
+               if(res == 1)
+               {
+                    return ResponseEntity.ok().body("1");
+               }
+            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body("0");
+    }
 }
