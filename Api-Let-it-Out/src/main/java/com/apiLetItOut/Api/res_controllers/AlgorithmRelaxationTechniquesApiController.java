@@ -498,8 +498,10 @@ public class AlgorithmRelaxationTechniquesApiController {
                 if(preference != "0")
                 {
                     System.out.println("preference choosen: "+preference);
-                    
-                    Object resultToReturn = algorithmRelaxationTechniquesService.getTechniqueOfTheWeekForEachUserMethod(preference, dateExecution);
+                    int levelTechniques = userTAGService.SearchLevelTechniqueMethod(userTAGId);    
+                    int count = algorithmRelaxationTechniquesService.getCountByUserTAGMethod(username);
+                    Object resultToReturn = algorithmRelaxationTechniquesService.getTechniqueOfTheWeekForEachUserMethod(preference, dateExecution, levelTechniques, count);
+                
                     if(resultToReturn!= null)
                     {
                         return ResponseEntity.ok().body(resultToReturn);
@@ -523,9 +525,9 @@ public class AlgorithmRelaxationTechniquesApiController {
         int count = algorithmRelaxationTechniquesService.getCountByUserTAGMethod(username);
         if(count>0)
         {
-            return ResponseEntity.ok().body("1");
+            return ResponseEntity.ok().body(count);
         }
-        return ResponseEntity.ok().body(count);
+        return ResponseEntity.ok().body("0");
     }
 
     @PostMapping("countByUser/changeCountForTAGUser")
