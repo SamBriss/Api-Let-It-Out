@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.ActivitiesFromTherapistService;
+import com.apiLetItOut.Api.services.AlgorithmTriggerElementsService;
 import com.apiLetItOut.Api.services.AppointmentCalendarService;
 import com.apiLetItOut.Api.services.CalendarTAGActivityService;
 import com.apiLetItOut.Api.services.DictionaryCountService;
@@ -52,6 +53,9 @@ public class CalendarTAGActivityApiController {
 
     @Autowired
     TemporaryDictionaryService temporaryDictionaryService;
+
+    @Autowired
+    AlgorithmTriggerElementsService algorithmTriggerElementsService;
 
     @PostMapping("/userTAGCalendar/addUserTAGActivityCalendar")
     public ResponseEntity<String> newCalendarConfiguration(@RequestParam("username") String username,
@@ -132,24 +136,55 @@ public class CalendarTAGActivityApiController {
                     }
                 }
 
-
                 // si llegó aqui es por que no está sobrepuesta
                 // agregar la actividad a la tabla de activitytherapistcalendar
 
+// aqui empieza el algoritmo de patrones desencadenantes aplicados -------------------------------------------------------------------------------
                 int result;
-                result = calendarTAGActivityService.addNewActivityUserTagCalendarMethod(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders);
-                processWordsInLocation(userTAGId, location);
-                processWordsInDirection(userTAGId, direction);
+                List<Double> listDesencadenantesEncontrados = new ArrayList<>();
+                double sumaProbabilidades = 0.0;
+                double multProbabilidades = 1.0;
+                double activityProbability = 0.0;
+                processWordsInLocation(userTAGId, location, sumaProbabilidades, multProbabilidades, listDesencadenantesEncontrados);
+                
+                processWordsInDirection(userTAGId, direction, sumaProbabilidades, multProbabilidades, listDesencadenantesEncontrados);
+                // process words in label, in time
+                sumaProbabilidades = 0;
+                multProbabilidades = 1;
+                // aqui hacer suma y mult de cada uno de los desencadenantes
+                for(Double d : listDesencadenantesEncontrados)
+                {
+                    sumaProbabilidades += d;
+                    multProbabilidades *= d;
+                }
+                // asignar la probabilidad de la actividad como la probabilidad del desencadante si es nomás un desencadenante
+                if(listDesencadenantesEncontrados.isEmpty())
+                {
+                    activityProbability = 0;
+                    System.out.println("la probabilidad es de 0%");
+                }else if(listDesencadenantesEncontrados.size() == 1)
+                {
+                    activityProbability = sumaProbabilidades*100;
+                    System.out.println("nomas hay un desencadenante entonces la probabilidad es :   "+listDesencadenantesEncontrados.get(0)*100);
+                }
+                else{
+                    // encontrar la probabilidad de la actividad cuando se encuentre más de un desencadenante
+                    activityProbability = sumaProbabilidades - multProbabilidades;
+                    activityProbability = activityProbability*100;
+                }
+                // agregar la actividad al calendario
+                result = calendarTAGActivityService.addNewActivityUserTagCalendarMethod(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders, activityProbability);
+                
                 recognizeWordsInLocation(userTAGId, location);
                 recognizeWordsInDirection(userTAGId, direction);
                 recognizeWordsInStartHour(userTAGId, startHourStr);
+                
                 return ResponseEntity.status(HttpStatus.OK).body(""+result);
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-      }            
-                                                
+      }                                          
         return ResponseEntity.status(HttpStatus.OK).body("unsuccesful");
     }
 
@@ -263,7 +298,7 @@ public class CalendarTAGActivityApiController {
         }
     }
 
-    private void processWordsInLocation(int userTAGId, String location) throws ParseException {
+    private void processWordsInLocation(int userTAGId, String location, double sumaProbabilidades, double multProbabilidades, List<Double> listDesencadenantesEncontrados) throws ParseException {
         // Limpieza y normalización de palabras en el campo "location"
         String cleanedLocation = location.toLowerCase()
                 .replace('á', 'a')
@@ -282,17 +317,46 @@ public class CalendarTAGActivityApiController {
         }
     
         // Procesar palabras de la categoría "1"
+        Integer patternId = algorithmTriggerElementsService.SelectLastTriggerPatternId(userTAGId);
         String[] words1 = cleanedLocation.split("\\s+");
         for (String word : words1) {
             Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(1, word);
+           
             if (wordId != null) {
+// buscar la palabra wordId en el triggerElement (patrones desencadenantes esto va aqui en cada uno de los processWords)------------------------------------------------------------------------------------------
+                if(patternId != null)
+                {
+                    Integer proba = algorithmTriggerElementsService.selectIndividualProbabilityDesencadenanteWord(wordId, patternId);
+                    if(proba!=null)
+                    {
+                        Double probabilidad = Double.valueOf(proba);
+                        probabilidad = probabilidad/100;
+                        sumaProbabilidades += proba;
+                        multProbabilidades *= proba;
+                        System.out.println("suma probabilidades =  "+sumaProbabilidades);
+                        System.out.println("mult probabilidades =  "+multProbabilidades);
+                        listDesencadenantesEncontrados.add(probabilidad);
+                        System.out.println("la palabra: "+wordId+" , tiene la probabilidad de:  "+proba+"%");
+                    }
+                    else
+                    {
+                        System.out.println("la palabra: "+wordId+" tiene una probabilidad de 0%");
+                    }
+                }
+                else
+                {
+                    // guardar la actividad con probabilidad de 0%
+                    System.out.println("el usuario no tiene elementos desencadenantes registrados");
+                }
+// fin del algoritmo de patrones desencadenantes aqui --------------------------------------------------------------------------------------------------------------------------
+
                 processWord(userTAGId, wordId);
                 cleanedLocation = cleanedLocation.replace(word, "");
             }
-        }
+        }        
     }  
 
-    private void processWordsInDirection(int userTAGId, String direction) throws ParseException {
+    private void processWordsInDirection(int userTAGId, String direction, double sumaProbabilidades, double multProbabilidades, List<Double> listDesencadenantesEncontrados) throws ParseException {
         // Limpieza y normalización de palabras en el campo "location"
         String cleanedDirection = direction.toLowerCase()
                 .replace('á', 'a')
@@ -311,10 +375,39 @@ public class CalendarTAGActivityApiController {
         }
     
         // Procesar palabras de la categoría "4"
+        Integer patternId = algorithmTriggerElementsService.SelectLastTriggerPatternId(userTAGId);
         String[] words4 = cleanedDirection.split("\\s+");
         for (String word : words4) {
             Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(4, word);
+
             if (wordId != null) {
+                // buscar la palabra wordId en el triggerElement (patrones desencadenantes esto va aqui en cada uno de los processWords)------------------------------------------------------------------------------------------
+                if(patternId != null)
+                {
+                    Integer proba = algorithmTriggerElementsService.selectIndividualProbabilityDesencadenanteWord(wordId, patternId);
+                    if(proba!=null)
+                    {
+                        Double probabilidad = Double.valueOf(proba);
+                        probabilidad = probabilidad/100;
+                        sumaProbabilidades += proba;
+                        multProbabilidades *= proba;
+                        System.out.println("suma probabilidades =  "+sumaProbabilidades);
+                        System.out.println("mult probabilidades =  "+multProbabilidades);
+                        listDesencadenantesEncontrados.add(probabilidad);
+                        System.out.println("la palabra: "+wordId+" , tiene la probabilidad de:  "+proba+"%");
+                    }
+                    else
+                    {
+                        System.out.println("la palabra: "+wordId+" tiene una probabilidad de 0%");
+                    }
+                }
+                else
+                {
+                    // guardar la actividad con probabilidad de 0%
+                    System.out.println("el usuario no tiene elementos desencadenantes registrados");
+                }
+                // fin del algoritmo de patrones desencadenantes aqui --------------------------------------------------------------------------------------------------------------------------
+
                 processWord(userTAGId, wordId);
                 cleanedDirection = cleanedDirection.replace(word, "");
             }

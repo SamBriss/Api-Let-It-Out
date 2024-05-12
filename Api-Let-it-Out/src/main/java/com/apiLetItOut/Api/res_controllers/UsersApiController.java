@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.UserService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api")
@@ -19,7 +18,7 @@ public class UsersApiController {
     UserService userService;
 
     @PostMapping("/user/findUsernameEmail")
-    public ResponseEntity postMethodName(@RequestParam("username") String username,
+    public ResponseEntity<String> postMethodName(@RequestParam("username") String username,
             @RequestParam("email") String email) {
 
         int result = userService.SearchUsersEmailMethod(username, email);
@@ -36,7 +35,7 @@ public class UsersApiController {
     }
 
     @PostMapping("/user/createToken")
-    public ResponseEntity createToken(@RequestParam("username") String username,
+    public ResponseEntity<String> createToken(@RequestParam("username") String username,
             @RequestParam("email") String email) {
 
         java.util.List<Object[]> resultList = userService.findInfoForTokenMethod(username, email);
@@ -110,7 +109,7 @@ public class UsersApiController {
     }
 
     @PostMapping("/user/findTel")
-    public ResponseEntity postMethodtel(@RequestParam("tel") String tel) {
+    public ResponseEntity<String> postMethodtel(@RequestParam("tel") String tel) {
 
         int result = userService.SearchUsersByTelMethod(tel);
 
@@ -137,7 +136,7 @@ public class UsersApiController {
     }
 
     @PostMapping("/user/updatePassword")
-    public ResponseEntity UpdatePassword(@RequestParam("tel") String tel,
+    public ResponseEntity<String> UpdatePassword(@RequestParam("tel") String tel,
             @RequestParam("password") String password) {
 
         int result = userService.UpdatePasswordMethod(tel, password);
@@ -152,7 +151,7 @@ public class UsersApiController {
     }
 
     @PostMapping("/userTAG/existenciaTAG")
-    public ResponseEntity postMethodExistencia(@RequestParam("username") String username) {
+    public ResponseEntity<String> postMethodExistencia(@RequestParam("username") String username) {
         Integer existencia = userService.SearchUserTAGMethod(username);
         if (existencia == null) {
             return ResponseEntity.status(HttpStatus.OK).body("no existe");
@@ -163,7 +162,7 @@ public class UsersApiController {
         }
     }
     @PostMapping("/userTAG/verificaVinculacion")
-    public ResponseEntity postMethodverificaVinculacion(@RequestParam("username") String username) {
+    public ResponseEntity<String> postMethodverificaVinculacion(@RequestParam("username") String username) {
         
         Integer existencia = userService.SearchUserTAGMethod(username);
         if (existencia == null) {

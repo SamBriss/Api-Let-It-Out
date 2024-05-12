@@ -82,4 +82,26 @@ public class AppointmentCalendarService {
     {
         return appointmentCalendarRepository.updateTherapistAcceptance(appointmentId, therapistAcceptance);
     }
+    // reprogramar cita desde terapeuta
+    
+    public java.util.List<Object[]> findAppointmentsReprogramFromCalendarTAG(int userTherapistId)
+    {
+        return appointmentCalendarRepository.findAppointmentsReprogramFromCalendarTAG(userTherapistId);
+    }
+    public java.util.List<Object[]> findAppointmentsToReprogramByTherapist(String username)
+    {
+        return appointmentCalendarRepository.findAppointmentsToReprogramByTherapist(username);
+    }
+    public int updateTAGAcceptanceMethod(int appointmentId, int therapistAcceptance)
+    {
+        return appointmentCalendarRepository.updateTAGAcceptance(appointmentId, therapistAcceptance);
+    }
+    public java.util.List<Object[]> findAppointmentsReprogramForTAG(int userTAGId)
+    {
+        return appointmentCalendarRepository.findAppointmentsReprogramForTAG(userTAGId);
+    }
+    public int deleteAppointment(int appointmentId)
+    {
+        return appointmentCalendarRepository.deleteAppointment(appointmentId);
+    }
 }

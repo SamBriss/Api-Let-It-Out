@@ -60,4 +60,23 @@ public class AlgorithmTriggerElementsService {
     {
         return algorithmTriggerElementsRepository.selectCountManualAttacksByUserTAG(userTAGId);
     }
+
+    // aplicacion algoritmo de patrones desencadenantes
+    public Integer SelectLastTriggerPatternId(int userTAGId)
+    {
+        return algorithmTriggerElementsRepository.SelectLastTriggerPatternId(userTAGId);
+    }
+    public Integer selectIndividualProbabilityDesencadenanteWord(int dictionaryWordId, int triggerPatternId)
+    {
+        return algorithmTriggerElementsRepository.selectIndividualProbabilityDesencadenanteWord(dictionaryWordId, triggerPatternId);
+    }
+    public Integer SelectLastTriggerPatternIdByDate(int userTAGId, Date date)
+    {
+        return algorithmTriggerElementsRepository.SelectLastTriggerPatternIdByDate(userTAGId, date);
+    }
+    
+    public int selectCountAttacksManualByUserTAGMethod(int userTAGId)
+    {
+        return algorithmTriggerElementsRepository.selectCountAttacksManualByUserTAG(userTAGId);
+    }
 }

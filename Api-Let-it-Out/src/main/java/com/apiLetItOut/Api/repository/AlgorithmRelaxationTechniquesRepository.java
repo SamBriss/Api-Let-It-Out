@@ -143,9 +143,9 @@ List<Object[]> getAverageScoreRepetitionsAudioIdByAgeUser(@Param("startAge") int
     "ORDER BY rankingId DESC LIMIT 1", nativeQuery = true)
     Object[] getCategoryIdAndDateFromLastRankingId();
     
-    @Query(value = "Select r.categoryId, r.preferenceId, a.name, a.url, r.countUses, r.usersScore, r.finalScore, a.audioId from techniques_ranking r INNER JOIN relaxationtechniqueaudios a ON r.audioId=a.audioId "+
+    @Query(value = "Select r.categoryId, r.preferenceId, a.name, a.url, r.countUses, r.usersScore, r.finalScore, a.audioId, a.techniqueLevel, :levelTechniques as levelTechniques, :count as count from techniques_ranking r INNER JOIN relaxationtechniqueaudios a ON r.audioId=a.audioId "+
     "WHERE r.preferenceId=:preference AND r.executionDate=:date AND r.audioId >0", nativeQuery = true)
-    Object getTechniqueOfTheWeekForEachUser(String preference, Date date);
+    Object getTechniqueOfTheWeekForEachUser(String preference, Date date, int levelTechniques, int count);
     
     @Query(value = "SELECT executionDate FROM techniques_ranking " +
     "ORDER BY rankingId DESC LIMIT 1", nativeQuery = true)

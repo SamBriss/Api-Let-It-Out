@@ -115,9 +115,9 @@ public class AlgorithmRelaxationTechniquesService {
         return algorithmRelaxationTechniquesRepository.getCategoryIdAndDateFromLastRankingId();
     }
 
-    public Object getTechniqueOfTheWeekForEachUserMethod(String preference, Date date)
+    public Object getTechniqueOfTheWeekForEachUserMethod(String preference, Date date, int levelTechniques, int count)
     {
-        return algorithmRelaxationTechniquesRepository.getTechniqueOfTheWeekForEachUser(preference, date);
+        return algorithmRelaxationTechniquesRepository.getTechniqueOfTheWeekForEachUser(preference, date, levelTechniques, count);
     }
     
     public Date getDateFromLastRankingIdMethod()

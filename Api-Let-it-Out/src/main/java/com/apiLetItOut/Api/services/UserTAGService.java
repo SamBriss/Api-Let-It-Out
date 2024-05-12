@@ -111,4 +111,18 @@ public class UserTAGService {
         return userTAGRepository.UpdateUserTAGLevelTAGId(levelTAGId, userTAGId);
         
     }
+    
+    // pulsera
+    public Integer SearchUserPulsera(int userId)
+    {
+        return userTAGRepository.SearchUserPulsera(userId);
+    }
+    public List<Object[]> SearchEmergencyContactsByUserTAGId(int userTAGId)
+    {
+        return userTAGRepository.SearchEmergencyContactsByUserTAGId(userTAGId);
+    }
+    public int UpdateExistencePulseraTAG(int userId)
+    {
+        return userTAGRepository.UpdateExistencePulseraTAG(userId);
+    }
 }

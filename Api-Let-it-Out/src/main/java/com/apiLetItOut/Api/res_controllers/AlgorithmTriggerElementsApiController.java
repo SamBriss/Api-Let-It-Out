@@ -41,6 +41,9 @@ public class AlgorithmTriggerElementsApiController {
 
                 System.out.println("usertagid int :   "+i);
                 int countAttacks = algorithmTriggerElementsService.selectCountAttacksByUserTAGMethod(i);
+                int countAttacksManual = algorithmTriggerElementsService.selectCountAttacksManualByUserTAGMethod(i);
+                countAttacks = countAttacks + countAttacksManual;
+
                 System.out.println("count attacks:  "+countAttacks);
                 int countManualAttacks = algorithmTriggerElementsService.selectCountManualAttacksByUserTAGMethod(i);
                 System.out.println("count manualA:  "+countManualAttacks);
@@ -59,7 +62,27 @@ public class AlgorithmTriggerElementsApiController {
                         savePatternsAtBD(listInfoElementsLocationByRPearson, i, countAttacks);
                     }
                 }
-                List<Integer> listElementsTime = algorithmTriggerElementsService.getAllDictionaryWordsByCategoryAndUserTAGMethod(i, 2);
+                List<Integer> listElementsDirections = algorithmTriggerElementsService.getAllDictionaryWordsByCategoryAndUserTAGMethod(i, 4);
+                if(!listElementsDirections.isEmpty() && countAttacks>0)
+                {
+                    if(listElementsDirections.size()>1)
+                    {
+                        List<Double[]> listInfoElementsDirection = calculateRPearson(listElementsDirections, i);
+                        List<Double[]> listInfoElementsDirectionByRPearson = validateRPearsonMinimum(listInfoElementsDirection, countAttacks);
+                        savePatternsAtBD(listInfoElementsDirectionByRPearson, i, countAttacks);
+                    }
+                }
+                List<Integer> listElementsMomentsOfDay = algorithmTriggerElementsService.getAllDictionaryWordsByCategoryAndUserTAGMethod(i, 9);
+                if(!listElementsMomentsOfDay.isEmpty() && countAttacks>0)
+                {
+                    if(listElementsMomentsOfDay.size()>1)
+                    {
+                        List<Double[]> listInfoElementsMomentsOfDay = calculateRPearson(listElementsMomentsOfDay, i);
+                        List<Double[]> listInfoElementsMomentsOfDayByRPearson = validateRPearsonMinimum(listInfoElementsMomentsOfDay, countAttacks);
+                        savePatternsAtBD(listInfoElementsMomentsOfDayByRPearson, i, countAttacks);
+                    }
+                }
+                List<Integer> listElementsTime = algorithmTriggerElementsService.getAllDictionaryWordsByCategoryAndUserTAGMethod(i, 10);
                 if(!listElementsTime.isEmpty() && countAttacks>0)
                 {
                     if(listElementsTime.size()>1)
@@ -69,7 +92,7 @@ public class AlgorithmTriggerElementsApiController {
                         savePatternsAtBD(listInfoElementsTimeByRPearson, i, countAttacks);
                     }
                 }
-                List<Integer> listElementsActivities = algorithmTriggerElementsService.getAllDictionaryWordsByCategoryAndUserTAGMethod(i, 3);
+                List<Integer> listElementsActivities = algorithmTriggerElementsService.getAllDictionaryWordsByCategoryAndUserTAGMethod(i, 8);
                 if(!listElementsActivities.isEmpty() && countAttacks>0)
                 {
                     if(listElementsActivities.size()>1)
@@ -192,7 +215,14 @@ public class AlgorithmTriggerElementsApiController {
         LocalDate fechaActual = LocalDate.now(); 
         String img = createGraphicImg(listInfoElementsLocationByRPearson, i);
 
-        int result = algorithmTriggerElementsService.addTriggerPatternMethod(Date.from(fechaActual.atStartOfDay(ZoneId.systemDefault()).toInstant()), cantAttacks, i, img);
+        Integer patternIdSearched = algorithmTriggerElementsService.SelectLastTriggerPatternIdByDate(i, Date.from(fechaActual.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        int result;
+        if(patternIdSearched == null){
+            result = algorithmTriggerElementsService.addTriggerPatternMethod(Date.from(fechaActual.atStartOfDay(ZoneId.systemDefault()).toInstant()), cantAttacks, i, img);
+        }
+        else{
+            result = patternIdSearched;
+        }
         System.out.println("result =   "+result);
         if(result > 0 )
         {

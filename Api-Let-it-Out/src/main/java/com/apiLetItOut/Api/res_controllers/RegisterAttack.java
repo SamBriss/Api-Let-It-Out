@@ -43,7 +43,7 @@ public class RegisterAttack {
     AttackRegisterDetailsService attackRegisterDetailsService;
 
     @PostMapping("registerDataAttack")
-    public ResponseEntity<String> RegisterAttackAnxietyButton(@RequestParam("user") String user, 
+    public ResponseEntity<String> RegisterAttack(@RequestParam("user") String user, 
                                 @RequestParam("startHour") String startHourStr, 
                                 @RequestParam("endHour") String endHourStr, 
                                 @RequestParam("type") String typeStr)
@@ -96,7 +96,7 @@ public class RegisterAttack {
             return new ResponseEntity<>("No se encontro el userTAGId", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @PostMapping("registerTechniques")
     public ResponseEntity<String> RegisterAudiosOfAttack(@RequestParam("user") String user, 
                                                     @RequestParam("url") String url,
@@ -105,6 +105,9 @@ public class RegisterAttack {
                                                     @RequestParam("startHour")String startHourStr,
                                                     @RequestParam("endHour") String endHourStr)
     {
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("entra en register audios of attack");
+
         Integer score=0;
         Long progressLong=0L;
         try{
@@ -153,18 +156,23 @@ public class RegisterAttack {
                 int rows = listenedAudiosFeedbackService.RegisterTechniquesOfAttack(userTAGId, audioId, progress, score, feedbackDate, attackRegisterId);
                 if(rows==1)
                 {
+                    System.out.println("se registró de manera correcta");
                     return new ResponseEntity<>("Se registro de manera correcta", HttpStatus.ACCEPTED);
                 } else 
                 {
+                    System.out.println("no se registro");
                     return new ResponseEntity<>("No se registro de manera correcta", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } else if(userTAGId==null){
+                System.out.println("no se encontró el usertag id");
                 return new ResponseEntity<>("No se encontro el userTAGId", HttpStatus.BAD_REQUEST);
             } else
             {
+                System.out.println("no se encontró el ataque registrado");
                 return new ResponseEntity<>("No se encontro el ataque registrado.", HttpStatus.BAD_REQUEST);
             }
         } else{
+            System.out.println("no se encontro el userid");
             return new ResponseEntity<>("No se encontro el userId", HttpStatus.BAD_REQUEST);
         }
     }
