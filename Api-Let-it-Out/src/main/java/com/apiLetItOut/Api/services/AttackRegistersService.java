@@ -54,4 +54,20 @@ public class AttackRegistersService {
     {
         return attackRegistersRepository.SearchDurationByAttackId(attackRegisterId);
     }
+
+    public List<Object[]> SearchAttacksOfUserIncompletedMethod(int userTAGId)
+    {
+        return attackRegistersRepository.SearchAttacksOfUserIncompleted(userTAGId);
+    }
+
+    public int QuantityAttacksOfUserIncompletedMethod(int userTAGId)
+    {
+        return attackRegistersRepository.QuantityAttacksOfUserIncompleted(userTAGId);
+    }
+
+    public Integer UpdateCompletedattackRegisterMethod(int attackRegisterId)
+    {
+        return attackRegistersRepository.UpdateCompletedAttackRegister(attackRegisterId, 1);
+    }
+    
 }

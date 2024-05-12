@@ -80,10 +80,10 @@ public class ManualAttacksController {
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
 
         if (userTAGId > 0) {
-            int manualAttackCout = 1;
-            //manualAttackCout = manualAttacksService.RegisterNewManualAttackMethod(date, hour,
-            //        place, motive, place, intensity, emotions, physicalSensations, thoughts, typeOfThought,
-            //        attackMethodsId, userTAGId);
+            int manualAttackCout;
+            manualAttackCout = manualAttacksService.RegisterNewManualAttackMethod(date, hour,
+                   place, motive, place, intensity, emotions, physicalSensations, thoughts, typeOfThought,
+                   attackMethodsId, userTAGId);
 
             if (manualAttackCout > 0) {
                 processPlaceAndHourAndCount(userTAGId, place, hourstr, date);

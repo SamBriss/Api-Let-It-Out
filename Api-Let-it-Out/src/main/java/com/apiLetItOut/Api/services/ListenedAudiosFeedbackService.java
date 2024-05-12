@@ -58,4 +58,19 @@ public class ListenedAudiosFeedbackService {
     {
         return listenedAudiosFeedbackRepository.SearchAudiosIdListenedTAG(userTAGId);
     }
+
+    public List<Object[]> SearchInformationOfTechniqueIncompleteMethod(int attackRegisterId)
+    {
+        return listenedAudiosFeedbackRepository.SearchInformationOfTechniqueIncomplete(attackRegisterId);
+    }
+
+    public int SelectQuantityAudiosMethod(int attackRegisterId)
+    {
+        return listenedAudiosFeedbackRepository.SelectQuantityAudios(attackRegisterId);
+    }
+
+    public Integer UpdateCompletedfeedbackaudiosAttacks(int score, int listenedId)
+    {
+        return listenedAudiosFeedbackRepository.UpdateCompletedfeedbackaudiosAttacks(score, listenedId);
+    }
 }

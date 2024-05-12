@@ -29,7 +29,6 @@ public interface AttackRegistersRepository extends CrudRepository<AttackRegister
                         @Param("typeId") Integer typeId,
                         @Param("userTAGId") Integer userTAGId);
 
-
         @Query(value = "SELECT attackRegisterId FROM attackregisters WHERE date = :date " +
         "AND startHour = :startHour AND endHour = :endHour AND userTAGId = :userTAGId", nativeQuery = true)
         Integer SearchAttackId(@Param("date") LocalDate date,
@@ -53,6 +52,16 @@ public interface AttackRegistersRepository extends CrudRepository<AttackRegister
 
         @Query(value = "Select duration from attackRegisters where attackRegisterId=:attackRegisterId", nativeQuery=true)
         String SearchDurationByAttackId (@Param("attackRegisterId") int attackRegisterId);
-                
-                     
+               
+        @Query(value = "Select attackRegisterId, date, startHour from attackregisters where userTAGId=:userTAGId AND completed=0 ORDER BY date ASC", nativeQuery = true)
+        List<Object[]> SearchAttacksOfUserIncompleted(@Param("userTAGId") int userTAGId);         
+
+        @Query(value = "SELECT COUNT(*) from attackregisters where userTAGId=:userTAGId AND completed=0", nativeQuery = true)
+        int QuantityAttacksOfUserIncompleted(@Param("userTAGId") int userTAGId); 
+        
+        @Transactional
+        @Modifying
+        @Query(value = "Update attackregisters set completed = :completed where attackRegisterId =:attackRegisterId", nativeQuery = true)
+        Integer UpdateCompletedAttackRegister(@Param("attackRegisterId") int attackRegisterId, 
+                                                @Param("completed") int completed);
 }

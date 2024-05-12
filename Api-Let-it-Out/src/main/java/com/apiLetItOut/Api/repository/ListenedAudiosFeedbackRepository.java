@@ -46,4 +46,20 @@ public interface ListenedAudiosFeedbackRepository extends CrudRepository<Listene
 
     @Query(value = "Select distinct audioId from listenedaudiosfeedback where userTAGId = :userTAGId", nativeQuery = true)
     List<Integer> SearchAudiosIdListenedTAG(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "SELECT laf.listenedId, rt.name, rt.duration " +
+    "FROM listenedaudiosfeedback laf " +
+    "JOIN relaxationtechniqueaudios rt ON laf.audioId = rt.audioId " +
+    "WHERE laf.attackRegisterId = :attackRegisterId", nativeQuery = true)
+    List<Object[]> SearchInformationOfTechniqueIncomplete(@Param("attackRegisterId") int attackRegisterId);
+
+    @Query(value = "SELECT count(*) FROM listenedaudiosfeedback " +
+    "WHERE attackRegisterId = :attackRegisterId", nativeQuery = true)
+    int SelectQuantityAudios(@Param("attackRegisterId") int attackRegisterId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Update listenedaudiosfeedback set score = :score WHERE listenedId =:listenedId", nativeQuery = true)
+    Integer UpdateCompletedfeedbackaudiosAttacks(@Param("score") int score, 
+                                            @Param("listenedId") int listenedId);
 }

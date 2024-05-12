@@ -98,4 +98,7 @@ public class UserService {
     {
         return userRepository.UpdatePassword(password, tel);
     }
+    public Integer SelectAlreadyhavetoken(){
+        return userRepository.SelectAlreadyhavetoken();
+    }      
 }

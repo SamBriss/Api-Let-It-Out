@@ -1,14 +1,18 @@
 package com.apiLetItOut.Api.repository;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.apiLetItOut.Api.models.AttackRegisterDetails;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface AttackRegisterDetailsRepository extends CrudRepository<AttackRegisterDetails, Integer>{
@@ -62,4 +66,25 @@ public interface AttackRegisterDetailsRepository extends CrudRepository<AttackRe
         Integer CountOfAttacksCompleted (@Param("actualDate") LocalDate actualDate,
                                         @Param("beforeDate") LocalDate beforeDate,
                                         @Param("userTAGId") int userTAGId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO attackregisterdetails" + 
+    "(attackRegisterId, place, motive, explanationResume," +
+    "intensity, emotions, physicalSensations," +
+    "thoughts, typeOfThought, attackMethodsId, reportURL)" +
+    "VALUES (:attackRegisterId, :place, :motive, :explanationResume," +
+    ":intensity, :emotions, :physicalSensations, :thoughts, :typeOfThought," +
+    ":attackMethodsId, :reportURL)", nativeQuery = true)
+    Integer RegisterNewAtttackDetails(@Param("attackRegisterId") int attackRegisterId,
+                        @Param("place") String place,
+                        @Param("motive") String motive,
+                        @Param("explanationResume") String explanationResume,
+                        @Param("intensity") int intensity,
+                        @Param("emotions") String emotions,
+                        @Param("physicalSensations") String physicalSensations,
+                        @Param("thoughts") String thoughts,
+                        @Param("typeOfThought") String typeOfThought,
+                        @Param("attackMethodsId") int attackMethodsId,
+                        @Param("reportURL") String reportURL);
 }

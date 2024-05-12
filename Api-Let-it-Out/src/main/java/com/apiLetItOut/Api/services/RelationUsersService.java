@@ -43,12 +43,27 @@ public class RelationUsersService {
     {
         return relationUsersRepository.ExistenceOfVinculation(userTAGId, userTherapistId);
     }
-    public List<Object[]> SearchDataOfPatientsMethod(int userTherapistId)
-    {
-        return relationUsersRepository.SearchDataOfPatients(userTherapistId);
-    } 
     public int CountMaxVinculationMethod(int userTAGId)
     {
         return relationUsersRepository.CountMaxVinculation(userTAGId);
+    }
+    public List<Object[]> SearchDataOfPatientsMethod(int userTherapistId)
+    {
+        return relationUsersRepository.SearchDataOfPatients(userTherapistId);
+    }
+
+    public List<Object[]> SearchDataOfPatientsUsersTAGIdMethod(int userTherapistId)
+    {
+        return relationUsersRepository.SearchDataOfPatientsUsersTAGId(userTherapistId);
+    }
+
+    public List<Object[]> SearchTherapistRelatedTAG(int userTAGId, int userTherapistId)
+    {
+        return relationUsersRepository.SearchTherapistRelatedTAG(userTherapistId, userTAGId);
+    }
+
+    public List<Object[]> SearchDataOfTherapistTherapistIdMethod(int userTAGId)
+    {
+        return relationUsersRepository.SearchDataOfTherapistUserTherapistId(userTAGId);
     }
 }

@@ -17,10 +17,13 @@ import com.apiLetItOut.Api.services.UserTherapistService;
 public class LogInApiController {
     @Autowired
     UserService userService;
+
     @Autowired
     UserTherapistService userTherapistService;
+
     @Autowired
     UserTAGService userTAGService;
+
     @PostMapping("users/login/ByUsername")
     public ResponseEntity authenticateUserByUsername( @RequestParam(value = "username") String username,
                                                     @RequestParam("password") String password)
@@ -88,6 +91,36 @@ public class LogInApiController {
         else
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuario no encontrado");
+        }
+    }
+
+    @PostMapping("users/login/alreadyhavetoken")
+    public ResponseEntity alreadyhavetokenController()
+    {
+       Integer userId = userService.SelectAlreadyhavetoken();
+
+        if (userId != null ) 
+        {
+            Integer find = userTherapistService.FindUserTherapistsMethod(userId);
+            String username = userService.SearchUsernameByIdMethod(userId);
+
+            StringBuilder builder = new StringBuilder();
+            if (find == 0)
+            {
+                find = userTAGService.FindUserTAGMethod(userId);
+                builder.append("TAG").append(",").append(username);
+                return ResponseEntity.status(HttpStatus.OK).body(builder);
+            }
+            else 
+            {
+                builder.append("Terapeuta").append(",").append(username);
+                return ResponseEntity.status(HttpStatus.OK).body(builder);
+            }
+
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("no hay token en uso");
         }
     }
 }

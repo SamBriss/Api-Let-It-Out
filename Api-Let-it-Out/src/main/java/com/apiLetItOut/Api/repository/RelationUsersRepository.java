@@ -47,11 +47,25 @@ public interface RelationUsersRepository extends CrudRepository<RelationUsers, I
         int ExistenceOfVinculation(@Param("userTAGId") int userTAGId,
         @Param("userTherapistId") int userTherapistId);
 
-        @Query(value = "select ug.name, ug.lastnameP, ug.age, l.level, ug.username"+
-        " from users ug JOIN userstag tag ON tag.userId=ug.userId JOIN levelstag l ON tag.levelTAGId = l.levelTAGId" +
-        " where tag.userTAGId= ALL(select userTAGId from relationUsers r where r.userTherapistId = :userTherapistId)", nativeQuery = true)
-        List<Object[]> SearchDataOfPatients(@Param("userTherapistId") int userTherapistId);
-
         @Query (value="Select COUNT(*) from relationusers where userTAGId = :userTAGId", nativeQuery = true)
         int CountMaxVinculation(@Param("userTAGId") int userTAGId);
+
+        @Query(value = "select ug.name, ug.lastnameP, ug.age, l.level, ug.username, ug.tel, tag.userTAGId "+
+        " from users ug JOIN userstag tag ON tag.userId=ug.userId JOIN levelstag l ON tag.levelTAGId = l.levelTAGId" +
+        " where tag.userTAGId IN(select r.userTAGId from relationUsers r where r.userTherapistId = :userTherapistId)", nativeQuery = true)
+        List<Object[]> SearchDataOfPatients(@Param("userTherapistId") int userTherapistId);
+
+        @Query(value = "select ug.name, ug.lastnameP, tag.userTAGId, ug.username "+
+        " from users ug JOIN userstag tag ON tag.userId=ug.userId " +
+        " where tag.userTAGId IN(select r.userTAGId from relationUsers r where r.userTherapistId = :userTherapistId)", nativeQuery = true)
+        List<Object[]> SearchDataOfPatientsUsersTAGId(@Param("userTherapistId") int userTherapistId);
+
+        @Query(value = "Select u.name, u.lastnameP, r.userTherapistId from relationusers r JOIN usersTherapists ut ON r.userTherapistId=ut.userTherapistId JOIN users u ON ut.userId=u.userId where r.userTherapistId != :userTherapistId && r.userTAGId=:userTAGId", nativeQuery = true)
+        List<Object[]> SearchTherapistRelatedTAG(@Param("userTherapistId") int userTherapistId,
+                                                @Param("userTAGId") int userTAGId);
+
+        @Query(value = "select ug.name, ug.lastnameP, t.userTherapistId, ug.username "+
+        " from users ug JOIN usersTherapists t ON t.userId=ug.userId " +
+        " where t.userTherapistId IN(select r.userTherapistId from relationUsers r where r.userTAGId = :userTAGId)", nativeQuery = true)
+        List<Object[]> SearchDataOfTherapistUserTherapistId(@Param("userTAGId") int userTAGId);
 }

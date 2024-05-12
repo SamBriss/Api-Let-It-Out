@@ -133,5 +133,66 @@ public class MyPatients {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("getChatsTherapist")
+    public ResponseEntity<List<Object[]>> getUsersChat(@RequestParam("user") String userT)
+    {
+        List<Object[]> dataFull = new ArrayList<>();
+        Integer userTherapistId = userTherapistService.findUserTherapistIdByUsernameMethod(userT);
+        if(userTherapistId==null)
+        {
+            userTherapistId = userTherapistService.findUserTherapistIdByEmailMethod(userT);
+        }
+        if(userTherapistId!=null)
+        {
+            List<Object[]> myPatients = relationUsersService.SearchDataOfPatientsUsersTAGIdMethod(userTherapistId);
+            for(Object[] data : myPatients)
+            {
+                if(data!=null)
+                {
+                    int userTAGId = (int) data[2];
+                    Object[] objeto = {data[0], data[1], data[2], 1, "nada"};
+                    dataFull.add(objeto);
+                    List<Object[]> therapistRelatedPartial = relationUsersService.SearchTherapistRelatedTAG(userTAGId, userTherapistId);
+                    for (Object[] objects : therapistRelatedPartial) {
+                        if(objects!=null)
+                        {
+                            Object[] object2 = {objects[0], objects[1], objects[2], 2, data[3]};
+                            dataFull.add(object2);
+                        }
+                        
+                    } 
+                }
+                
+            }
+            
+        }
+        return new ResponseEntity<>(dataFull, HttpStatus.OK);
+    }
 
+
+    @PostMapping("getChatsTAG")
+    public ResponseEntity<List<Object[]>> getUsersTAGChat(@RequestParam("user") String user)
+    {
+        List<Object[]> dataFull = new ArrayList<>();
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
+        if(userTAGId==null)
+        {
+            userTAGId = userTAGService.GetUserTAGIdByEmailMethod(user);
+        }
+        if(userTAGId!=null)
+        {
+            List<Object[]> myTherapists = relationUsersService.SearchDataOfTherapistTherapistIdMethod(userTAGId);
+            for(Object[] data : myTherapists)
+            {
+                if(data!=null)
+                {
+                    Object[] objeto = {data[0], data[1], data[2], 1};
+                    dataFull.add(objeto);
+                }
+                
+            }
+            
+        }
+        return new ResponseEntity<>(dataFull, HttpStatus.OK);
+    }
 }

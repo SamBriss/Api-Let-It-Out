@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.services;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.apiLetItOut.Api.repository.AttackRegistersRepository;
 public class AttackRegisterDetailsService {
     @Autowired 
     AttackRegisterDetailsRepository attackRegisterDetailsRepository;
+    
     @Autowired
     AttackRegistersRepository attackRegistersRepository;
 
@@ -79,5 +81,12 @@ public class AttackRegisterDetailsService {
     public Integer CountOfAttacksCompletedMethod(LocalDate actualDate, LocalDate beforeDate, int userTAGId)
     {
         return attackRegisterDetailsRepository.CountOfAttacksCompleted(actualDate, beforeDate, userTAGId);
+    }
+
+    public Integer RegisterNewAttackDetailsMethod( int attackRegisterId, String place, String motive, 
+                    String explanationResume, int intensity, String emotions, String physicalSensations, 
+                    String thoughts, String typeOfThought, int attackMethodsId, String reportURL)
+    {
+        return attackRegisterDetailsRepository.RegisterNewAtttackDetails(attackRegisterId, place, motive, explanationResume, intensity, emotions, physicalSensations, thoughts, typeOfThought, attackMethodsId, reportURL);
     }
 }
