@@ -24,7 +24,7 @@ public class RegisterTherapistApiController {
     @Autowired
     DirectionsService directionService; // Nuevo
 
-    @PostMapping("/userTherapist/register")
+    @PostMapping("userTherapist/register")
     public ResponseEntity<String> registerNewTherapistUser(@RequestParam("username") String username,
                                                             @RequestParam("password") String password,
                                                             @RequestParam("email") String email,
