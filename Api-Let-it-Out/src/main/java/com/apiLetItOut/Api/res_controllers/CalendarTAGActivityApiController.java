@@ -179,7 +179,7 @@ public class CalendarTAGActivityApiController {
                 recognizeWordsInDirection(userTAGId, direction);
                 recognizeWordsInStartHour(userTAGId, startHourStr);
                 
-                return ResponseEntity.status(HttpStatus.OK).body(""+result);
+                return ResponseEntity.status(HttpStatus.OK).body(""+activityProbability); // aqui hacer return de la probabilidad de la actividad
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -534,6 +534,7 @@ public class CalendarTAGActivityApiController {
                     for (Object[] activity : listAllActivitiesFound) {
                         Date activityDate = (Date) activity[4];
                         if (isSameDay(activityDate, currentDate) || activityDate.after(currentDate)) {
+                            System.out.println("date activity: "+activityDate+"   :    current date:  "+currentDate);
                             activitiesInCurrentMonth.add(activity);
                         }
                     }

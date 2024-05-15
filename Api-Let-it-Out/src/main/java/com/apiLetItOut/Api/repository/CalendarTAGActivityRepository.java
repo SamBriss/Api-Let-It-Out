@@ -20,7 +20,7 @@ public interface CalendarTAGActivityRepository extends CrudRepository<CalendarTA
     @Query(value= "Select u.startHour, u.endHour FROM calendar_tag_activity u WHERE u.userTAGId=:userTAGId AND u.date=:date", nativeQuery = true)
     java.util.List<Object[]> findRegistersOfUserTagActivities(@Param("userTAGId") int userTAGId, @Param("date") Date date);
 
-    @Query(value= "Select u.activityId, u.label, u.location, u.direction, u.date, u.startHour, u.endHour, u.dateRegister, u.comments, u.reminders FROM calendar_tag_activity u WHERE u.userTAGId=:userTAGId", nativeQuery = true)
+    @Query(value= "Select u.activityId, u.label, u.location, u.direction, u.date, u.startHour, u.endHour, u.dateRegister, u.comments, u.reminders FROM calendar_tag_activity u WHERE u.userTAGId=:userTAGId ORDER BY(u.date)", nativeQuery = true)
     java.util.List<Object[]> findAllActivitiesFromCalendarTAG(@Param("userTAGId") int userTAGId);
 
 
