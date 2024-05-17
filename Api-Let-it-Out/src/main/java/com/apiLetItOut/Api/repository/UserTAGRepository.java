@@ -59,7 +59,7 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
                                     @Param("topLimitAge") int topLimitAge,
                                     @Param("levelTAGId") int levelTAGId);
 
-    @Query(value = "Select username from usersTAG", nativeQuery = true)
+    @Query(value = "Select u.username from users u join usersTAG ut ON u.userId=ut.userId", nativeQuery = true)
     List<String> SearchAllUsersTAG();
     
     @Query(value = "Select t.userTAGId from users u INNER JOIN userstag t ON u.userId=t.userId WHERE u.username=:username", nativeQuery = true)

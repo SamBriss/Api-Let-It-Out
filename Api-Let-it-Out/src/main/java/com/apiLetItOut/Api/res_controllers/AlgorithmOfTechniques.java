@@ -1,5 +1,6 @@
 package com.apiLetItOut.Api.res_controllers;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apiLetItOut.Api.services.ListenedAudiosFeedbackService;
 import com.apiLetItOut.Api.services.PreferencesTAGUserService;
 import com.apiLetItOut.Api.services.RelaxationTechniquesService;
+import com.apiLetItOut.Api.services.TechniquesDownloadService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
@@ -41,9 +44,41 @@ public class AlgorithmOfTechniques {
 
     @Autowired
     PreferencesTAGUserService preferencesTAGUserService;
+    @Autowired
+    TechniquesDownloadService techniquesDownloadService;
 
     @PostMapping("searchUrls")
     public ResponseEntity<Map<String, Object>> getTechniques(@RequestParam("user") String user) 
+    {
+        Map<String, Object> responseData = new HashMap<>();
+        responseData = getUrlsOfTechniques(user);
+        return ResponseEntity.ok(responseData);
+    }
+
+    @PostMapping("updateDownload")
+    public ResponseEntity<String> downloadComplete(@RequestParam("user") String user) 
+    {
+        int userId = getUserID(user);
+        Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
+        LocalDate today = LocalDate.now();
+        if(userTAGId !=null)
+        {
+            int verification = techniquesDownloadService.CheckCompleteMethod(userTAGId, today);
+            if(verification>0)
+            {
+                return ResponseEntity.status(HttpStatus.CREATED).body("success");
+            }else{
+                System.out.println("no se pudo cambiar el dominio");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el estado de descarga");
+            }
+        }else{
+            System.out.println("no se pudo encontrar el usuario");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo encontrar el usuario");
+        }
+        
+    }
+
+    public Map<String, Object> getUrlsOfTechniques(String user)
     {
         int userId = getUserID(user);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
@@ -328,8 +363,42 @@ public class AlgorithmOfTechniques {
             responseData.put("url" + i, url);
             i++;
         }
-        return ResponseEntity.ok(responseData);
+        return responseData;
     }
+
+    public boolean insertDownload(List<String> urls, String user, LocalDate date, int completed)
+    {
+    
+        List<Integer> audiosIds = new ArrayList<>();
+        for (String url : urls) {
+            Integer audioId = relaxationTechniquesService.SearchAudioIdByUrl(url);
+            if(audioId!=null)
+            {
+                audiosIds.add(audioId);
+            }
+        }
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
+        if(userTAGId==null)
+        {
+            userTAGId = userTAGService.GetUserTAGIdByEmailMethod(user);
+        }
+        if(userTAGId!=null)
+        {
+            int countD =  techniquesDownloadService.deleteDownloads(userTAGId);
+            for (Integer audioId : audiosIds) {
+                int count = techniquesDownloadService.InsertDownloads(date, userTAGId, audioId, completed);
+                if(count<0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
 
     @PostMapping("searchUrls/PracticeButtons")
     public ResponseEntity<Map<String, Object>> getTechniquesPracticeButton(@RequestParam("user") String user) 
@@ -583,7 +652,6 @@ public class AlgorithmOfTechniques {
         return finalScore;
     }
     
-
     private Map<Integer, Double> sortByValue(Map<Integer, Double> scoresAndId) {
         List<Map.Entry<Integer, Double>> list = new ArrayList<>(scoresAndId.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {

@@ -52,7 +52,7 @@ public interface RelaxationTechniquesRepository extends CrudRepository<Relaxatio
     @Query(value = "Select url from relaxationtechniqueaudios where audioId = :audioId", nativeQuery = true)
     String SearchUrlOfAudioId(@Param("audioId") int audioId);
 
-    @Query(value = "Select audioId from relaxationtechniqueaudios where url = :url", nativeQuery = true)
+    @Query(value = "Select audioId from relaxationtechniqueaudios where url = :url LIMIT 1", nativeQuery = true)
     Integer SearchAudioIdByUrl(@Param("url") String url);
 
     @Query(value = "Select duration from relaxationtechniqueaudios where audioId = :audioId", nativeQuery = true)

@@ -2,6 +2,10 @@ package com.apiLetItOut.Api.config_cron;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -40,13 +44,24 @@ public class cronConfig {
 
     }
 
-    /*@Scheduled(cron = "0 0 4 * * *") // Se ejecuta todos los días a las 4 am
+    @Scheduled(cron = "0 37 6 * * *") // Se ejecuta todos los días a las 4 am
     public void executeAlgorithmOfTechniques() {
         List<String> usernames = userTAGService.SearchAllUsernameOfUsersTAGMethod();
+        Map<String, Object> responseData = new HashMap<>();
+        List<String> urls = new ArrayList<>();
+        LocalDate date = LocalDate.now();
         for (String user : usernames) {
-            algorithmOfTechniquesController.getTechniques(user);
+            responseData = algorithmOfTechniquesController.getUrlsOfTechniques(user);
+            for(Map.Entry<String, Object> entry: responseData.entrySet())
+            {
+                String url = entry.getValue().toString();
+                System.out.println(url);
+                urls.add(url);
+            }
+            algorithmOfTechniquesController.insertDownload(urls, user, date, 0);
+            urls.clear();
         }
-    }*/
+    }
     
     @Scheduled(cron = "0 0 22 * * *")
     public void scheduledTaskSunday22AlgorithmTriggerPatterns()

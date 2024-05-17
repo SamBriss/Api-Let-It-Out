@@ -2,12 +2,15 @@ package com.apiLetItOut.Api.res_controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiLetItOut.Api.services.PsychiatricDomainService;
 import com.apiLetItOut.Api.services.RelationUsersService;
 import com.apiLetItOut.Api.services.UserService;
 import com.apiLetItOut.Api.services.UserTAGService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,9 @@ public class UpdateTAGProfile {
 
     @Autowired
     RelationUsersService relationUserService;
+
+    @Autowired
+    PsychiatricDomainService psychiatricDomainService;
 
     @PostMapping("/userProfile/getDataGeneralUsername")
     public ResponseEntity<Map<String, Object>> getUserProfileGeneralByUsername(@RequestParam("username") String username) {
@@ -341,8 +347,11 @@ public class UpdateTAGProfile {
         }
     }
 
-    /*@PostMapping("/userProfile/updateDomains")
-    public String updateDomains(@RequestParam("user") String user) {
+    @PostMapping("/userProfile/updateDomains")
+    public ResponseEntity<String> updateDomains(@RequestParam("user") String user, 
+                                            @RequestParam("domainId") String domainIdStr,
+                                            @RequestParam("score") String scoreStr,
+                                            @RequestParam("i") String iStr) {
         Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
         if(userTAGId==null)
         {
@@ -350,8 +359,32 @@ public class UpdateTAGProfile {
         }
         if(userTAGId!=null)
         {
-
+            LocalDate executionDateLD = LocalDate.now();
+            String executionDate = String.valueOf(executionDateLD);
+            Integer i, score, domainId;
+            try{
+                i = Integer.parseInt(iStr);
+                score = Integer.parseInt(scoreStr);
+                domainId = Integer.parseInt(domainIdStr);
+            }catch(NumberFormatException ex)
+            {
+                System.out.println("Los campos de numeros deben ser números enteros válidos");
+                return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
+            }
+            List<Integer> domainsIds = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
+            int domainIdToReplace = domainsIds.get(i);
+            int confirmation = psychiatricDomainService.UpdateDomainsNewMethod(userTAGId, domainId, score, executionDate, domainIdToReplace);
+            if(confirmation>0){
+                return ResponseEntity.status(HttpStatus.CREATED).body("success");
+            }else{
+                System.out.println("no se pudo cambiar el dominio");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el dominio");
+            }
         }
-    }*/
+        else{
+            System.out.println("no se pudo cambiar usuario");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar usuario");
+        }
+    }
     
 }

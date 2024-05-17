@@ -28,12 +28,37 @@ public interface PsychiatricDomainRepository extends CrudRepository <Psychiatric
         @Transactional
         @Modifying
         @Query(value = "UPDATE psychiatricDomainsQuestionaire " + 
-                        "SET score = :score, executionDate = :executionDate, " + "domainId = :domainId" +
+                        "SET score = :score, executionDate = :executionDate, " + "domainId = :domainId " +
                         "WHERE userTAGId = :userTAGId ", nativeQuery = true)
         int UpdateDomains(@Param("userTAGId") int userTAGId,
                                 @Param("domainId") int domainId,
                                 @Param("score") int score,
                                 @Param("executionDate") Date executionDate);
+
+        @Transactional
+        @Modifying
+        @Query(value = "INSERT INTO psychiatricDomainsQuestionaire " + 
+                "(userTAGId, domainId, score, executionDate) " +
+                "VALUES (:userTAGId, :domainId, :score, :executionDate)", nativeQuery = true)
+        Integer RegisterNewDomain(@Param("userTAGId") int userTAGId,
+                                @Param("domainId") int domainId,
+                                @Param("score") int score,
+                                @Param("executionDate") String executionDate);
+        @Transactional
+        @Modifying
+        @Query(value = "delete from psychiatricDomainsQuestionaire where userTAGId = :userTAGId AND domainId=:domainId", nativeQuery = true)
+        Integer DeleteRegistersDomains(@Param("userTAGId") int userTAGId,
+        @Param("domainId") int domainId);
+        @Transactional
+        @Modifying
+        @Query(value = "UPDATE psychiatricDomainsQuestionaire " + 
+                        "SET score = :score, executionDate = :executionDate, " + "domainId = :domainId " +
+                        "WHERE userTAGId = :userTAGId AND domainId = :domainIdLast", nativeQuery = true)
+        int UpdateDomainsNew(@Param("userTAGId") int userTAGId,
+                                @Param("domainId") int domainId,
+                                @Param("score") int score,
+                                @Param("executionDate") String executionDate,
+                                @Param("domainIdLast") int domainIdLast);
 
         @Query (value = "Select domainId from psychiatricDomainsQuestionaire where userTAGId = :userTAGId ORDER BY score DESC", nativeQuery = true)
         List<Integer> SearchDomainsOfUserTAG(@Param("userTAGId") int userTAGId);

@@ -20,6 +20,19 @@ public class PsychiatricDomainService {
     {
         return psychiatricDomainRepository.UpdateDomains(userTAGId, domainId, score, executionDate);
     }
+
+    public Integer UpdateDomainsNewMethod(int userTAGId, int domainId, int score, String executionDate, int domainIdLast)
+    {
+        return psychiatricDomainRepository.UpdateDomainsNew(userTAGId, domainId, score, executionDate, domainIdLast);
+    }
+    public Integer DeleteRegistersDomains(int userTAGId, int domainId)
+    {
+        return psychiatricDomainRepository.DeleteRegistersDomains(userTAGId, domainId);
+    }
+
+    public Integer RegisterNewDomain(int userTAGId,int domainId, int score, String executionDate){
+        return psychiatricDomainRepository.RegisterNewDomain(userTAGId, domainId, score, executionDate);
+    }
     public List<Integer> SearchDomainsOfUserTAGMethod(int userTAGId)
     {
         return psychiatricDomainRepository.SearchDomainsOfUserTAG(userTAGId);
