@@ -164,7 +164,7 @@ public class UpdateTAGProfile {
         }
         char genderChar = gender.charAt(0);
         gender = String.valueOf(genderChar);
-        String telCompleto = "+521" + tel;
+        String telCompleto = "+52" + tel;
         int umbral = 210 - age;
         int userId = userService.SearchUserTAGMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);

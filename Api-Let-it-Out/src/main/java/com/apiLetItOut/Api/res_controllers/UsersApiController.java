@@ -139,7 +139,9 @@ public class UsersApiController {
     public ResponseEntity<String> UpdatePassword(@RequestParam("tel") String tel,
             @RequestParam("password") String password) {
 
-        int result = userService.UpdatePasswordMethod(tel, password);
+        String encrypt = password.trim();
+
+        int result = userService.UpdatePasswordMethod(tel, encrypt);
 
         if (result > 0) {
             return ResponseEntity.status(HttpStatus.OK).body("update");

@@ -24,7 +24,7 @@ public class RegisterTherapistApiController {
     @Autowired
     DirectionsService directionService; // Nuevo
 
-    @PostMapping("userTherapist/register")
+    @PostMapping("/userTherapist/register")
     public ResponseEntity<String> registerNewTherapistUser(@RequestParam("username") String username,
                                                             @RequestParam("password") String password,
                                                             @RequestParam("email") String email,
@@ -45,8 +45,8 @@ public class RegisterTherapistApiController {
         // Validación de campos
         if (licence.isEmpty() || contractStr.isEmpty() || vinculationCodeStr.isEmpty() ||
             street.isEmpty() || colony.isEmpty() || username.isEmpty() || password.isEmpty() 
-            || email.isEmpty() || name.isEmpty() || lastNameP.isEmpty() || lastNameM.isEmpty() 
-            || tel.isEmpty() || ageStr.isEmpty() || gender.isEmpty() || tokenStr.isEmpty()) {
+            || email.isEmpty() || name.isEmpty() || lastNameP.isEmpty() || tel.isEmpty() 
+            || ageStr.isEmpty() || gender.isEmpty() || tokenStr.isEmpty()) {
             return new ResponseEntity<>("Please Complete all Fields", HttpStatus.BAD_REQUEST);
         }
         // Convierte los string a los valores necesarios para poder usar el servicio para hacer registo a la bd
