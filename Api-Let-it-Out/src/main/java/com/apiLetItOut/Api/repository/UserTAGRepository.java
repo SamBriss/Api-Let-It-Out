@@ -97,5 +97,11 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     @Modifying
     @Query(value = "Update userstag set pulsera =1 WHERE userId=:userId", nativeQuery = true)
     int UpdateExistencePulseraTAG(@Param("userId") int userId);
+
+    // contactos de emergencia new
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO emergencycontacts(userTAGId, nameContact, numberContact) VALUES (:userTAGId, :nameContact, :numberContact)", nativeQuery = true)
+    Integer InsertEmergencyContacts(@Param("userTAGId") int userTAGId, @Param("nameContact") String nameContact, @Param("numberContact") String numberContact);
                                         
 }

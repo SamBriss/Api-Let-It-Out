@@ -151,4 +151,22 @@ public class RegisterTAGController {
             return ResponseEntity.ok().body("No hay TAG");
         }
     }
+    
+    @PostMapping("/userTAG/emergencyContacts")
+    public ResponseEntity<String> methodEmergencyContacts(@RequestParam("username") String username, @RequestParam("name") String name, @RequestParam("tel") String tel)
+    {
+        Integer userId = userService.SearchUserTAGMethod(username);
+        if(userId != null)
+        {
+            Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
+            if(userTAGId != null)
+            {
+                Integer res = userTAGService.InsertEmergencyContacts(userTAGId, name, tel);
+                if(res >= 1){
+                    return ResponseEntity.ok().body("success");
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("unsuccessful");
+    }
 }
