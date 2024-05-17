@@ -18,6 +18,10 @@ public class UserService {
     {
         return userRepository.LogInUserByUsername(username, password);
     }
+    public String SelectPasswordMethod(String username)
+    {
+        return userRepository.SelectPassword(username);
+    }
     public int SearchUserByEmailMethod(String email, String password)
     {
         return userRepository.LogInUserByEmail(email, password);

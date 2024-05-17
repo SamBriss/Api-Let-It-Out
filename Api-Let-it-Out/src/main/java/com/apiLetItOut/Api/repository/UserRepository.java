@@ -30,9 +30,12 @@ public interface UserRepository extends CrudRepository<Users, Integer>{
     @Query(value= "Select userId FROM Users WHERE username=:username AND email=:email", nativeQuery = true)
     Integer SearchUsers (@Param("username") String username,
                         @Param("email") String email);
-    @Query(value= "SELECT userId FROM users WHERE username=:username AND password=:password", nativeQuery = true)
+    @Query(value= "SELECT userId FROM users WHERE username=:username AND password LIKE CONCAT('%', :password, '%') LIMIT 1", nativeQuery = true)
     Integer LogInUserByUsername (@Param("username") String username,
                         @Param("password") String password);
+
+    @Query(value= "SELECT password FROM users WHERE username=:username LIMIT 1", nativeQuery = true)
+    String SelectPassword (@Param("username") String username);
 
     @Query(value= "Select userId FROM users WHERE email=:email AND password=:password", nativeQuery = true)
     Integer LogInUserByEmail ( @Param("email") String email,

@@ -27,7 +27,10 @@ public class LogInApiController {
     @PostMapping("users/login/ByUsername")
     public ResponseEntity authenticateUserByUsername( @RequestParam(value = "username") String username,
                                                     @RequestParam("password") String password)
+
     {
+        password =  password.trim();
+        System.out.println(password);
        int userId = userService.SearchUserByUsernameMethod(username, password);
 
         if (userId > 0 ) 
@@ -56,6 +59,8 @@ public class LogInApiController {
     public ResponseEntity authenticateUserByEmail(@RequestParam("username") String email,
                                             @RequestParam("password") String password)
     {
+        password =  password.trim();
+        System.out.println(password);
        int userId = userService.SearchUserByEmailMethod(email, password);
 
         if (userId > 0 ) 
