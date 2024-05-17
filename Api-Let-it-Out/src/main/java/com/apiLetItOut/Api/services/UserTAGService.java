@@ -125,4 +125,9 @@ public class UserTAGService {
     {
         return userTAGRepository.UpdateExistencePulseraTAG(userId);
     }
+    // contactos emergencia
+    public Integer InsertEmergencyContacts(int userTAGId, String nameContact, String numberContact)
+    {
+        return userTAGRepository.InsertEmergencyContacts(userTAGId, nameContact, numberContact);
+    }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("api")
 public class UpdateTAGProfile {
@@ -40,6 +39,7 @@ public class UpdateTAGProfile {
         String lastNameM = userService.SearchUserLMMethod(userId);
         Integer age = userService.SearchUserAgeMethod(userId);
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
+        String tel = userService.SearchUserTelMethod(userId);
         String levelTAGStr="Leve";
         if(levelTAG!=null)
         {
@@ -63,6 +63,7 @@ public class UpdateTAGProfile {
         responseData.put("age", age);
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("email", email);
+        responseData.put("tel", tel);
         
         // Retornar los datos como respuesta
         return ResponseEntity.ok(responseData);
@@ -164,7 +165,7 @@ public class UpdateTAGProfile {
         }
         char genderChar = gender.charAt(0);
         gender = String.valueOf(genderChar);
-        String telCompleto = "+521" + tel;
+        String telCompleto = "+52" + tel;
         int umbral = 210 - age;
         int userId = userService.SearchUserTAGMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
@@ -186,7 +187,6 @@ public class UpdateTAGProfile {
         }
     }
 
-    
     @PostMapping("/userProfile/getDataGeneralEmail")
     public ResponseEntity<Map<String, Object>> getUserProfileGeneralByEmail(@RequestParam("email") String email) {
         Map<String, Object> responseData = new HashMap<>();
@@ -341,6 +341,17 @@ public class UpdateTAGProfile {
         }
     }
 
+    /*@PostMapping("/userProfile/updateDomains")
+    public String updateDomains(@RequestParam("user") String user) {
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
+        if(userTAGId==null)
+        {
+            userTAGId = userTAGService.GetUserTAGIdByEmailMethod(user);
+        }
+        if(userTAGId!=null)
+        {
 
+        }
+    }*/
     
 }

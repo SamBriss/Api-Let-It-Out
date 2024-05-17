@@ -42,7 +42,8 @@ public class UpdateTherapistProfile {
         String street = directionService.SearchStreetMethod(directionId);
         String colony = directionService.SearchColonyMethod(directionId);
         int numExt = directionService.SearchNumExtMethod(directionId);
-
+        String tel = userService.SearchUserTelMethod(userId);
+        String licence  = userTherapistService.SearchLicenceTherapistMethod(userTherapistId);
         String gendercom="Femenino";
         if(gender.equals("M"))
         {
@@ -62,6 +63,8 @@ public class UpdateTherapistProfile {
         responseData.put("street", street);
         responseData.put("colony", colony);
         responseData.put("numExt", numExt);
+        responseData.put("tel", tel);
+        responseData.put("licence", licence);
         // Retornar los datos como respuesta
         return ResponseEntity.ok(responseData);
     }
