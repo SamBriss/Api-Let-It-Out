@@ -347,7 +347,7 @@ public class UpdateTAGProfile {
         }
     }
 
-    @PostMapping("/userProfile/updateDomains")
+    /*@PostMapping("/userProfile/updateDomains")
     public ResponseEntity<String> updateDomains(@RequestParam("user") String user, 
                                             @RequestParam("domainId") String domainIdStr,
                                             @RequestParam("score") String scoreStr,
@@ -372,9 +372,61 @@ public class UpdateTAGProfile {
                 return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
             }
             List<Integer> domainsIds = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
+            System.out.println(i);
             int domainIdToReplace = domainsIds.get(i);
             int confirmation = psychiatricDomainService.UpdateDomainsNewMethod(userTAGId, domainId, score, executionDate, domainIdToReplace);
             if(confirmation>0){
+                return ResponseEntity.status(HttpStatus.CREATED).body("success");
+            }else{
+                System.out.println("no se pudo cambiar el dominio");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el dominio");
+            }
+        }
+        else{
+            System.out.println("no se pudo cambiar usuario");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar usuario");
+        }
+    }*/
+
+
+    @PostMapping("/userProfile/updateDomains")
+    public ResponseEntity<String> updateDomains(@RequestParam("user") String user, 
+                                            @RequestParam("domainId1") String domainId1Str,
+                                            @RequestParam("score1") String score1Str,
+                                            @RequestParam("domainId2") String domainId2Str,
+                                            @RequestParam("score2") String score2Str,
+                                            @RequestParam("domainId3") String domainId3Str,
+                                            @RequestParam("score3") String score3Str) {
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
+        if(userTAGId==null)
+        {
+            userTAGId = userTAGService.GetUserTAGIdByEmailMethod(user);
+        }
+        if(userTAGId!=null)
+        {
+            LocalDate executionDateLD = LocalDate.now();
+            String executionDate = String.valueOf(executionDateLD);
+            Integer score1, domainId1, score2, domainId2, score3, domainId3;
+            try{
+                score1 = Integer.parseInt(score1Str);
+                domainId1 = Integer.parseInt(domainId1Str);
+                score2 = Integer.parseInt(score2Str);
+                domainId2 = Integer.parseInt(domainId2Str);
+                score3 = Integer.parseInt(score3Str);
+                domainId3 = Integer.parseInt(domainId3Str);
+            }catch(NumberFormatException ex)
+            {
+                System.out.println("Los campos de numeros deben ser números enteros válidos");
+                return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
+            }
+            List<Integer> domainsIds = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
+            int domainId1ToReplace = domainsIds.get(0);
+            int domainId2ToReplace = domainsIds.get(1);
+            int domainId3ToReplace = domainsIds.get(2);
+            int confirmation1 = psychiatricDomainService.UpdateDomainsNewMethod(userTAGId, domainId1, score1, executionDate, domainId1ToReplace);
+            int confirmation2 = psychiatricDomainService.UpdateDomainsNewMethod(userTAGId, domainId2, score2, executionDate, domainId2ToReplace);
+            int confirmation3 = psychiatricDomainService.UpdateDomainsNewMethod(userTAGId, domainId3, score3, executionDate, domainId3ToReplace);
+            if(confirmation1>0 && confirmation2>0 && confirmation3>0){
                 return ResponseEntity.status(HttpStatus.CREATED).body("success");
             }else{
                 System.out.println("no se pudo cambiar el dominio");

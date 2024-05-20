@@ -43,7 +43,7 @@ public class RegisterAttack {
     AttackRegisterDetailsService attackRegisterDetailsService;
 
     @PostMapping("registerDataAttack")
-    public ResponseEntity<String> RegisterAttack(@RequestParam("user") String user, 
+    public ResponseEntity<String> RegisterAttacks(@RequestParam("user") String user, 
                                 @RequestParam("startHour") String startHourStr, 
                                 @RequestParam("endHour") String endHourStr, 
                                 @RequestParam("type") String typeStr)

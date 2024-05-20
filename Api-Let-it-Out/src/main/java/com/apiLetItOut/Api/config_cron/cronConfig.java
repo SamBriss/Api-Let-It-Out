@@ -44,7 +44,7 @@ public class cronConfig {
 
     }
 
-    @Scheduled(cron = "0 37 6 * * *") // Se ejecuta todos los días a las 4 am
+    @Scheduled(cron = "0 0 4 * * *") // Se ejecuta todos los días a las 4 am
     public void executeAlgorithmOfTechniques() {
         List<String> usernames = userTAGService.SearchAllUsernameOfUsersTAGMethod();
         Map<String, Object> responseData = new HashMap<>();

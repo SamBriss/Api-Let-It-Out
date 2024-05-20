@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apiLetItOut.Api.models.DictionaryWords;
 import com.apiLetItOut.Api.repository.DictionaryWordsRepository;
 
 @Service
