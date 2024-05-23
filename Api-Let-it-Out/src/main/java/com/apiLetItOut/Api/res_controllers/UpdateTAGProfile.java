@@ -44,6 +44,7 @@ public class UpdateTAGProfile {
         String lastNameP = userService.SearchUserLPMethod(userId);
         String lastNameM = userService.SearchUserLMMethod(userId);
         Integer age = userService.SearchUserAgeMethod(userId);
+        String gender = userService.SearchUserGenderMethod(userId);
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
         String tel = userService.SearchUserTelMethod(userId);
         String levelTAGStr="Leve";
@@ -62,11 +63,24 @@ public class UpdateTAGProfile {
                 levelTAGStr="Severo";
             }
         }
+        if(gender.equals("F") || gender.equals("f"))
+        {
+            gender="Femenino";
+        }
+        else if(gender.equals("M") || gender.equals("m"))
+        {
+            gender="Masculino";
+        }
+        else if(gender.equals("P") || gender.equals("p"))
+        {
+            gender = "Prefiero no especificar";
+        }
         // Agregar los datos al mapa de respuesta
         responseData.put("name", name);
         responseData.put("lastNameP", lastNameP);
         responseData.put("lastNameM", lastNameM);
         responseData.put("age", age);
+        responseData.put("gender", gender);
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("email", email);
         responseData.put("tel", tel);
@@ -202,6 +216,7 @@ public class UpdateTAGProfile {
         String name = userService.SearchNameMethod(userId);
         String lastNameP = userService.SearchUserLPMethod(userId);
         String lastNameM = userService.SearchUserLMMethod(userId);
+        String gender = userService.SearchUserGenderMethod(userId);
         Integer age = userService.SearchUserAgeMethod(userId);
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
         String levelTAGStr="Leve";
@@ -220,11 +235,24 @@ public class UpdateTAGProfile {
                 levelTAGStr="Severo";
             }
         }
+        if(gender.equals("F") || gender.equals("f"))
+        {
+            gender="Femenino";
+        }
+        else if(gender.equals("M") || gender.equals("m"))
+        {
+            gender="Masculino";
+        }
+        else if(gender.equals("P") || gender.equals("p"))
+        {
+            gender = "Prefiero no especificar";
+        }
         // Agregar los datos al mapa de respuesta
         responseData.put("name", name);
         responseData.put("lastNameP", lastNameP);
         responseData.put("lastNameM", lastNameM);
         responseData.put("age", age);
+        responseData.put("gender", gender);
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("username", username);
         
@@ -346,48 +374,6 @@ public class UpdateTAGProfile {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar usuario");
         }
     }
-
-    /*@PostMapping("/userProfile/updateDomains")
-    public ResponseEntity<String> updateDomains(@RequestParam("user") String user, 
-                                            @RequestParam("domainId") String domainIdStr,
-                                            @RequestParam("score") String scoreStr,
-                                            @RequestParam("i") String iStr) {
-        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
-        if(userTAGId==null)
-        {
-            userTAGId = userTAGService.GetUserTAGIdByEmailMethod(user);
-        }
-        if(userTAGId!=null)
-        {
-            LocalDate executionDateLD = LocalDate.now();
-            String executionDate = String.valueOf(executionDateLD);
-            Integer i, score, domainId;
-            try{
-                i = Integer.parseInt(iStr);
-                score = Integer.parseInt(scoreStr);
-                domainId = Integer.parseInt(domainIdStr);
-            }catch(NumberFormatException ex)
-            {
-                System.out.println("Los campos de numeros deben ser números enteros válidos");
-                return new ResponseEntity<>("Los campos de numeros deben ser números enteros válidos", HttpStatus.BAD_REQUEST);
-            }
-            List<Integer> domainsIds = psychiatricDomainService.SearchDomainsOfUserTAGMethod(userTAGId);
-            System.out.println(i);
-            int domainIdToReplace = domainsIds.get(i);
-            int confirmation = psychiatricDomainService.UpdateDomainsNewMethod(userTAGId, domainId, score, executionDate, domainIdToReplace);
-            if(confirmation>0){
-                return ResponseEntity.status(HttpStatus.CREATED).body("success");
-            }else{
-                System.out.println("no se pudo cambiar el dominio");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el dominio");
-            }
-        }
-        else{
-            System.out.println("no se pudo cambiar usuario");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar usuario");
-        }
-    }*/
-
 
     @PostMapping("/userProfile/updateDomains")
     public ResponseEntity<String> updateDomains(@RequestParam("user") String user, 

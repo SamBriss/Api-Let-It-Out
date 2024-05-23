@@ -1,5 +1,7 @@
 package com.apiLetItOut.Api.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +12,14 @@ public class InformativeArticlesService {
     @Autowired 
     InformativeArticleRepository informativeArticleRepository;
 
-    public int SearchIdOfDocumentMethod(String topic)
+    public List<Integer> SearchIdOfDocumentsMethod(String topic)
     {
-        String topicFormated = topic.toLowerCase();
-        return informativeArticleRepository.SearchIdOfDocument(topicFormated);
+        return informativeArticleRepository.SearchIdOfDocuments(topic);
+    }
+
+    public Integer SearchIdOfDocumentMethod(String topic)
+    {
+        return informativeArticleRepository.SearchIdOfDocument(topic);
     }
 
     public String SearchNameOfDocumentMethod(int articleId)
@@ -39,5 +45,15 @@ public class InformativeArticlesService {
     public int SearchTypeOfDocumentMethod(int articleId)
     {
         return informativeArticleRepository.SearchTypeOfDocument(articleId);
+    }
+
+    public List<String> SearchAllNamesOfInformationMethod()
+    {
+        return informativeArticleRepository.SearchAllNamesOfInformation();
+    }
+
+    public List<String> SearchNamesOfClassficationMethod(String topicClassification)
+    {
+        return informativeArticleRepository.SearchNamesOfClassfication(topicClassification);
     }
 }

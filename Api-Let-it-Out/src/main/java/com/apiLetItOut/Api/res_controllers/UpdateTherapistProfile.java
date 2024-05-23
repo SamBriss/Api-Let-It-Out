@@ -183,12 +183,11 @@ public class UpdateTherapistProfile {
         String lastNameP = userService.SearchUserLPMethod(userId);
         String lastNameM = userService.SearchUserLMMethod(userId);
         Integer age = userService.SearchUserAgeMethod(userId);
-        String gender = userService.SearchUserGenderMethod(userId);
         int directionId = userTherapistService.SearchDirectionIdTherapistMethod(userTherapistId);
         String street = directionService.SearchStreetMethod(directionId);
         String colony = directionService.SearchColonyMethod(directionId);
         int numExt = directionService.SearchNumExtMethod(directionId);
-
+        String gender = userService.SearchUserGenderMethod(userId);
         String gendercom="Femenino";
         if(gender.equals("M"))
         {

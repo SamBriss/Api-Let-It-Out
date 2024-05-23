@@ -54,10 +54,10 @@ public class InformationSectionApiController {
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
         //Datos generales
         int age = userService.SearchUserAgeMethod(userId);
-        String rangeAge="niñx";
+        String rangeAge="niños";
         if(age < 21 && age>13)
         {
-            rangeAge = "adolescente";
+            rangeAge = "adolescentes";
         } else if(age>20 && age<36)
         {
             rangeAge="adulto joven";
@@ -66,20 +66,20 @@ public class InformationSectionApiController {
             rangeAge = "adulto";
         } else if(age>59)
         {
-            rangeAge="tercera edad";
+            rangeAge="adultos mayores";
         }
         String gender = userService.SearchUserGenderMethod(userId);
         if(gender.equals("F") || gender.equals("f"))
         {
-            gender = "Mujer";
+            gender = "mujeres";
         }
         if(gender.equals("M") || gender.equals("m"))
         {
-            gender = "Hombre";
+            gender = "hombres";
         }
         if(gender.equals("P") || gender.equals("p"))
         {
-            gender = "Queer";
+            gender = "Todos";
         }
         int levelTAGId = userTAGService.SearchLevelTAGMethod(userTAGId);
         String levelTAG = "Leve";
@@ -117,20 +117,22 @@ public class InformationSectionApiController {
             System.out.println("el topid es " + topic);
             try
             {
-                Integer articleId = informativeArticlesService.SearchIdOfDocumentMethod(topic);
-                if (articleId != null) {
-                    int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
-                    String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
-                    if(!names.contains(name))
-                    {
-                        names.add(name);
-                        String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
-                        classifications.add(classification);
-                        int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
-                        types.add(type);
-                    }else
-                    {
-                        continue;
+                List<Integer> articlesId = informativeArticlesService.SearchIdOfDocumentsMethod(topic);
+                if (articlesId != null) {
+                    for(Integer articleId: articlesId){
+                        int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
+                        String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
+                        if(!names.contains(name))
+                        {
+                            names.add(name);
+                            String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
+                            classifications.add(classification);
+                            int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
+                            types.add(type);
+                        }else
+                        {
+                            continue;
+                        }
                     }
                 }
             }catch (NullPointerException ex)
@@ -176,15 +178,17 @@ public class InformationSectionApiController {
             System.out.println("el domain es " + domain);
             try
             {
-                Integer articleId = informativeArticlesService.SearchIdOfDocumentMethod(domain);
-                if (articleId != null) {
-                    int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
-                    String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
-                    names.add(name);
-                    String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
-                    classifications.add(classification);
-                    int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
-                    types.add(type);
+                List<Integer> articlesId = informativeArticlesService.SearchIdOfDocumentsMethod(domain);
+                for(Integer articleId: articlesId){
+                    if (articleId != null) {
+                        int id = articleId.intValue(); // Solo llamamos a intValue() si articleId no es null
+                        String name = informativeArticlesService.SearchNameOfDocumentMethod(id);
+                        names.add(name);
+                        String classification = informativeArticlesService.SearchClassificationOfDocumentMethod(id);
+                        classifications.add(classification);
+                        int type = informativeArticlesService.SearchTypeOfDocumentMethod(id);
+                        types.add(type);
+                    }
                 }
             }catch (NullPointerException ex)
             {
@@ -209,26 +213,43 @@ public class InformationSectionApiController {
     public List<String> fillListWithDistortions()
     {
         List<String> cognitiveDistortions = new ArrayList<>();
-        //cognitiveDistortions.add("Leer la mente");
-        cognitiveDistortions.add("Adivinar el futuro");//
-        cognitiveDistortions.add("Personalizacion");
-        /*cognitiveDistortions.add("Maximizar/minimizar");
+        cognitiveDistortions.add("Leer la mente");
+        cognitiveDistortions.add("Adivinar el futuro");
+        cognitiveDistortions.add("Catastrofización");
+        cognitiveDistortions.add("Maximizar");
+        cognitiveDistortions.add("Minimizar");
         cognitiveDistortions.add("Etiquetar");
-        cognitiveDistortions.add("Descalificar");*/
-        cognitiveDistortions.add("Sobregeneralizacion negativa");//
-        /*cognitiveDistortions.add("“debo” o “tengo”");
+        cognitiveDistortions.add("Descalificar");
+        cognitiveDistortions.add("Filtro negativo");
+        cognitiveDistortions.add("Sobregeneralizacion negativa");
+        cognitiveDistortions.add("Pensamiento del todo o nada");
+        cognitiveDistortions.add("Orientación hacia el remordimiento");
+        cognitiveDistortions.add("“Debo” o “Tengo”");
         cognitiveDistortions.add("Personalización");
         cognitiveDistortions.add("Comparación falsa");
-        cognitiveDistortions.add("“y que sí...”");
-        cognitiveDistortions.add("Razonamiento emocional");*/
+        cognitiveDistortions.add("“Y que sí...”");
+        cognitiveDistortions.add("Razonamiento emocional");
         return cognitiveDistortions;
     }
 
     public List<String> fillListOfTopics(String levelTAG, String age, String gender, List<String> domains, List<String> distortionRecognized, List<String> distortions)
     {
         List<String> topics = new ArrayList<>();
-        //topics.add(age);
-        //topics.add(gender);
+        topics.add(age);
+        if(gender.equals("Todos"))
+        {
+            topics.add("Mujeres");
+            topics.add("LGBTQ+");
+        }
+        if(gender.equals("Mujeres"))
+        {
+            topics.add("Mujeres");
+        }
+        List<String> domainsGeneral = informativeArticlesService.SearchNamesOfClassficationMethod("Distorsiones Cognitivas. Información general");
+        for(String tag: domainsGeneral)
+        {
+            topics.add(tag);
+        }
         //distortion
         if(distortionRecognized!=null)
         {
@@ -241,26 +262,61 @@ public class InformationSectionApiController {
         for (String domain : domains) {
             topics.add(domain);
         }
-        /*//tag
-        topics.add("TrastornoDeAnsiedadGeneralizada_PodcastEstresAcademico");
-        topics.add("TrastornoDeAnsiedadGeneralizada_PodcastTrastornoAnsiedadGeneralizada");
-        //sintoms
-        topics.add("Sintomas_PodcastDesencadenantesAnsiedad");
-        topics.add("TrastornoDeAnsiedadGeneralizada_PodcastDeshacerAnsiedad");*/
-        //nivel tag
-        //topics.add(levelTAG);
-        //tecnicas
-        /*topics.add("TecnicasDeRelajacion_ProgramaPodcastRelajacionGuiada");
-        topics.add("EnDondeAfectaLaAnsiedad");
-        topics.add("AnsiedadSocial");
-        topics.add("TrastornoObsesivoCompulsivo");
-        topics.add("TodoSobreLaAnsiedad");*/
+        //tag
+        List<String> tagInformation = informativeArticlesService.SearchNamesOfClassficationMethod("Trastorno de Ansiedad Generalizada");
+        for(String tag: tagInformation)
+        {
+            topics.add(tag);
+        }
+        //tag
+        List<String> sintomas = informativeArticlesService.SearchNamesOfClassficationMethod("Sintomas de la ansiedad");
+        for(String tag: sintomas)
+        {
+            topics.add(tag);
+        }
+        List<String> levels = informativeArticlesService.SearchNamesOfClassficationMethod("Niveles de ansiedad");
+        for(String tag: levels)
+        {
+            topics.add(tag);
+        }
+        List<String> techniques = informativeArticlesService.SearchNamesOfClassficationMethod("Técnicas de relajación");
+        for(String tag: techniques)
+        {
+            topics.add(tag);
+        }
+        List<String> fobiaSocial = informativeArticlesService.SearchNamesOfClassficationMethod("Fobia Social");
+        for(String tag: fobiaSocial)
+        {
+            topics.add(tag);
+        }
+        List<String> toc = informativeArticlesService.SearchNamesOfClassficationMethod("Trastorno obsesivo-compulsivo");
+        for(String tag: toc)
+        {
+            topics.add(tag);
+        }
+        List<String> todo = informativeArticlesService.SearchNamesOfClassficationMethod("Todo sobre la ansiedad");
+        for(String tag: todo)
+        {
+            topics.add(tag);
+        }
         for (String distortion : distortions) {
             topics.add(distortion);
         }
-        /*topics.add("TastornoDePanico");
-        topics.add("Agorafobia");
-        topics.add("Fobias");*/
+        List<String> panico = informativeArticlesService.SearchNamesOfClassficationMethod("Trastorno de Pánico");
+        for(String tag: panico)
+        {
+            topics.add(tag);
+        }
+        List<String> agorafobia = informativeArticlesService.SearchNamesOfClassficationMethod("Agorafobia");
+        for(String tag: agorafobia)
+        {
+            topics.add(tag);
+        }
+        List<String> fobias = informativeArticlesService.SearchNamesOfClassficationMethod("Fobias");
+        for(String tag: fobias)
+        {
+            topics.add(tag);
+        }
         return topics;
     }
 
