@@ -50,30 +50,93 @@ public class AlgorithmOfTechniques {
     @PostMapping("searchUrls")
     public ResponseEntity<Map<String, Object>> getTechniques(@RequestParam("user") String user) 
     {
+        int userId = getUserID(user);
+        Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
         Map<String, Object> responseData = new HashMap<>();
-        responseData = getUrlsOfTechniques(user);
+        List<String> urls = techniquesDownloadService.SearchUrlOdAudiosToDownloadMethod(userTAGId, LocalDate.now());
+        int i=0;
+        for(String url: urls)
+        {
+            responseData.put("url"+i, url);
+            i++;
+        }
         return ResponseEntity.ok(responseData);
     }
 
     @PostMapping("updateDownload")
-    public ResponseEntity<String> downloadComplete(@RequestParam("user") String user) 
+    public ResponseEntity<String> downloadComplete(@RequestParam("user") String user,
+                                                    @RequestParam("completed") String completedStr) 
     {
         int userId = getUserID(user);
         Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
         LocalDate today = LocalDate.now();
+        Integer completed=0;
+        try{
+            completed= Integer.parseInt(completedStr);
+        }catch(NumberFormatException ex)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo convertir el valor a int");
+        }
         if(userTAGId !=null)
         {
-            int verification = techniquesDownloadService.CheckCompleteMethod(userTAGId, today);
-            if(verification>0)
-            {
-                return ResponseEntity.status(HttpStatus.CREATED).body("success");
+            List<Integer> audiosId = new ArrayList<>();
+            boolean verification =false;
+            audiosId = techniquesDownloadService.SearchAudioIdByDateMethod(userTAGId, today);
+            if(audiosId!=null){
+                for(int i=0; i<completed; i++)
+                {
+                    int audioId = audiosId.get(i);
+                    verification = techniquesDownloadService.CheckCompleteAudioId(userTAGId, today, audioId);
+                }
+                if(verification)
+                {
+                    System.out.println("success");
+                    return ResponseEntity.status(HttpStatus.OK).body("success");
+                }else{
+                    System.out.println("no se pudo cambiar el estado");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el estado de descarga");
+                }
             }else{
-                System.out.println("no se pudo cambiar el dominio");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo cambiar el estado de descarga");
+                System.out.println("no se pudo encontrar los audiosId");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error interno");
             }
         }else{
             System.out.println("no se pudo encontrar el usuario");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo encontrar el usuario");
+        }
+        
+    }
+
+
+    @PostMapping("searchUrlsDownloaded")
+    public ResponseEntity<Map<String, Object>> UrlDownloadComplete(@RequestParam("user") String user) 
+    {
+        int userId = getUserID(user);
+        Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
+        if(userTAGId !=null)
+        {
+            List<String> urlsOfAudiosDownloaded= techniquesDownloadService.SearchUrlOdAudiosDownloaded(userTAGId);
+            if(urlsOfAudiosDownloaded!=null){
+                Map<String, Object> responseData = new HashMap<>();
+                int i=0;
+                for(String url: urlsOfAudiosDownloaded)
+                {
+                    responseData.put("url"+i, url);
+                    i++;
+                }
+                if(responseData!=null && !responseData.isEmpty())
+                {
+                    return ResponseEntity.ok(responseData);
+                }else{
+                    return ResponseEntity.ok(null);
+                }
+            }
+            else{
+                return ResponseEntity.ok(null);
+            }
+        }
+        else{
+            return ResponseEntity.ok(null);
         }
         
     }
@@ -384,7 +447,7 @@ public class AlgorithmOfTechniques {
         }
         if(userTAGId!=null)
         {
-            int countD =  techniquesDownloadService.deleteDownloads(userTAGId);
+            techniquesDownloadService.deleteDownloads(userTAGId);
             for (Integer audioId : audiosIds) {
                 int count = techniquesDownloadService.InsertDownloads(date, userTAGId, audioId, completed);
                 if(count<0)
