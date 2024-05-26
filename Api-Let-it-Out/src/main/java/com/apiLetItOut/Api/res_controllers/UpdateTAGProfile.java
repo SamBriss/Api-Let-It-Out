@@ -48,6 +48,7 @@ public class UpdateTAGProfile {
         Integer levelTAG = userTAGService.SearchLevelTAGMethod(userTAGId);
         String tel = userService.SearchUserTelMethod(userId);
         String levelTAGStr="Leve";
+        int existenceRelation = relationUserService.ExistenceOfUserTAGWithTherapistMethod(userTAGId);
         if(levelTAG!=null)
         {
             if(levelTAG==2)
@@ -84,7 +85,7 @@ public class UpdateTAGProfile {
         responseData.put("levelTAG", levelTAGStr);
         responseData.put("email", email);
         responseData.put("tel", tel);
-        
+        responseData.put("relationCount", existenceRelation);
         // Retornar los datos como respuesta
         return ResponseEntity.ok(responseData);
     }

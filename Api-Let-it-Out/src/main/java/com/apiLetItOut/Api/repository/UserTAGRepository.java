@@ -23,9 +23,9 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO userstag (userId, levelTAGId, medsExistence, " +
-        "registerDate, levelTAGQuestionaireDate, umbral, levelTechiniques) " +
+        "registerDate, levelTAGQuestionaireDate, umbral, levelTechiniques, pulsera) " +
         "VALUES (:userId, :levelTAGId, :medsExistence, " + 
-        ":registerDate, :levelTAGQuestionaireDate, :umbral, :levelTechiniques)", nativeQuery = true)
+        ":registerDate, :levelTAGQuestionaireDate, :umbral, :levelTechiniques, 0)", nativeQuery = true)
     Integer RegisterNewUserTAG( @Param("userId") int userId,
                         @Param("levelTAGId") int levelTAGId,
                         @Param("medsExistence") int medsExistence,

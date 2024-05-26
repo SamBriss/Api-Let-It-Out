@@ -28,7 +28,7 @@ public class TechniquesDownloadService {
     {
         return techniquesDownloadRepository.SearchAudioIdByDate(dateDownload, userTAGId);
     }
-    public boolean CheckCompleteAudioId(int userTAGId, LocalDate dateDownload, int audioId)
+    public Integer CheckCompleteAudioId(int userTAGId, LocalDate dateDownload, int audioId)
     {
         return techniquesDownloadRepository.CheckCompleteAudioId(dateDownload, userTAGId, audioId);
     }
