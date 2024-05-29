@@ -51,19 +51,28 @@ public class RelationUsersService {
     {
         return relationUsersRepository.SearchDataOfPatients(userTherapistId);
     }
-
     public List<Object[]> SearchDataOfPatientsUsersTAGIdMethod(int userTherapistId)
     {
         return relationUsersRepository.SearchDataOfPatientsUsersTAGId(userTherapistId);
     }
-
     public List<Object[]> SearchTherapistRelatedTAG(int userTAGId, int userTherapistId)
     {
         return relationUsersRepository.SearchTherapistRelatedTAG(userTherapistId, userTAGId);
     }
-
     public List<Object[]> SearchDataOfTherapistTherapistIdMethod(int userTAGId)
     {
         return relationUsersRepository.SearchDataOfTherapistUserTherapistId(userTAGId);
+    }
+    public List<Object[]> SearchPatientsDataForGraphicsMethod(int userTherapistId)
+    {
+        return relationUsersRepository.SearchPatientsDataForGraphics(userTherapistId);
+    }
+    public List<Integer> SearchPatientsLevelTAGMethod(int userTherapistId, int levelTAGId)
+    {
+        return relationUsersRepository.SearchPatientsLevelTAG(userTherapistId, levelTAGId);
+    }
+    public List<Integer> SearchPatientsAgeMethod(int userTherapistId, int topLimitAge, int bottomLimitAge)
+    {
+        return relationUsersRepository.SearchPatientsAge(userTherapistId, topLimitAge, bottomLimitAge);
     }
 }

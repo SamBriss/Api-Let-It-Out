@@ -195,4 +195,30 @@ public class MyPatients {
         }
         return new ResponseEntity<>(dataFull, HttpStatus.OK);
     }
+
+
+    /*@PostMapping("getUsersSimilarGraphics")
+    public ResponseEntity<List<Object[]>> getUsersSimilarGraphics(@RequestParam("user") String user)
+    {
+        Integer userTherapistId = userTherapistService.findUserTherapistIdByUsernameMethod(user);
+        if(userTherapistId==null)
+        {
+            userTherapistId = userTherapistService.findUserTherapistIdByEmailMethod(user);
+        }
+        if(userTherapistId!=null)
+        {
+            List<Object[]> patientsData = relationUsersService.SearchPatientsDataForGraphicsMethod(userTherapistId);
+            int cantPatients = patientsData.size();
+            List<Integer> patientsLevel1 = relationUsersService.SearchPatientsLevelTAGMethod(userTherapistId, 1);
+            List<Integer> patientsLevel2 = relationUsersService.SearchPatientsLevelTAGMethod(userTherapistId, 2);
+            List<Integer> patientsLevel3 = relationUsersService.SearchPatientsLevelTAGMethod(userTherapistId, 3);
+            List<Integer> patientsLevel4 = relationUsersService.SearchPatientsLevelTAGMethod(userTherapistId, 4);
+            List<Integer> patientsMinors = relationUsersService.SearchPatientsAgeMethod(userTherapistId, 14, 7);
+            List<Integer> patientsTeens = relationUsersService.SearchPatientsAgeMethod(userTherapistId, 21, 13);
+            List<Integer> patientsYoungs = relationUsersService.SearchPatientsAgeMethod(userTherapistId, 36, 20);
+            List<Integer> patientsAdults = relationUsersService.SearchPatientsAgeMethod(userTherapistId, 60, 35);
+            List<Integer> patientsOlds = relationUsersService.SearchPatientsAgeMethod(userTherapistId, 99, 59);
+
+        }
+    }*/
 }

@@ -83,4 +83,14 @@ public class AttackRegistersService {
     {
         return attackRegistersRepository.UpdateAttackRegisterType(attackRegisterId);
     }
+
+    public Integer SearchCountOfAttacks(int userTAGId, LocalDate lastMonth)
+    {
+        return attackRegistersRepository.SearchCountOfAttacks(userTAGId, lastMonth);
+    }
+
+    public List<Integer> SearchRegistersAttackCompletedMethod(int userTAGId)
+    {
+        return attackRegistersRepository.SearchRegistersAttackCompleted(userTAGId);
+    }
 }
