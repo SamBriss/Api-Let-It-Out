@@ -18,7 +18,11 @@ public class DictionaryWordsService {
 
     public Integer findWordIdByCategoryAndWord(int categoryId, String word) {
         return dictionaryWordsRepository.findWordIdByCategoryAndWord(categoryId, word);
-    }
+    } //findWordIdByHour
+
+    public Integer findWordIdByHourMethod(String word) {
+        return dictionaryWordsRepository.findWordIdByHour(word);
+    } 
 
     public Integer findWordIdByCategoryAndWordInEmotionalCategories(String word) {
         List<Integer> emotionalCategoryIds = Arrays.asList(2, 3); // IDs de las categorías emocionales

@@ -20,6 +20,9 @@ public interface DictionaryWordsRepository extends CrudRepository <DictionaryWor
     @Query(value = "SELECT dictionaryWordId FROM dictionarywords WHERE categoryId = :categoryId AND :word LIKE CONCAT('%', word, '%') LIMIT 1", nativeQuery = true)
     Integer findWordIdByCategoryAndWord(int categoryId, String word);
 
+    @Query(value = "SELECT dictionaryWordId FROM dictionarywords WHERE categoryId = 10 AND :word LIKE CONCAT(word, '%') LIMIT 1", nativeQuery = true)
+    Integer findWordIdByHour(String word);
+
     @Query(value = "SELECT dw.dictionaryWordId FROM DictionaryWords dw WHERE dw.categoryId IN (:categoryIds) AND :word LIKE CONCAT('%', word, '%')", nativeQuery = true)
     Integer findWordIdByCategoryAndWordInEmotionalCategories(@Param("word") String word, 
                                                             @Param("categoryIds") List<Integer> categoryIds);

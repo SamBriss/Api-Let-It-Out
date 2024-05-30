@@ -29,6 +29,7 @@ public interface AttackRegistersRepository extends CrudRepository<AttackRegister
                         @Param("typeId") Integer typeId,
                         @Param("userTAGId") Integer userTAGId);
 
+                        
         @Query(value = "SELECT attackRegisterId FROM attackregisters WHERE date = :date " +
         "AND startHour = :startHour AND endHour = :endHour AND userTAGId = :userTAGId", nativeQuery = true)
         Integer SearchAttackId(@Param("date") LocalDate date,

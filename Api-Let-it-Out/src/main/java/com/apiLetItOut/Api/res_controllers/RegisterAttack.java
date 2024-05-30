@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.apiLetItOut.Api.services.AttackRegisterDetailsService;
 import com.apiLetItOut.Api.services.AttackRegistersService;
+import com.apiLetItOut.Api.services.FrecuencyGraphicsService;
 import com.apiLetItOut.Api.services.ListenedAudiosFeedbackService;
 import com.apiLetItOut.Api.services.RelaxationTechniquesService;
 import com.apiLetItOut.Api.services.UserService;
@@ -41,6 +42,9 @@ public class RegisterAttack {
 
     @Autowired
     AttackRegisterDetailsService attackRegisterDetailsService;
+
+    @Autowired
+    FrecuencyGraphicsService frecuencyGraphicsService;
 
     @PostMapping("registerDataAttack")
     public ResponseEntity<String> RegisterAttacks(@RequestParam("user") String user, 
@@ -80,9 +84,11 @@ public class RegisterAttack {
             LocalDate date = LocalDate.now();
 
             Integer rows = attackRegistersService.RegisterAttackMethod(date, startHour, endHour, duration, 0, typeId, userTAGId);
+            //RegisterAttackGraphicMethod
             if(rows > 0 && rows!=null)
             {
                 Integer attackRegisterId = attackRegistersService.SearchAttackIdMethod(date, startHour, endHour, userTAGId);
+                frecuencyGraphicsService.registerAttackGraphicMethod(userTAGId, date); 
                 if(attackRegisterId!=null)
                 {
                     return new ResponseEntity<>(String.valueOf(attackRegisterId), HttpStatus.OK);

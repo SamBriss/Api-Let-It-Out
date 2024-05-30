@@ -1,7 +1,10 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.util.Date;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -43,4 +46,15 @@ public interface FrecuencyGraphicsRepository extends CrudRepository <FrecuencyGr
         "(SELECT SUM(count) FROM frecuencygraphics WHERE userTAGId = :userTAGId AND date BETWEEN DATE_SUB(DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH), INTERVAL 6 MONTH) AND DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)) * 0.5 AS umbral_disminucion " +
     ") AS subconsulta", nativeQuery = true)
     String increaseOrDecrease(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "SELECT count FROM frecuencygraphics WHERE userTAGId = :userTAGId AND date = :date LIMIT 1", nativeQuery = true)
+    Integer findCountByUserTAGIdAndDate(@Param("userTAGId") int userTAGId, @Param("date") LocalDate date);
+
+    @Modifying
+    @Query(value = "UPDATE frecuencygraphics SET count = count + 1 WHERE userTAGId = :userTAGId AND date = :date", nativeQuery = true)
+    void updateCount(@Param("userTAGId") int userTAGId, @Param("date") LocalDate date);
+
+    @Modifying
+    @Query(value = "INSERT INTO frecuencygraphics (userTAGId, date, count) VALUES (:userTAGId, :date, 1)", nativeQuery = true)
+    void insertNewRecord(@Param("userTAGId") int userTAGId, @Param("date") LocalDate date);
 }

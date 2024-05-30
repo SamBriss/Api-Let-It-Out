@@ -368,7 +368,8 @@ public class ManualAttacksController {
         // Procesar palabras de la categoría "10" en hour
         String[] remainingHourWords = cleanedHour.split("\\s+");
         for (String word : remainingHourWords) {
-            Integer wordId = dictionaryWordsService.findWordIdByCategoryAndWord(10, word);
+            //hacer un like de solo el inicio de la hora
+            Integer wordId = dictionaryWordsService.findWordIdByHourMethod(word);
             if (wordId != null) {
                 processWord(userTAGId, wordId, date);
             }

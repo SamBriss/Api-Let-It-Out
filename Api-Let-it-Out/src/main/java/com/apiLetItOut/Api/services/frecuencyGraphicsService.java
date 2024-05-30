@@ -1,11 +1,14 @@
 package com.apiLetItOut.Api.services;
 
 import java.util.List;
-
+import java.time.LocalDate;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apiLetItOut.Api.repository.FrecuencyGraphicsRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class FrecuencyGraphicsService {
@@ -29,5 +32,16 @@ public class FrecuencyGraphicsService {
     }
     public String increaseOrDecreaseMethod(int userTAGId){
         return frecuencyGraphicsRepository.increaseOrDecrease(userTAGId);
+    }
+
+    @Transactional
+    public void registerAttackGraphicMethod(int userTAGId, LocalDate date) {
+        Integer existingCount = frecuencyGraphicsRepository.findCountByUserTAGIdAndDate(userTAGId, date);
+
+        if (existingCount != null) {
+            frecuencyGraphicsRepository.updateCount(userTAGId, date);
+        } else {
+            frecuencyGraphicsRepository.insertNewRecord(userTAGId, date);
+        }
     }
 }

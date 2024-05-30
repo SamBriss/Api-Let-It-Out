@@ -146,7 +146,7 @@ public class CalendarTAGActivityApiController {
                 double multProbabilidades = 1.0;
                 double activityProbability = 0.0;
                 processWordsInLocation(userTAGId, location, sumaProbabilidades, multProbabilidades, listDesencadenantesEncontrados);
-                
+                processWordInStartHour(userTAGId, startHourStr, sumaProbabilidades, multProbabilidades, listDesencadenantesEncontrados);
                 processWordsInDirection(userTAGId, direction, sumaProbabilidades, multProbabilidades, listDesencadenantesEncontrados);
                 // process words in label, in time
                 sumaProbabilidades = 0;
@@ -175,6 +175,8 @@ public class CalendarTAGActivityApiController {
                 // agregar la actividad al calendario
                 result = calendarTAGActivityService.addNewActivityUserTagCalendarMethod(userTAGId, label, location, direction, date, startHour, endHour, dateRegister, comments, reminders, activityProbability);
                 
+                location = location.trim();
+                direction = direction.trim();
                 recognizeWordsInLocation(userTAGId, location);
                 recognizeWordsInDirection(userTAGId, direction);
                 recognizeWordsInStartHour(userTAGId, startHourStr);
@@ -297,6 +299,63 @@ public class CalendarTAGActivityApiController {
             }
         }
     }
+    private void processWordInStartHour(int userTAGId, String StartHour, double sumaProbabilidades, double multProbabilidades, List<Double> listDesencadenantesEncontrados) throws ParseException {
+        // Limpieza y normalización de palabras en el campo "location"
+        String cleanedLocation = StartHour.toLowerCase()
+                .replace('á', 'a')
+                .replace('é', 'e')
+                .replace('í', 'i')
+                .replace('ó', 'o')
+                .replace('ú', 'u')
+                .replaceAll("[.,]", ""); // Quitar puntos y comas
+    
+        // Eliminar palabras de la categoría "13"
+        String[] words = cleanedLocation.split("\\s+");
+        for (String word : words) {
+            if (dictionaryWordsService.countByCategoryIdAndWord(13, word) > 0) {
+                cleanedLocation = cleanedLocation.replace(word, "");
+            }
+        }
+    
+        // Procesar palabras de la categoría "10"
+        Integer patternId = algorithmTriggerElementsService.SelectLastTriggerPatternId(userTAGId);
+        String[] words1 = cleanedLocation.split("\\s+");
+        for (String word : words1) {
+            Integer wordId = dictionaryWordsService.findWordIdByHourMethod(word);
+           
+            if (wordId != null) {
+// buscar la palabra wordId en el triggerElement (patrones desencadenantes esto va aqui en cada uno de los processWords)------------------------------------------------------------------------------------------
+                if(patternId != null)
+                {
+                    Integer proba = algorithmTriggerElementsService.selectIndividualProbabilityDesencadenanteWord(wordId, patternId);
+                    if(proba!=null)
+                    {
+                        Double probabilidad = Double.valueOf(proba);
+                        probabilidad = probabilidad/100;
+                        sumaProbabilidades += proba;
+                        multProbabilidades *= proba;
+                        System.out.println("suma probabilidades =  "+sumaProbabilidades);
+                        System.out.println("mult probabilidades =  "+multProbabilidades);
+                        listDesencadenantesEncontrados.add(probabilidad);
+                        System.out.println("la palabra: "+wordId+" , tiene la probabilidad de:  "+proba+"%");
+                    }
+                    else
+                    {
+                        System.out.println("la palabra: "+wordId+" tiene una probabilidad de 0%");
+                    }
+                }
+                else
+                {
+                    // guardar la actividad con probabilidad de 0%
+                    System.out.println("el usuario no tiene elementos desencadenantes registrados");
+                }
+// fin del algoritmo de patrones desencadenantes aqui --------------------------------------------------------------------------------------------------------------------------
+
+                processWord(userTAGId, wordId);
+                cleanedLocation = cleanedLocation.replace(word, "");
+            }
+        }        
+    }  
 
     private void processWordsInLocation(int userTAGId, String location, double sumaProbabilidades, double multProbabilidades, List<Double> listDesencadenantesEncontrados) throws ParseException {
         // Limpieza y normalización de palabras en el campo "location"

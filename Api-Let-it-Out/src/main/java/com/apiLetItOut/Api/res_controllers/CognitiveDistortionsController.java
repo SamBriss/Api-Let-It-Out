@@ -51,18 +51,16 @@ public class CognitiveDistortionsController {
 
         int userId = userService.SearchUserTAGMethod(username);
         int userTAGId = userTAGService.FindUserTAGMethod(userId);
-        int userTherapistId;
+        Integer userTherapistId;
 
         if (userTAGId > 0) {
 
             if(usernameTherapist == "no"){
-                userTherapistId = 0;
+                userTherapistId = null;
             }else{
                 int userIdT = userService.SearchUserTAGMethod(usernameTherapist);
                 userTherapistId = userTherapistService.FoundTherapistIdMethod(userIdT);
             }
-
-        if(userTherapistId > 0){
 
             int cognitiveDistortionReg = cognitiveDistortionsService.RegisterNewCognitiveDistortionMethod(dateSituation, thought, physicalSensation, emotionalFeeling, consequence, cognitiveDistortion, userTAGId, userTherapistId);
 
@@ -77,11 +75,6 @@ public class CognitiveDistortionsController {
             {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar la herramienta");
             }
-        }
-        else
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No existe ese usuario");
-        }
             
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar usuario TAG");

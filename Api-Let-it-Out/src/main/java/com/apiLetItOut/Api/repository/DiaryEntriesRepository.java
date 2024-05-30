@@ -47,8 +47,5 @@ public interface DiaryEntriesRepository extends CrudRepository <DiaryEntries, In
                                             @Param("userTAGId") int userTAGId);
         
         @Query(value = " Select text from diaryEntries where diaryId = :diaryId", nativeQuery = true)
-        String SearchTextOfDiaryEntry(@Param("diaryId") int diaryId);
-
-        
-    
+        String SearchTextOfDiaryEntry(@Param("diaryId") int diaryId);      
 }

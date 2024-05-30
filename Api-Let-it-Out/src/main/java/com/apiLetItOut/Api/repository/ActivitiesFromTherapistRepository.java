@@ -41,7 +41,7 @@ public interface ActivitiesFromTherapistRepository extends CrudRepository <Activ
     @Modifying
     @Query(value = "Update activitiesfromtherapist set comments = :comments where activityTId =:activityTId", nativeQuery = true)
     Integer UpdateCommentsTherapist(@Param("activityTId") int activityTId,
-    @Param("comments") String comments);
+                                    @Param("comments") String comments);
     @Query(value= "Select COUNT(*) FROM activitiesfromtherapist WHERE userTAGId=:userTAGId AND completed=:completed", nativeQuery = true)
     Integer CountRequestQuantityActivitiesCompleted(@Param("userTAGId") int userTAGId,
                                                     @Param("completed") int completed);
