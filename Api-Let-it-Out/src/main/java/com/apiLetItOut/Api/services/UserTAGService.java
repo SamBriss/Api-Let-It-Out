@@ -130,4 +130,9 @@ public class UserTAGService {
     {
         return userTAGRepository.InsertEmergencyContacts(userTAGId, nameContact, numberContact);
     }
+
+    public Date SelectRegisterDateMethod(int userTAGId)
+    {
+        return userTAGRepository.SelectRegisterDate(userTAGId);
+    }
 }

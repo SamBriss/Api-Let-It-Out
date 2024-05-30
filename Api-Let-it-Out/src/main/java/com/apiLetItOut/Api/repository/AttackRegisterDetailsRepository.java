@@ -39,7 +39,7 @@ public interface AttackRegisterDetailsRepository extends CrudRepository<AttackRe
         @Query(value = "select typeOfThought from attackRegisterDetails where attackRegisterId = :attackRegisterId", nativeQuery = true)
         String SearchtypeOfThoughtOfAttack(@Param("attackRegisterId") int attackRegisterId);
 
-        @Query(value = "select am.method from attacksMethods am JOIN attackRegisterDetails ar ON am.attackMethodId=ar.attackMethodId where ar.attackRegisterId = :attackRegisterId", nativeQuery = true)
+        @Query(value = "select am.method from attacksMethods am JOIN attackRegisterDetails ar ON am.attackMethodId=ar.attackMethodsId where ar.attackRegisterId = :attackRegisterId", nativeQuery = true)
         String SearchAttackMethodsOfAttack(@Param("attackRegisterId") int attackRegisterId);
 
         @Query(value="Select intensity from attackRegisterDetails ard JOIN attackregisters ar ON ard.attackRegisterId = ar.attackRegisterId " 
@@ -55,7 +55,7 @@ public interface AttackRegisterDetailsRepository extends CrudRepository<AttackRe
                                         @Param("userTAGId") int userTAGId,
                                         @Param("typeOfThought") char typeOfThought);
         @Query(value="Select count(*) from attackRegisterDetails ard JOIN attackregisters ar ON ard.attackRegisterId = ar.attackRegisterId" 
-        + " where ar.date <= CONCAT('', :actualDate, '') AND ar.date>= CONCAT('', :beforeDate, '') AND ar.userTAGId = :userTAGId AND ard.attackMethodId = :attackMethodId", nativeQuery=true)
+        + " where ar.date <= CONCAT('', :actualDate, '') AND ar.date>= CONCAT('', :beforeDate, '') AND ar.userTAGId = :userTAGId AND ard.attackMethodsId = :attackMethodId", nativeQuery=true)
         Integer SearchCountOfMethods(@Param("actualDate") LocalDate actualDate,
                                         @Param("beforeDate") LocalDate beforeDate,
                                         @Param("userTAGId") int userTAGId,

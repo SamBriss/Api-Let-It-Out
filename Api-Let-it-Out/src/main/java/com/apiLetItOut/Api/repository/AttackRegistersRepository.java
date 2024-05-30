@@ -86,4 +86,10 @@ public interface AttackRegistersRepository extends CrudRepository<AttackRegister
         @Modifying
         @Query(value = "Update attackregisters set typeId =1 WHERE attackRegisterId=:attackRegisterId", nativeQuery = true)
         int UpdateAttackRegisterType(@Param("attackRegisterId") int attackRegisterId);
+
+        @Query(value="Select count(*) from attackRegisters where userTAGId = :userTAGId and date>=CONCAT('', :lastMonth, '')", nativeQuery = true)
+        Integer SearchCountOfAttacks(@Param("userTAGId") int userTAGId, @Param("lastMonth") LocalDate lastMonth);
+
+        @Query(value = "Select attackRegisterId from attackregisters WHERE userTAGId = :userTAGId AND completed=1", nativeQuery = true)
+        List<Integer> SearchRegistersAttackCompleted(@Param("userTAGId") int userTAGId); 
 }

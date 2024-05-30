@@ -103,5 +103,7 @@ public interface UserTAGRepository extends CrudRepository<UsersTAG, Integer> {
     @Modifying
     @Query(value = "INSERT INTO emergencycontacts(userTAGId, nameContact, numberContact) VALUES (:userTAGId, :nameContact, :numberContact)", nativeQuery = true)
     Integer InsertEmergencyContacts(@Param("userTAGId") int userTAGId, @Param("nameContact") String nameContact, @Param("numberContact") String numberContact);
-                                        
+    
+    @Query(value = "Select registerDate From userstag where userTAGId=:userTAGId", nativeQuery = true)
+    Date SelectRegisterDate(@Param("userTAGId") int userTAGId);
 }

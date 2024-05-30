@@ -53,7 +53,6 @@ public interface AlgorithmTriggerElementsRepository extends CrudRepository<Trigg
 
     @Query(value = "Select date from triggerPatterns ORDER BY date DESC LIMIT 1", nativeQuery = true)
     java.sql.Date selectLastDateAlgorithmPatterns();
-
     
     @Query(value = "Select COUNT(*) from triggerPatterns", nativeQuery = true)
     int selectCountPatterns();
@@ -72,7 +71,6 @@ public interface AlgorithmTriggerElementsRepository extends CrudRepository<Trigg
     @Query(value = "Select individualProbability from triggerelements WHERE dictionaryWordId=:dictionaryWordId AND triggerPatternId=:triggerPatternId", nativeQuery = true)
     Integer selectIndividualProbabilityDesencadenanteWord(@Param("dictionaryWordId") int dictionaryWordId,
                                                         @Param("triggerPatternId") int triggerPatternId);
-
                                                         
     @Query(value = "Select triggerpatternId from triggerpatterns WHERE userTAGId=:userTAGId AND date=:date", nativeQuery = true)
     Integer SelectLastTriggerPatternIdByDate(@Param("userTAGId") int userTAGId,
@@ -80,5 +78,28 @@ public interface AlgorithmTriggerElementsRepository extends CrudRepository<Trigg
                                             
     @Query(value = "Select COUNT(manualAttackRegister) from manualattackregister WHERE userTAGId=:userTAGId", nativeQuery = true)
     int selectCountAttacksManualByUserTAG(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select triggerPatternId from triggerPatterns where userTAGId=:userTAGId", nativeQuery = true)
+    List<Integer> SearchPatternsIdByUserTAGId(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select triggerElementId from triggerElements where triggerPatternId=:triggerPatternId", nativeQuery = true)
+    List<Integer> SearchElementsByPatternId(@Param("triggerPatternId") int triggerPatternId);
+
+    @Query(value="Select d.dictionaryWordId from triggerPatterns p JOIN "+
+    "triggerElements e on e.triggerPatternId= p.triggerPatternId JOIN dictionaryWords d ON e.dictionaryWordId = d.dictionaryWordId "+
+    " where p.userTAGId=:userTAGId AND d.categoryId=:categoryId  GROUP BY d.word ", nativeQuery = true)
+    List<Integer> SearchWordsPatterns(@Param("userTAGId") int userTAGId,
+                                        @Param("categoryId") int categoryId);
+
+    @Query(value = "Select p.date, e.individualProbability, d.word from triggerPatterns p JOIN triggerElements e on e.triggerPatternId= p.triggerPatternId JOIN dictionaryWords d ON e.dictionaryWordId = d.dictionaryWordId  where e.dictionaryWordId=:dictionaryWordId AND p.userTAGId=:userTAGId", nativeQuery = true)
+    List<Object[]> SearchPointGraphicByWordId(@Param("userTAGId") int userTAGId,
+                                            @Param("dictionaryWordId") int dictionaryWordId);
+    
+    @Query(value = "Select date from triggerPatterns order by date ASC", nativeQuery = true)
+    List<Date> SearchDatesOfPatterns();
+
+    @Query(value = "Select count(*) from triggerPatterns p JOIN triggerElements e on e.triggerPatternId= p.triggerPatternId JOIN dictionaryWords d ON e.dictionaryWordId = d.dictionaryWordId where e.dictionaryWordId=:dictionaryWordId AND p.userTAGId=:userTAGId", nativeQuery = true)
+    Integer SearchCountOfWordsRepetition(@Param("userTAGId") int userTAGId,
+                                            @Param("dictionaryWordId") int dictionaryWordId);
 
 }

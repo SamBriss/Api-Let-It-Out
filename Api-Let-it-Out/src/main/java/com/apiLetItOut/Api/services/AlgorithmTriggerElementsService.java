@@ -79,4 +79,34 @@ public class AlgorithmTriggerElementsService {
     {
         return algorithmTriggerElementsRepository.selectCountAttacksManualByUserTAG(userTAGId);
     }
+
+    public List<Integer> searchExistenceOfPatterns(int userTAGId)
+    {
+        return algorithmTriggerElementsRepository.SearchPatternsIdByUserTAGId(userTAGId);
+    }
+
+    public List<Integer> SearchElementsByPatternId(int triggerPatternId)
+    {
+        return algorithmTriggerElementsRepository.SearchElementsByPatternId(triggerPatternId);
+    }
+
+    public List<Integer> SearchWordsPatternsMethod(int userTAGId, int categoryId)
+    {
+        return algorithmTriggerElementsRepository.SearchWordsPatterns(userTAGId, categoryId);
+    }
+    
+    public List<Object[]> SearchPointGraphicByWordIdMethod(int userTAGId, int dictionaryWordId)
+    {
+        return algorithmTriggerElementsRepository.SearchPointGraphicByWordId(userTAGId, dictionaryWordId);
+    }
+
+    public Integer SearchCountOfWordsRepetition(int userTAGId, int dictionaryWordId)
+    {
+        return algorithmTriggerElementsRepository.SearchCountOfWordsRepetition(userTAGId, dictionaryWordId);
+    }
+
+    public List<Date> SearchDatesOfPatternsMethod()
+    {
+        return algorithmTriggerElementsRepository.SearchDatesOfPatterns();
+    }
 }
