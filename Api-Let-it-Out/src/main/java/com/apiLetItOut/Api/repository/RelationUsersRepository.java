@@ -1,6 +1,7 @@
 package com.apiLetItOut.Api.repository;
 
 import java.util.List;
+import java.util.Date;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,7 +51,7 @@ public interface RelationUsersRepository extends CrudRepository<RelationUsers, I
     @Query (value="Select COUNT(*) from relationusers where userTAGId = :userTAGId", nativeQuery = true)
     int CountMaxVinculation(@Param("userTAGId") int userTAGId);
 
-    @Query(value = "select ug.name, ug.lastnameP, ug.age, l.level, ug.username, ug.tel, tag.userTAGId "+
+    @Query(value = "select ug.name, ug.lastnameP, ug.age, l.level, ug.username, ug.tel, tag.levelTechiniques, tag.userTAGId"+
     " from users ug JOIN userstag tag ON tag.userId=ug.userId JOIN levelstag l ON tag.levelTAGId = l.levelTAGId" +
     " where tag.userTAGId IN(select r.userTAGId from relationUsers r where r.userTherapistId = :userTherapistId)", nativeQuery = true)
     List<Object[]> SearchDataOfPatients(@Param("userTherapistId") int userTherapistId);
@@ -81,10 +82,25 @@ public interface RelationUsersRepository extends CrudRepository<RelationUsers, I
                                             @Param("levelTAGId") int levelTAGId);
 
     @Query(value = "select tag.userTAGId from users ug JOIN userstag tag ON tag.userId=ug.userId "+
-    " JOIN users ug ON ug.userId = tag.userId " +
     " where tag.userTAGId IN(select r.userTAGId from relationUsers r where r.userTherapistId = :userTherapistId) AND ug.age>:ageMin AND ug.age<:ageMax", nativeQuery = true)
     List<Integer> SearchPatientsAge(@Param("userTherapistId") int userTherapistId,
                                             @Param("ageMax") int ageMax,
                                             @Param("ageMin") int ageMin);
+
+    @Query(value = "select count(*) from attackregisters where userTAGId=:userTAGId", nativeQuery = true)
+    Integer SearchCountUseButtonsByUserId(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "select count(*) from diaryEntries where userTAGId=:userTAGId", nativeQuery = true)
+    Integer SearchCountUseDiaryByUserId(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select AVG(score) from listenedAudiosFeedback l join attackRegisters a ON "
+    +"a.attackRegisterId = l.attackRegisterId where (a.completed=1 OR a.attackRegisterId=1) AND l.userTAGId= "
+    + ":userTAGId", nativeQuery = true)
+    Integer SearchAvgListenedAudiosByUserId(@Param("userTAGId") int userTAGId);
+
+    @Query(value = "Select count(*) from listenedAudiosFeedback where userTAGId=:userTAGId and feedbackDate>CONCAT('', :minFeedback, '') and feedbackDate<=CONCAT('', :maxFeedback, '')", nativeQuery = true)
+    Integer SearchCountTechniquesListened(@Param("userTAGId") int userTAGId, 
+                                        @Param("minFeedback") Date minFeedback, 
+                                        @Param("maxFeedback") Date maxFeedback);
 }
 

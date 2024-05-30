@@ -288,57 +288,58 @@ public class TechniquesSectionController {
         switch (levelAge) {
             case 1:
             // mayores nivel 1
-                /*audiosId.add(7);
-                audiosId.add(16);
-                audiosId.add(33);
-                audiosId.add(38);*/
                 audiosId.add(45);
-                //audiosId.add(47);
+                audiosId.add(47);
+                audiosId.add(72);
+                audiosId.add(32);
+                audiosId.add(78);
+                audiosId.add(60);
+                audiosId.add(81);
+                audiosId.add(17);
                 break;
             case 2:
             // mayores nivel 2
-                audiosId.add(11);
-                audiosId.add(14);
                 audiosId.add(21);
                 audiosId.add(23);
-                audiosId.add(25);
-                audiosId.add(31);
-                audiosId.add(44);
-                audiosId.add(48);
+                audiosId.add(75);
+                audiosId.add(79);
+                audiosId.add(82);
+                audiosId.add(85);
                 break;
             case 3:
             //mayores nivel 3
-                audiosId.add(8);
-                audiosId.add(12);
-                audiosId.add(18);
-                audiosId.add(8);
+                audiosId.add(80);
+                audiosId.add(66);
+                audiosId.add(56);
+                audiosId.add(71);
                 audiosId.add(29);
                 audiosId.add(35);
-                audiosId.add(37);
-                audiosId.add(41);
                 break;
             case 4:
             // menores nivel 1
-                audiosId.add(9);
-                audiosId.add(10);
-                audiosId.add(27);
-                audiosId.add(33);
-                audiosId.add(43);
-                audiosId.add(46);
+                audiosId.add(42);
+                audiosId.add(78);
+                audiosId.add(60);
+                audiosId.add(64);
+                audiosId.add(70);
+                audiosId.add(51);
                 break;
             case 5:
             // menores nivel 2
-                audiosId.add(11);
-                audiosId.add(21);
-                audiosId.add(24);
-                audiosId.add(30);
-                audiosId.add(45);
+                audiosId.add(87);
+                audiosId.add(85);
+                audiosId.add(61);
+                audiosId.add(82);
+                audiosId.add(88);
+                audiosId.add(84);
                 break;
             default:
-                audiosId.add(13);
+                audiosId.add(54);
+                audiosId.add(83);
+                audiosId.add(58);
                 audiosId.add(18);
-                audiosId.add(37);
-                audiosId.add(40);
+                audiosId.add(36);
+                audiosId.add(41);
                 break;
         }
         return audiosId;
