@@ -199,11 +199,17 @@ public class AlgorithmTriggerElementsApiController {
                 Double p = e[1] / cantAttacks;
                 if(p>1.0)
                 {
-                    p = 1.0;
+                    p = .99;
                 }
                 e[11] = p;
                 System.out.println("elemento "+e[0]+"    formula:   "+e[1]+"/"+cantAttacks+"  probabilidad:   "+e[11]);
                 listInfoElementsWordsByRPearson.add(e);
+            }
+            else{
+                System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
+                System.out.println("EL ELEMENTO: "+e[0]+" , TIENE UNA R DE PEARSON MENOR A 0.3");
+                System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
+
             }
         }
 

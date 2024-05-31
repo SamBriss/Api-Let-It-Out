@@ -36,7 +36,7 @@ public class cronConfig {
     AlgorithmTriggerElementsApiController algorithmTriggerElementsApiController;
     
     
-    @Scheduled(cron = "0 34 21 ? * TUE")
+    @Scheduled(cron = "0 15 9 ? * THU")
     public void scheduledTaskSunday23pmAlgorithmRanking()
     {            
         // hacer el algoritmo de ranking de tecnicas de relajacion
@@ -63,7 +63,7 @@ public class cronConfig {
         }
     }
     
-    @Scheduled(cron = "0 8 21 * * *")
+    @Scheduled(cron = "0 57 8 * * *")
     public void scheduledTaskSunday22AlgorithmTriggerPatterns()
     {
 
