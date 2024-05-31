@@ -75,7 +75,10 @@ public class TriggersPatternsGraphics {
                     Collections.sort(allDates);
 
                     // Ahora allDates contiene todas las fechas ordenadas
-
+                    for(Date date: allDates)
+                    {
+                        System.out.println("fecha es: "+ date);
+                    }
                     
                     int i=0;
                     for (Integer wordId : wordsOfTriggersLocations) {

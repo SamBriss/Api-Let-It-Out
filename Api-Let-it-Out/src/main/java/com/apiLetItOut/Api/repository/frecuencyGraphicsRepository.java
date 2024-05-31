@@ -2,7 +2,6 @@ package com.apiLetItOut.Api.repository;
 
 import java.util.List;
 import java.time.LocalDate;
-import java.util.Date;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

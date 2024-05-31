@@ -95,7 +95,7 @@ public interface AlgorithmTriggerElementsRepository extends CrudRepository<Trigg
     List<Object[]> SearchPointGraphicByWordId(@Param("userTAGId") int userTAGId,
                                             @Param("dictionaryWordId") int dictionaryWordId);
     
-    @Query(value = "Select date from triggerPatterns order by date ASC", nativeQuery = true)
+    @Query(value = "Select date from triggerPatterns group by date order by date ASC", nativeQuery = true)
     List<Date> SearchDatesOfPatterns();
 
     @Query(value = "Select count(*) from triggerPatterns p JOIN triggerElements e on e.triggerPatternId= p.triggerPatternId JOIN dictionaryWords d ON e.dictionaryWordId = d.dictionaryWordId where e.dictionaryWordId=:dictionaryWordId AND p.userTAGId=:userTAGId", nativeQuery = true)

@@ -75,4 +75,14 @@ public class RelationUsersService {
     {
         return relationUsersRepository.SearchPatientsAge(userTherapistId, topLimitAge, bottomLimitAge);
     }
+    
+    public Integer SearchCountUseButtonsByUserIdMethod(int userTAGId)
+    {
+        return relationUsersRepository.SearchCountUseButtonsByUserId(userTAGId);
+    }
+
+    public Integer SearchCountUseDiaryByUserIdMethod(int userTAGId)
+    {
+        return relationUsersRepository.SearchCountUseDiaryByUserId(userTAGId);
+    }
 }
