@@ -635,96 +635,71 @@ public class CalendarTAGActivityApiController {
     }
     
     @PostMapping("/userTAGCalendar/GetAllActivitiesToDoMonth")
-    public ResponseEntity showAllTAGCalendarActivitiesToDoOfTheMonth(@RequestParam("username") String username, 
-                                                                @RequestParam("dateReference") String dateReferenceStr,
-                                                                @RequestParam("monthPos") String monthPosStr) throws ParseException
-    {
+    public ResponseEntity showAllTAGCalendarActivitiesToDoOfTheMonthh(@RequestParam("username") String username, 
+                                                                  @RequestParam("dateReference") String dateReferenceStr,
+                                                                  @RequestParam("monthPos") String monthPosStr) throws ParseException {
+        System.out.println("entra en get activities to do");
         Integer userId = null;
         userId = this.userService.SearchUserTAGMethod(username);
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        if(userId != null && userId > 0)
-        {
+        if (userId != null && userId > 0) {
             System.out.println();
             System.out.println();
-            System.out.println("mes esocigo:  "+monthPosStr);
-            System.out.println("feecha escogidaa:  "+dateReferenceStr);
+            System.out.println("mes esocigo:  " + monthPosStr);
+            System.out.println("feecha escogidaa:  " + dateReferenceStr);
             int userTAGId = this.userTAGService.FindUserTAGMethod(userId);
-            System.out.println("usertagid:  "+ userTAGId);
+            System.out.println("usertagid:  " + userTAGId);
             List<Object[]> activitiesInCurrentMonth = new ArrayList<>();
-            if(userTAGId > 0)
-            {
+            if (userTAGId > 0) {
                 List<Object[]> listAllActivitiesFound = new ArrayList<>();
-                if(monthPosStr.equals("-1") && dateReferenceStr.equals("-1"))
-                {
+
+                if (monthPosStr.equals("-1") && dateReferenceStr.equals("-1")) {
                     System.out.println("entra en ninguna fecha ni mes escogidas");
-                    listAllActivitiesFound =  activitiesFromTherapistService.findAllActivitiesToDoFromCalendarTAGMethod(userTAGId);
-                }
-                else if(!monthPosStr.equals("-1"))
-                {
-                    System.out.println("entra en mes escogido");
-                    listAllActivitiesFound =  activitiesFromTherapistService.findAllActivitiesToDoFromCalendarTAGMethod(userTAGId); 
-                }
-                else if(!dateReferenceStr.equals("-1"))
-                {
-                    System.out.println("entra en fecha escogida");
-                    Date dateReference = formatoFecha.parse(dateReferenceStr);
-                    activitiesInCurrentMonth = activitiesFromTherapistService.findAllActivitiesToDoFromCalendarTAGByDateMethod(userTAGId, dateReference);
-                }
-                // u.activityId, u.label, u.location, u.direction, u.date, u.startHour, u.endHour, u.dateRegister, u.comments, u.reminders         
-                            
-                //System.out.println("list all act size:   "+listAllActivitiesFound.size());
-                if(listAllActivitiesFound.size() > 0 && dateReferenceStr.equals("-1"))
-                {
-                    Date referenceDate = new Date();
-                    Calendar calendarReference = Calendar.getInstance();
-                    calendarReference.setTime(referenceDate);
-                    int referenceMonth = calendarReference.get(Calendar.MONTH);
-                    System.out.println("month reference:      "+referenceMonth);
-                   for(int i =0; i < listAllActivitiesFound.size(); i++)
+                    listAllActivitiesFound = activitiesFromTherapistService.findAllActivitiesToDoFromCalendarTAGMethod(userTAGId);
+    
+                    Date currentDate = new Date(); // Obtener la fecha actual
+                    activitiesInCurrentMonth = new ArrayList<>();
+    
+                    // Filtrar los appointments que sean del mismo día o no hayan ocurrido
+                    for (Object[] activity : listAllActivitiesFound) {
+                        try{
+                            Date activityDate = formatoFecha.parse(activity[3].toString());
+                            if (isSameDay(activityDate, currentDate) || activityDate.after(currentDate)) {
+                                System.out.println("date activity: "+activityDate+"   :    current date:  "+currentDate);
+                                activitiesInCurrentMonth.add(activity);
+                            }
+                        }
+                        catch(Exception e){}
+                    }
+
+                } else if (!monthPosStr.equals("-1")) {
+                    listAllActivitiesFound = activitiesFromTherapistService.findAllActivitiesToDoFromCalendarTAGMethod(userTAGId);
+                    int referenceMonth = Integer.parseInt(monthPosStr);
+                    for(int i =0; i < listAllActivitiesFound.size(); i++)
                     {
+                        System.out.println("entra en month escogido foooor");
                         Date date = (Date) listAllActivitiesFound.get(i)[3];
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(date);
 
                         int mes = calendar.get(Calendar.MONTH);
                         System.out.println("mes: "+mes);
+                        
+                        if (mes == referenceMonth) {
+                            System.out.println("entra en que encuentra messs: "+mes+" = "+referenceMonth);
+                            activitiesInCurrentMonth.add(listAllActivitiesFound.get(i));
+                        }                
+                    }
 
-                        if(monthPosStr!="-1")
-                        {
-                            if(Integer.parseInt(monthPosStr) == mes)
-                            {
-                                activitiesInCurrentMonth.add(listAllActivitiesFound.get(i));
-                            }
-                        }
-                        else{
-                            if (mes == referenceMonth) {
-                                activitiesInCurrentMonth.add(listAllActivitiesFound.get(i));
-                            }
-                        }
-                    
-                    }
-                    if(activitiesInCurrentMonth.size()>0)
-                    {
-                        return ResponseEntity.ok().body(activitiesInCurrentMonth);
-                    }
-                    else if(activitiesInCurrentMonth.isEmpty())
-                    {
-                        return ResponseEntity.ok().body("none");
-                    }
+                } else if (!dateReferenceStr.equals("-1")) {
+                    System.out.println("entra en fecha escogida");
+                    Date dateReference = formatoFecha.parse(dateReferenceStr);
+                    activitiesInCurrentMonth = activitiesFromTherapistService.findAllActivitiesToDoFromCalendarTAGByDateMethod(userTAGId, dateReference);
                 }
-                else if(!dateReferenceStr.equals("-1"))
-                {
-                    
-                    if(activitiesInCurrentMonth.size()>0)
-                    {
-                        return ResponseEntity.ok().body(activitiesInCurrentMonth);
-                    }
-                    else if(activitiesInCurrentMonth.isEmpty())
-                    {
-                        return ResponseEntity.ok().body("none");
-                    }
-                }
-                else{
+    
+                if (!activitiesInCurrentMonth.isEmpty()) {
+                    return ResponseEntity.ok().body(activitiesInCurrentMonth);
+                } else {
                     return ResponseEntity.ok().body("none");
                 }
             }
@@ -732,7 +707,7 @@ public class CalendarTAGActivityApiController {
         }
         return ResponseEntity.ok().body("userTAGNotFound");
     }
-    
+
     private boolean timeOverlaps(Date start1, Date end1, Date start2, Date end2) {
         return start1.before(end2) && end1.after(start2);
     }

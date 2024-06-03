@@ -4,10 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apiLetItOut.Api.services.AlgorithmRelaxationTechniquesService;
 import com.apiLetItOut.Api.services.AlgorithmTriggerElementsService;
+import com.apiLetItOut.Api.services.UserTAGService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -29,6 +32,9 @@ public class AlgorithmTriggerElementsApiController {
 
     @Autowired
     AlgorithmTriggerElementsService algorithmTriggerElementsService;
+
+    @Autowired
+    UserTAGService userTAGService;
 
     @PostMapping("algorithmPatterns/algorithm")
     public ResponseEntity algorithmTriggerPatternsAndElements() {
@@ -279,5 +285,35 @@ public class AlgorithmTriggerElementsApiController {
     {
         // caro aqui pon lo de crear la grafica para un usuario, nomás manda el userId, y los elementos de este regresa el string de la url
         return "null";
+    }
+
+    @PostMapping("/userTAG/registerDate")
+    public ResponseEntity<String> getRegisterDate(@RequestParam("user") String user) {
+        Integer userTAGId = userTAGService.GetUserTAGIdByeUsernameMethod(user);
+        if(userTAGId == null)
+        {
+            userTAGId = userTAGService.GetUserTAGIdByEmailMethod(user);
+        }
+        if(userTAGId!=null)
+        {
+            Date registerDate = userTAGService.SelectRegisterDateMethod(userTAGId);
+            System.out.println(registerDate);
+            int levelTAGId = userTAGService.SearchLevelTAGMethod(userTAGId);
+            Integer countAttacks = algorithmTriggerElementsService.selectCountAttacksByUserTAGMethod(userTAGId);
+            if(countAttacks==null)
+            {
+                countAttacks=0;
+            }
+            if(registerDate!=null )
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(String.valueOf(registerDate)+ ":" + levelTAGId + ":" +countAttacks);
+            }
+            else
+            {
+                return ResponseEntity.status(HttpStatus.OK).body("No se pudo");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.OK).body("No se pudo");
+        }
     }
 }

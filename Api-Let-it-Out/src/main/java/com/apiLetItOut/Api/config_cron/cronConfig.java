@@ -63,7 +63,7 @@ public class cronConfig {
         }
     }
     
-    @Scheduled(cron = "0 57 8 * * *")
+    @Scheduled(cron = "0 55 20 * * *")
     public void scheduledTaskSunday22AlgorithmTriggerPatterns()
     {
 
