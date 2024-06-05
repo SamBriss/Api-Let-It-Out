@@ -52,12 +52,16 @@ public class AlgorithmOfTechniques {
         int userId = getUserID(user);
         Integer userTAGId = userTAGService.FindUserTAGMethod(userId);
         Map<String, Object> responseData = new HashMap<>();
+        responseData = getUrlsOfTechniques(user);
+
         List<String> urls = techniquesDownloadService.SearchUrlOdAudiosToDownloadMethod(userTAGId, LocalDate.now());
         int i = 0;
         for (String url : urls) {
             responseData.put("url" + i, url);
+            System.out.println("url " + url);
             i++;
         }
+
         return ResponseEntity.ok(responseData);
     }
 
@@ -77,7 +81,7 @@ public class AlgorithmOfTechniques {
             List<Integer> audiosId = new ArrayList<>();
             int verification = 0;
             audiosId = techniquesDownloadService.SearchAudioIdByDateMethod(userTAGId, today);
-            if (audiosId != null) {
+            if (audiosId != null && !audiosId.isEmpty()) {
                 for (int i = 0; i < completed; i++) {
                     int audioId = audiosId.get(i);
                     verification = techniquesDownloadService.CheckCompleteAudioId(userTAGId, today, audioId);

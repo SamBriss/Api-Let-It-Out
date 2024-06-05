@@ -152,7 +152,7 @@ public class MyPatients {
                 if(data!=null)
                 {
                     int userTAGId = (int) data[2];
-                    Object[] objeto = {data[0], data[1], data[2], 1, "nada"};
+                    Object[] objeto = {data[0], data[1], data[3], 1, "nada"};
                     dataFull.add(objeto);
                     List<Object[]> therapistRelatedPartial = relationUsersService.SearchTherapistRelatedTAG(userTAGId, userTherapistId);
                     for (Object[] objects : therapistRelatedPartial) {
@@ -188,7 +188,7 @@ public class MyPatients {
             {
                 if(data!=null)
                 {
-                    Object[] objeto = {data[0], data[1], data[2], 1};
+                    Object[] objeto = {data[0], data[1], data[3], 1};
                     dataFull.add(objeto);
                 }
                 

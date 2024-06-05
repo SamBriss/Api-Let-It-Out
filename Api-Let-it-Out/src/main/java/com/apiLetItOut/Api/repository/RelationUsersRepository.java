@@ -61,7 +61,7 @@ public interface RelationUsersRepository extends CrudRepository<RelationUsers, I
     " where tag.userTAGId IN(select r.userTAGId from relationUsers r where r.userTherapistId = :userTherapistId)", nativeQuery = true)
     List<Object[]> SearchDataOfPatientsUsersTAGId(@Param("userTherapistId") int userTherapistId);
 
-    @Query(value = "Select u.name, u.lastnameP, r.userTherapistId from relationusers r JOIN usersTherapists ut ON r.userTherapistId=ut.userTherapistId JOIN users u ON ut.userId=u.userId where r.userTherapistId != :userTherapistId && r.userTAGId=:userTAGId", nativeQuery = true)
+    @Query(value = "Select u.name, u.lastnameP, u.username from relationusers r JOIN usersTherapists ut ON r.userTherapistId=ut.userTherapistId JOIN users u ON ut.userId=u.userId where r.userTherapistId != :userTherapistId && r.userTAGId=:userTAGId", nativeQuery = true)
     List<Object[]> SearchTherapistRelatedTAG(@Param("userTherapistId") int userTherapistId,
                                             @Param("userTAGId") int userTAGId);
 

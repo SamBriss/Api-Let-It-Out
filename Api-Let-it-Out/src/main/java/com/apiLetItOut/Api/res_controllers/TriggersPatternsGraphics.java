@@ -51,8 +51,8 @@ public class TriggersPatternsGraphics {
                 {
 
                     List<Integer> wordsOfTriggersLocations = algorithmTriggerElementsService.SearchWordsPatternsMethod(userTAGId, 1);
-                    List<Integer> wordsOfTriggersDayMoments = algorithmTriggerElementsService.SearchWordsPatternsMethod(userTAGId, 2);
-                    List<Integer> wordsOfTriggersActivities = algorithmTriggerElementsService.SearchWordsPatternsMethod(userTAGId, 3);
+                    List<Integer> wordsOfTriggersDayMoments = algorithmTriggerElementsService.SearchWordsPatternsMethod(userTAGId, 10);
+                    List<Integer> wordsOfTriggersActivities = algorithmTriggerElementsService.SearchWordsPatternsMethod(userTAGId, 8);
                     List<Date> datesPatterns = algorithmTriggerElementsService.SearchDatesOfPatternsMethod();
                     Date dateRegister = userTAGService.SelectRegisterDateMethod(userTAGId);
                     List<Date> allDates = new ArrayList<>(datesPatterns);

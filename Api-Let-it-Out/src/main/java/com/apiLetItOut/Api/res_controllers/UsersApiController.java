@@ -16,7 +16,6 @@ import com.apiLetItOut.Api.services.UserService;
 public class UsersApiController {
     @Autowired
     UserService userService;
-
     @PostMapping("/user/findUsernameEmail")
     public ResponseEntity<String> postMethodName(@RequestParam("username") String username,
             @RequestParam("email") String email) {
