@@ -62,7 +62,7 @@ public class RemindersService {
         return remindersRepository.UpdateStatusReminderName(userTAGId, name, active);
     }
 
-    public List<Object[]> SelectReminderData(int reminderId)
+    public Object[] SelectReminderData(int reminderId)
     {
         return remindersRepository.SelectReminderData(reminderId);
     } 

@@ -51,7 +51,7 @@ public interface RemindersRepository extends CrudRepository<Reminders, Integer>{
     List<Object[]> SelectRemindersAllData(@Param("userTAGId") int userTAGId);
 
     @Query(value = "Select name, time, active, remindersId, reminderTypeId from reminders where remindersId = :reminderId", nativeQuery = true)
-    List<Object[]> SelectReminderData(@Param("reminderId") int reminderId);
+    Object[] SelectReminderData(@Param("reminderId") int reminderId);
 
     @Query(value="Select weekdayId from reminderweekdays where reminderId=:reminderId", nativeQuery = true)
     List<Integer> SelectDaysReminder(@Param("reminderId") int reminderId);

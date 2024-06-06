@@ -289,13 +289,13 @@ public class TechniquesSectionController {
             case 1:
             // mayores nivel 1
                 audiosId.add(45);
-                audiosId.add(47);
+                /*audiosId.add(47);
                 audiosId.add(72);
                 audiosId.add(32);
                 audiosId.add(78);
                 audiosId.add(60);
                 audiosId.add(81);
-                audiosId.add(17);
+                audiosId.add(17);*/
                 break;
             case 2:
             // mayores nivel 2

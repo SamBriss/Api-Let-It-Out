@@ -96,18 +96,18 @@ public class RemindersController {
                 for (Object[] objects : reminders) {
                     int reminderId = (Integer) objects[3];
                     List<Integer> weekDays = remindersService.SelectDaysReminder(reminderId);
-                    String weekDaysString = weekDays.stream()
-                            .map(String::valueOf)
-                            .collect(Collectors.joining(":"));
-                    if (objects.length > 4) {
-                        objects[4] = weekDaysString;
-                    } else {
-                        // Si el array no tiene 5 elementos, crear un nuevo array con el tamaño adecuado
-                        Object[] newObjects = Arrays.copyOf(objects, 5);
-                        newObjects[4] = weekDaysString;
-                        objects = newObjects;
+                    String weekDaysString = "";
+                    for(Integer weekDay: weekDays)
+                    {
+                        weekDaysString += String.valueOf(weekDay);
                     }
-                    dataFull.add(objects);
+                    Object[] finalData = new Object[5];
+                    finalData[0] = objects[0];
+                    finalData[1] = objects[1];
+                    finalData[2] = objects[2];
+                    finalData[3] = objects[3];
+                    finalData[4] = weekDaysString;
+                    dataFull.add(finalData);
                 }
                 return new ResponseEntity<>(dataFull, HttpStatus.OK);
             }
@@ -179,33 +179,29 @@ public class RemindersController {
     }
 
     @PostMapping("getReminderData")
-    public ResponseEntity<List<Object[]>> updateStatus(@RequestParam("reminderId") String reminderIdStr) {
-        List<Object[]> data = new ArrayList<>();
+    public ResponseEntity<Object[]> updateStatus(@RequestParam("reminderId") String reminderIdStr) {
+        Object[] finalData = new Object[5];
         try {
             Integer reminderId = (int) Math.round(Double.parseDouble(reminderIdStr));
-            List<Object[]> reminderData = remindersService.SelectReminderData(reminderId);
+            Object[] reminderData = remindersService.SelectReminderData(reminderId);
             List<Integer> weekDays = remindersService.SelectDaysReminder(reminderId);
-            String weekDaysString = weekDays.stream()
-                    .map(String::valueOf)
-                    .collect(Collectors.joining(":"));
-
-            // Crear una nueva lista para almacenar los datos extendidos
-            List<Object[]> extendedData = new ArrayList<>();
-            for (Object[] originalObject : reminderData) {
-                // Crear un nuevo objeto con un tamaño extendido
-                Object[] extendedObject = Arrays.copyOf(originalObject, originalObject.length + 1);
-                // Agregar weekDaysString en la nueva posición
-                extendedObject[originalObject.length ] = weekDaysString;
-                // Agregar el objeto extendido a la nueva lista
-                extendedData.add(extendedObject);
+            String weekDaysString = "";
+            for(Integer weekDay: weekDays)
+            {
+                weekDaysString += String.valueOf(weekDay);
             }
-
-            return new ResponseEntity<>(extendedData, HttpStatus.OK);
+            finalData[0] = reminderData[0];
+            finalData[1] = reminderData[1];
+            finalData[2] = reminderData[2];
+            finalData[3] = reminderData[3];
+            finalData[4] = weekDaysString;
+            System.out.println("success");
+            return new ResponseEntity<>(finalData, HttpStatus.OK);
         } catch (NumberFormatException ex) {
             // Manejar la excepción de formato de número
             ex.printStackTrace();
         }
-        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(finalData, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("updateReminder")
